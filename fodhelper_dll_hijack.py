@@ -1,6 +1,5 @@
 """
 https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/
-https://github.com/winscripting/UAC-bypass/blob/master/FodhelperBypass.ps1
 	
 Fodhelper.exe was introduced in Windows 10 to manage optional features like
 region-specific keyboard settings. Its location is: C:\Windows\System32\fodhelper.exe
