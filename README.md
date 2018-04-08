@@ -3,10 +3,7 @@
 For educational use only!
 
 #### Modules used:
-    os
-    requests
-    psutil
-    _winreg
+    os,requests,psutil,_winreg
 
 #### admin_to_system.py
 > schtasks to elevate our process and gain persistence on the system with the /SC ONLOGON switch. The /RU SYSTEM command will run the process invisible since we're not SYSTEM. The process will spawn and work as we want to, just that we can't see it.
