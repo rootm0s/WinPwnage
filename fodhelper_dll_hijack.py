@@ -8,6 +8,7 @@ and it is signed by Microsoft.
 """
   
 import os
+import _winreg
 import requests
 
 def fodhelper_dll_hijack(executable_path):
