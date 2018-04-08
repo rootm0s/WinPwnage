@@ -9,7 +9,7 @@ For educational use only!
 > schtasks to elevate our process and gain persistence on the system with the /SC ONLOGON switch. The /RU SYSTEM command will run the process invisible since we're not SYSTEM. The process will spawn and work as we want to, just that we can't see it.
 
 ##### fax_dll_hijack.py
-> This is a simple DLL hijacking attack that we have successfully tested against Windows XP,Vista and 7. A DLL named fxsst.dll normally resides in \Windows\System32 and is loaded by explorer.exe. Placing a new DLL with this name in \Windows results in this being loaded into explorer instead of the original DLL. On Windows Vista and above, the DLL's reference count must be increased by calling LoadLibrary on itself to avoid being unloaded. This achieves persistence, stealth and in some cases PSP avoidance.
+> ##### https://wikileaks.org/ciav7p1/cms/page_2621760.html This is a simple DLL hijacking attack that we have successfully tested against Windows XP,Vista and 7. A DLL named fxsst.dll normally resides in \Windows\System32 and is loaded by explorer.exe. Placing a new DLL with this name in \Windows results in this being loaded into explorer instead of the original DLL. On Windows Vista and above, the DLL's reference count must be increased by calling LoadLibrary on itself to avoid being unloaded. This achieves persistence, stealth and in some cases PSP avoidance.
 
 ##### fodhelper_dll_hijack.py
 > This script is a proof of concept to bypass the User Access Control (UAC) via fodhelper.exe. Fodhelper.exe was introduced in Windows 10 to manage optional features like region-specific keyboard settings. Its location is: C:\Windows\System32\fodhelper.exe and it is signed by Microsoft, we use it to elevate from user to admin.
