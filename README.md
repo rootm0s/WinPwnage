@@ -1,4 +1,4 @@
-# 💻 WinPwn
+# 💻 WinPwnage
 
 For educational use only!
 
