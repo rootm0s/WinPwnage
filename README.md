@@ -2,11 +2,13 @@
 
 For educational use only!
 
-#### Imports needed:
-    os
-    requests
-    psutil
-    _winreg
+#### Read:
+* https://wikileaks.org/ciav7p1/cms/page_2621770.html
+* https://wikileaks.org/ciav7p1/cms/page_2621767.html
+* https://wikileaks.org/ciav7p1/cms/page_2621760.html
+* https://msdn.microsoft.com/en-us/library/windows/desktop/bb736357(v=vs.85).aspx
+* https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/
+* https://github.com/winscripting/UAC-bypass/
 
 ##### admin_to_system.py
 > schtasks to elevate our process and gain persistence on the system with the /SC ONLOGON switch. The /RU SYSTEM command will run the process invisible since we're not SYSTEM. The process will spawn and work as we want to, just that we can't see it.
@@ -25,11 +27,3 @@ For educational use only!
 
 ##### slui_file_hijack.py
 > slui.exe is an auto-elevated binary that is vulnerable to file handler hijacking Read access to HKCU\Software\Classes\exefile\shell\open is performed upon execution. Due to the registry key being accessible from user mode, an arbitrary executable file can be provided.
-
-#### Read:
-* https://wikileaks.org/ciav7p1/cms/page_2621770.html
-* https://wikileaks.org/ciav7p1/cms/page_2621767.html
-* https://wikileaks.org/ciav7p1/cms/page_2621760.html
-* https://msdn.microsoft.com/en-us/library/windows/desktop/bb736357(v=vs.85).aspx
-* https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/
-* https://github.com/winscripting/UAC-bypass/
