@@ -1,17 +1,12 @@
 # 💻 WinPwnage
 
 For educational use only!
-```
-__        ___        ____                                 
-\ \      / (_) __ _ / _  __      ____ _ _ __  _ __  ___   
- \ \ /\ / /| |/ _` | (_| \ \ /\ / / _` | '_ \| '_ \/ _ \  
-  \ V  V / | | | | |\__  |\ V  V | | | | |_) | |_) \__  | 
-   \_/\_/  |_|_| |_|   |_| \_/\_/|_| |_|_.__/| .__/|___/  
-                                              \___|       
-```
 
-#### Modules used:
-    os,requests,psutil,_winreg
+#### Imports needed:
+    os
+    requests
+    psutil
+    _winreg
 
 ##### admin_to_system.py
 > schtasks to elevate our process and gain persistence on the system with the /SC ONLOGON switch. The /RU SYSTEM command will run the process invisible since we're not SYSTEM. The process will spawn and work as we want to, just that we can't see it.
