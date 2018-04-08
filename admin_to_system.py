@@ -7,7 +7,6 @@ persistence on the system with the /SC ONLOGON switch.
 /RU SYSTEM will run the process invisible since we're not SYSTEM. The process will
 spawn and work as we want to, just that we can't see it.
 """
-
 import os
 
 def schtask(mode,executable_path,taskname):
