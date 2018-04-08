@@ -24,6 +24,6 @@ For educational use only!
 > slui.exe is an auto-elevated binary that is vulnerable to file handler hijacking Read access to HKCU\Software\Classes\exefile\shell\open is performed upon execution. Due to the registry key being accessible from user mode, an arbitrary executable file can be provided.
 
 #### Read:
-https://wikileaks.org/ciav7p1/cms/page_2621770.html
-https://wikileaks.org/ciav7p1/cms/page_2621767.html
-https://wikileaks.org/ciav7p1/cms/page_2621760.html
+* https://wikileaks.org/ciav7p1/cms/page_2621770.html
+* https://wikileaks.org/ciav7p1/cms/page_2621767.html
+* https://wikileaks.org/ciav7p1/cms/page_2621760.html
