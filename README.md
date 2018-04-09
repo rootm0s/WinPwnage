@@ -13,6 +13,9 @@ For educational use only!
 ##### admin_to_system.py
 > schtasks to elevate our process and gain persistence on the system with the /SC ONLOGON switch. The /RU SYSTEM command will run the process invisible since we're not SYSTEM. The process will spawn and work as we want to, just that we can't see it.
 
+##### sdclt_uac_bypass.py
+> Bypasses UAC by hijacking the "IsolatedCommand" value in "shell\runas\command"
+
 ##### event_viewer_uac_bypass.py
 > Bypasses UAC by performing an image hijack on the .msc file extension
 
