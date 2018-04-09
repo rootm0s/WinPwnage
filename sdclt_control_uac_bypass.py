@@ -35,5 +35,5 @@ def sdclt_control_bypass():
 			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe")
 		except Exception as error:
 			return False
-	elese:
+	else:
 		sys.exit()
