@@ -4,7 +4,6 @@ https://wikileaks.org/ciav7p1/cms/page_2621770.html
 Registry key that was designed to assist with debugging and allows the user
 to specifiy an executable that should be run instead of the specified application.
 """
-
 import os
 import _winreg
 
