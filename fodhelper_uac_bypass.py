@@ -24,6 +24,6 @@ def fodhelper_dll_hijack(executable_path):
 		return False	
 	
 	try:
-		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\ms-settings\Shell\Open\command")
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\ms-settings")
 	except Exception as error:
 		return False
