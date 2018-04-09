@@ -16,6 +16,9 @@ For educational use only!
 ##### sdclt_uac_bypass.py
 > Bypasses UAC by hijacking the "IsolatedCommand" value in "shell\runas\command"
 
+##### sdclt_control_uac_bypass.py
+> Bypasses UAC by modifying control.exe App Path
+
 ##### event_viewer_uac_bypass.py
 > Bypasses UAC by performing an image hijack on the .msc file extension
 
