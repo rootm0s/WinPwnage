@@ -48,7 +48,7 @@ def event_viewer_uac_bypass():
 			time.sleep(5)
 
 			try:
-				_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\mscfile\shell\open\command")
+				_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\mscfile")
 			except Exception as error:
 				sys.exit()
 	else:
