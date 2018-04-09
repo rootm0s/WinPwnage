@@ -1,5 +1,7 @@
 """
 https://github.com/enigma0x3/Misc-PowerShell-Stuff/blob/master/Invoke-EventVwrBypass.ps1
+
+Bypasses UAC by performing an image hijack on the .msc file extension
 """
 import os
 import sys
