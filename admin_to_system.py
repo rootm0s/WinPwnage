@@ -16,31 +16,28 @@ def schtask(mode,executable_path,taskname):
 
 	if (mode.lower() == "create"):
 		try:
-			print "[WinPwn] Schtask payload selected: ({})".format(create_cmd)
 			schtasks_create = os.popen(create_cmd)
 			if (schtasks_create.read() == ""):
-				print "[WinPwn] Schtask results: ({})".format("Access Denied/Unknown error")
+				return False
 			else:
-				print "[WinPwn] Schtask results: ({})".format(schtasks_create.read())
+				return True
 		except Exception as e:
 			return False
 	elif (mode.lower() == "run"):
 		try:
-			print "[WinPwn] Schtask run selected: ({})".format(run_cmd)
 			schtasks_run = os.popen(run_cmd)
 			if (schtasks_run.read() == ""):
-				print "[WinPwn] Schtask results: ({})".format("Access Denied/Unknown error")
+				return False
 			else:
-				print "[WinPwn] Schtask results: ({})".format(schtasks_run.read())
+				return True
 		except Exception as e:
 			return False			
 	elif (mode.lower() == "delete"):
 		try:
-			print "[WinPwn] Schtask payload selected: ({})".format(delete_cmd)
 			schtasks_delete = os.popen(delete_cmd)
 			if (schtasks_delete.read() == ""):
-				print "[WinPwn] Schtask results: ({})".format("Access Denied/Unknown error")
+				return False
 			else:
-				print "[WinPwn] Schtask results: ({})".format(schtasks_delete.read())			
+				return True		
 		except Exception as e:
-			return False	
+			return False
