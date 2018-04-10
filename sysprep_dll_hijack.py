@@ -1,7 +1,8 @@
 """
-Under development, untested code but should work.
-	
 https://www.greyhathacker.net/?p=796
+	
+* Windows 7
+* Windows 8	
 	
 Executable:
 C:\windows\System32\sysprep\sysprep.exe
