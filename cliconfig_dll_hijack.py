@@ -1,7 +1,13 @@
 """
+Under development, untested code but should work.
+
 https://www.greyhathacker.net/?p=796
 
-Under development, untested code but should work.
+Executable:
+C:\windows\System32\cliconfg.exe
+
+Loads:
+C:\Windows\System32\NTWDBLIB.dll
 	
 Checks if cliconfg.exe is present in \system32\ folder, if True
 continue by checking if the dll file exists. If false, continue
