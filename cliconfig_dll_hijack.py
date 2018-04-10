@@ -18,6 +18,7 @@ access
 """
 import os
 import sys
+import requests
 import win32api
 import win32con
 
