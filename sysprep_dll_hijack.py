@@ -58,6 +58,6 @@ def sysprep_dll_hijack(url):
 				else:
 					return False
 			except Exception as error:
-
+				return False
 	else:
 		sys.exit()		
