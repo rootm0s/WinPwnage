@@ -12,9 +12,9 @@ C:\windows\System32\sysprep\CRYPTBASE.dll
 C:\Windows\System32\sysprep\RpcRtRemote.dll
 C:\Windows\System32\sysprep\UxTheme.dll
 	
-Checks if sysprep.exe is present in \system32\ folder, if True
-continue by checking if the dll file exists. If false, continue
-by attempting to download the evil dll file to \system32\ folder
+Checks if sysprep.exe is present in \system32\sysprep\ folder, if True
+continue by checking if the dll file exists. If false, continue by
+attempting to download the evil dll file to \system32\sysprep\ folder
 if fail, we attempt to use makecab and wusa to copy our dll. After
 the copy is done, we execute the executable and enjoys the elevated
 access
