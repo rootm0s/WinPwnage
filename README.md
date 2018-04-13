@@ -3,8 +3,8 @@
 For educational use only!
 
 ##### Windows 10:
-* sdclt_uac_bypass (https://github.com/rootm0s/WinPwnage/blob/master/sdclt_uac_bypass.py)
-* sdclt_control_uac_bypass (https://github.com/rootm0s/WinPwnage/blob/master/sdclt_control_uac_bypass.py)
+* sdclt_uac_bypass
+* sdclt_control_uac_bypass
 * event_viewer_uac_bypass
 * fodhelper_uac_bypass
 * image_file_execution
