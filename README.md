@@ -9,13 +9,13 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
 * fodhelper_uac_bypass
 * image_file_execution
 * admin_to_system
-* registry_persistence.py
+* registry_persistence
 
 ##### Windows 8:
 * slui_file_hijack
 * sysprep_dll_hijack
 * admin_to_system
-* registry_persistence.py
+* registry_persistence
 
 ##### Windows 7:
 * cliconfig_dll_hijack
@@ -25,7 +25,7 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
 * event_viewer_uac_bypass
 * sdclt_control_uac_bypass
 * admin_to_system
-* registry_persistence.py
+* registry_persistence
 
 #### Read:
 * https://wikileaks.org/ciav7p1/cms/page_2621770.html
