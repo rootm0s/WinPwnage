@@ -56,7 +56,7 @@ def slui():
 	print " {} slui: Attempting to create process".format(infoBox())
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start slui.exe",
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 		if (result[1] == 0):
 			print " {} slui: Process started successfully".format(successBox())
 		else:
@@ -71,7 +71,7 @@ def slui():
 	print " {} slui: Attempting to remove registry key".format(infoBox())
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\exefile\shell\open\command"))
+				os.path.join("Software\Classes\exefile\shell\open\command"))
 		print " {} slui: Registry key was deleted".format(successBox())					
 	except Exception as error:
 		print " {} slui: Unable to delete key".format(errorBox())
