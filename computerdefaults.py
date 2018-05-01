@@ -56,7 +56,7 @@ def computerdefaults():
 	print " {} computerdefaults: Attempting to create process".format(infoBox())
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start computerdefaults.exe",
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 		if (result[1] == 0):
 			print " {} computerdefaults: Process started successfully".format(successBox())
 		else:
