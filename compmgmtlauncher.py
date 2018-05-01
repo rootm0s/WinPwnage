@@ -64,7 +64,7 @@ def compmgmtlauncher():
 	print " {} compmgmtlauncher: Attempting to remove registry key".format(infoBox())
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\mscfile\shell\open\command"))
+				os.path.join("Software\Classes\mscfile\shell\open\command"))
 		print " {} compmgmtlauncher: Registry key was deleted".format(successBox())
 	except Exception as error:
 		print " {} compmgmtlauncher: Unable to delete key".format(errorBox())
