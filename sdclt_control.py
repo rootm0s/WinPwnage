@@ -64,7 +64,7 @@ def sdclt_control():
 		print " {} sdclt_control: Attempting to remove registry key".format(infoBox())
 		try:
 			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
+					os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
 			print " {} sdclt_control: Registry key was deleted".format(successBox())
 		except Exception as error:
 			print " {} sdclt_control: Unable to delete key".format(errorBox())
