@@ -38,7 +38,7 @@ def storage_delete():
 	print " {} storage: Attempting to delete registry key".format(infoBox())
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\.storage\container"))
+				os.path.join("Software\Classes\.storage\container"))
 		print " {} storage: Registry key deleted".format(successBox())
 	except Exception as error:
 		print " {} storage: Unable to delete registry key".format(errorBox())
@@ -48,9 +48,9 @@ def storage_save_to_disk(file_path):
 	print " {} storage: Attempting to read binary data from the registry key".format(infoBox())
 	try:
 		key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\.storage\container"),
-							0,
-							_winreg.KEY_READ)
+					os.path.join("Software\Classes\.storage\container"),
+					0,
+					_winreg.KEY_READ)
 
 		data = _winreg.QueryValueEx(key,None)
 		_winreg.CloseKey(key)
@@ -73,13 +73,13 @@ def storage_save_to_reg(file_path):
 	print " {} storage: Attempting to store binary data inside a registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\.storage\container"))
+					os.path.join("Software\Classes\.storage\container"))
 								
 		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_BINARY,
-							reader(file_path))
+				None,
+				0,
+				_winreg.REG_BINARY,
+				reader(file_path))
 		_winreg.CloseKey(key)
 		print " {} storage: Registry key created containing our binary data".format(successBox())
 	except Exception as error:
