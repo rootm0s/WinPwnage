@@ -71,7 +71,7 @@ def computerdefaults():
 	print " {} computerdefaults: Attempting to remove registry key".format(infoBox())
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\ms-settings\shell\open\command"))
+				os.path.join("Software\Classes\ms-settings\shell\open\command"))
 		print " {} computerdefaults: Registry key was deleted".format(successBox())
 	except Exception as error:
 		print " {} computerdefaults: Unable to delete key".format(errorBox())
