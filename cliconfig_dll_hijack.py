@@ -46,7 +46,7 @@ def cliconfig_dll_hijack(url):
 						except Exception as error:
 							return False
 						try:
-							print os.remove("NTWDBLIB.tmp")
+							os.remove("NTWDBLIB.tmp")
 						except Exception as error:
 							return False	
 						try:
