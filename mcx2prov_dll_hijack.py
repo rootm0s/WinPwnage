@@ -46,7 +46,7 @@ def mcx2prov_dll_hijack(url):
 						except Exception as error:
 							return False
 						try:
-							print os.remove("CRYPTBASE.tmp")
+							os.remove("CRYPTBASE.tmp")
 						except Exception as error:
 							return False	
 						try:
