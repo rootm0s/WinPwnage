@@ -54,6 +54,7 @@ def eventvwr():
 			print " {} eventvwr: Process started successfully".format(successBox())
 		else:
 			print " {} eventvwr: Problem creating process".format(errorBox())
+			return False
 	except Exception as error:
 		print " {} eventvwr: Problem creating process".format(errorBox())
 		return False
