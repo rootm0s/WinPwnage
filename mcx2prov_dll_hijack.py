@@ -60,7 +60,7 @@ def mcx2prov_dll_hijack():
 				print " {} mcx2prov_dll_hijack: Problem creating process".format(errorBox())
 				return False
 		except Exception as error:
-			print " {} mcx2prov_dll_hijack: Problem creating process: {}".format(errorBox(),error)
+			print " {} mcx2prov_dll_hijack: Problem creating process".format(errorBox())
 			return False			
 			
 	else:
