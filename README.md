@@ -5,6 +5,7 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
 #### Requirements:
  * colorama (https://pypi.org/project/colorama)
  * wmi (https://pypi.org/project/WMI/)
+ * pywin32 (https://sourceforge.net/projects/pywin32)
  * py2exe (https://sourceforge.net/projects/py2exe)
 
 #### Read:
