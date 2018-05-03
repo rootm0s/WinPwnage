@@ -3,6 +3,7 @@
 The meaning of this repo is to study the techniques. All of the samples/techniques are found online, on different blogs and repos here on GitHub. I do not take cred for any of the findings, thanks to all the researchers! Rewrote all of them and ported it to Python 2.7. Some of the code is not tested at all, but should work anyway.
 
 #### Requirements:
+ * colorama (https://pypi.org/project/colorama)
  * wmi (https://pypi.org/project/WMI/)
  * py2exe (https://sourceforge.net/projects/py2exe)
 
