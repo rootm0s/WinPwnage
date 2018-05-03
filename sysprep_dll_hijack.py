@@ -58,6 +58,7 @@ def sysprep_dll_hijack():
 				print " {} sysprep_dll_hijack: Process started successfully".format(successBox())
 			else:
 				print " {} sysprep_dll_hijack: Problem creating process".format(errorBox())
+				return False
 		except Exception as error:
 			print " {} sysprep_dll_hijack: Problem creating process: {}".format(errorBox(),error)
 			return False			
