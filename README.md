@@ -7,7 +7,7 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
  * wmi (https://pypi.org/project/WMI/)
  * pywin32 (https://sourceforge.net/projects/pywin32)
  
- #### Requirements for builting executable:
+ #### Requirements for building executable:
  * py2exe (https://sourceforge.net/projects/py2exe)
 
 #### Read:
