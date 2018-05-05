@@ -16,3 +16,4 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
 * https://winscripting.blog/2017/05/12/first-entry-welcome-and-uac-bypass/
 * https://github.com/winscripting/UAC-bypass/
 * https://www.greyhathacker.net/?p=796
+* https://github.com/hfiref0x/UACME
