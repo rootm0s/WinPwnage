@@ -6,7 +6,6 @@ import os
 import wmi
 import shutil
 import ctypes
-import psutil
 import win32con
 from colorama import init, Fore
 init(convert=True)
