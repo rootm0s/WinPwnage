@@ -1,5 +1,5 @@
 """
-Works from: Windows XP
+Works from: Windows 7
 Fixed in: unfixed
 """
 import os
