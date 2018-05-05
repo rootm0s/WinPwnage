@@ -21,11 +21,11 @@ def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
 
 def uac_status():
-	hKey = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
+	key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
 				"Software\Microsoft\Windows\CurrentVersion\Policies\System")
 					
-	ConsentPromptBehaviorAdmin = _winreg.QueryValueEx(hKey,"ConsentPromptBehaviorAdmin")							
-	ConsentPromptBehaviorUser = _winreg.QueryValueEx(hKey,"ConsentPromptBehaviorUser")
+	ConsentPromptBehaviorAdmin = _winreg.QueryValueEx(key,"ConsentPromptBehaviorAdmin")							
+	ConsentPromptBehaviorUser = _winreg.QueryValueEx(key,"ConsentPromptBehaviorUser")
 													
 	if (ConsentPromptBehaviorAdmin[0] == 0) and (ConsentPromptBehaviorUser[0] == 3):
 		return True
