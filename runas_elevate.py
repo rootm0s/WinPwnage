@@ -45,7 +45,7 @@ def runas(exe_path):
 				if (uac_status() == True):
 					print " {} runas: UAC level is set to Never Notify".format(successBox())
 					try:
-						ctypes.windll.Shell32.ShellExecuteA(None,"RunAs","cmd.exe",None,None,1)
+						ctypes.windll.Shell32.ShellExecuteA(None,"RunAs",exe_path,None,None,1)
 						print " {} runas: Successfully elevated our process with RunAs".format(successBox())
 					except Exception as error:
 						print " {} runas: Unable to elevate our process with RunAs".format(errorBox())
