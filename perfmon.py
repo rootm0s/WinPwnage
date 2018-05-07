@@ -38,7 +38,7 @@ def perfmon():
 		_winreg.CloseKey(key)
 		print " {} perfmon: Registry %SYTEMROOT% key was created".format(successBox())
 	except Exception as error:
-		print " {} perfmon: Unable to create %SYTEMROOT% key - {}".format(errorBox(),error)
+		print " {} perfmon: Unable to create %SYTEMROOT% key".format(errorBox())
 		return False
 
 	try:
@@ -66,10 +66,10 @@ def perfmon():
 		os.makedirs(os.path.join(tempfile.gettempdir(),"system32"))
 		print " {} perfmon: Successfully created temp directory".format(successBox())
 	except Exception as error:
-		print " {} perfmon: Unable to create folder - {}".format(errorBox(),error)
+		print " {} perfmon: Unable to create folder".format(errorBox())
 		return False
 		
-	print " {} perfmon: Pausing for 5 seconds before copy".format(infoBox())	
+	print " {} perfmon: Pausing for 5 seconds before copy".format(infoBox())
 	time.sleep(5)
 
 	try:
@@ -107,5 +107,6 @@ def perfmon():
 				"SYSTEMROOT")
 		print " {} perfmon: %SYTEMROOT% registry key was deleted".format(successBox())
 	except Exception as error:
-		print " {} perfmon: Unable to delete %SYTEMROOT% registry key: {}".format(errorBox(),error)
+		print " {} perfmon: Unable to delete %SYTEMROOT% registry key".format(errorBox())
 		return False
+perfmon()		
