@@ -109,5 +109,3 @@ def perfmon():
 	except Exception as error:
 		print " {} perfmon: Unable to delete %SYSTEMROOT% registry key".format(errorBox())
 		return False
-
-perfmon()
