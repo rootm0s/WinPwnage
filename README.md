@@ -20,3 +20,4 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
 * https://www.greyhathacker.net/?p=796
 * https://github.com/hfiref0x/UACME
 * https://bytecode77.com/hacking/exploits/uac-bypass/performance-monitor-privilege-escalation
+* https://bytecode77.com/hacking/exploits/uac-bypass/slui-file-handler-hijack-privilege-escalation
