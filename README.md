@@ -19,3 +19,4 @@ The meaning of this repo is to study the techniques. All of the samples/techniqu
 * https://github.com/winscripting/UAC-bypass/
 * https://www.greyhathacker.net/?p=796
 * https://github.com/hfiref0x/UACME
+* https://bytecode77.com/hacking/exploits/uac-bypass/performance-monitor-privilege-escalation
