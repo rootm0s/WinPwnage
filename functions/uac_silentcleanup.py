@@ -5,7 +5,6 @@ Fixed in:
 import os
 import time
 import _winreg
-import datetime
 from core.prints import *
 
 def silentcleanup():
