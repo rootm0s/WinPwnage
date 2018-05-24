@@ -10,7 +10,7 @@ def uac_status():
 	"""
 	try:
 		key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
-							os.path.join("Software\Microsoft\Windows\CurrentVersion\Policies\System"),0,_winreg.KEY_READ)
+					os.path.join("Software\Microsoft\Windows\CurrentVersion\Policies\System"),0,_winreg.KEY_READ)
 
 		ConsentPromptBehaviorAdmin = _winreg.QueryValueEx(key,"ConsentPromptBehaviorAdmin")							
 		ConsentPromptBehaviorUser = _winreg.QueryValueEx(key,"ConsentPromptBehaviorUser")
