@@ -9,6 +9,7 @@ import _winreg
 from core.prints import *
 
 class disable_file_system_redirection:
+    #http://code.activestate.com/recipes/578035-disable-file-system-redirector/
     disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
     revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
     def __enter__(self):
