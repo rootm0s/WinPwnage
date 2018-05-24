@@ -6,6 +6,9 @@ All of the samples, techniques are found online, on different blogs and repos he
 
 Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not tested, do not expect it to work.
 
+#### Requirements:
+```pip install -r requirements.txt```
+
 #### Read:
 * https://wikileaks.org/ciav7p1/cms/page_2621770.html
 * https://wikileaks.org/ciav7p1/cms/page_2621767.html
