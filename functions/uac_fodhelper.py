@@ -8,7 +8,6 @@ import time
 import ctypes
 import _winreg
 import win32con
-import datetime
 from core.prints import *
 
 wmi = wmi.WMI()
