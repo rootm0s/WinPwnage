@@ -1,14 +1,15 @@
 import os
 import _winreg
 from prints import *
+from uac import *
 
 silentcleanup = ["silentcleanup",
 			"9600", # Works from
 			"999999"] # Fixed in
 
 sdclt_isolatedcommand = ["sdcltisolatedcommand",
-			"10240", # Works from
-			"17025"] # Fixed in
+				"10240", # Works from
+				"17025"] # Fixed in
 
 computerdefaults = ["computerdefaults",
 			"10240", # Works from
@@ -35,8 +36,12 @@ perfmon = ["perfmon",
 		"16299"] # Fixed in
 
 slui = ["slui", 
-	"9600", # Works from
-	"17134"] # Fixed in
+		"9600", # Works from
+		"17134"] # Fixed in
+		
+runas = ["runas", 
+		"2600", # Works from
+		"999999"] # Fixed in
 
 def scan():
 	"""
@@ -65,6 +70,11 @@ def scan():
 			slui):
 		
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
-			print_success("We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
+			print_success( "We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 		else:
 			print_error("Cannot use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
+			
+	if (uac_status() == True):
+		print_success( "We can use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
+	else:
+		print_error("Cannot use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
