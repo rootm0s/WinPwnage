@@ -70,7 +70,7 @@ def scan():
 			slui):
 		
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
-			print_success( "We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
+			print_success("We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 		else:
 			print_error("Cannot use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 			
