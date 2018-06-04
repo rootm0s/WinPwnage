@@ -14,7 +14,7 @@ def cliconfg(payload):
 	print """
  -------------------------------------------------------------
  cliconfg.exe is an auto-elevated binary that attempts to
- load dll files which is not present in sysprep folder. By 
+ load dll files which is not present in system32 folder. By
  placing our own dll file in system32 directory will make
  the application load our evil dll file
  
