@@ -12,6 +12,7 @@ from functions.uac_compmgmtlauncher import *
 from functions.uac_computerdefaults import *
 from functions.uac_sdcltisolatedcommand import *
 from functions.uac_dll_sysprep import *
+from functions.uac_dll_cliconfg import *
 
 print """
         _                               
@@ -53,6 +54,8 @@ def main():
 				silentcleanup()
 			elif (sys.argv[2] == "sysprep"):
 				sysprep(sys.argv[3])
+			elif (sys.argv[2] == "cliconfg"):
+				cliconfg(sys.argv[3])
 	except Exception as error:
 		print_info("Unrecognized command")
 
