@@ -45,7 +45,11 @@ sysprep = ["sysprep",
 
 cliconfg = ["cliconfg",
 		"7600", # Works from
-		"10240"] # Fixed in	
+		"10240"] # Fixed in
+
+mcx2prov = ["mcx2prov",
+		"7600", # Works from
+		"10240"] # Fixed in
 
 runas = ["runas", 
 		"2600", # Works from
@@ -77,6 +81,7 @@ def scan():
 			perfmon,
 			sysprep,
 			cliconfg,
+			mcx2prov,			 
 			slui):
 		
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
@@ -85,6 +90,6 @@ def scan():
 			print_error("Cannot use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 			
 	if (uac_status() == True):
-		print_success( "We can use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
+		print_success("We can use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
 	else:
 		print_error("Cannot use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
