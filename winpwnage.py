@@ -50,6 +50,8 @@ def main():
 				sdclt_isolatedcommand(sys.argv[3])
 			elif (sys.argv[2] == "silentcleanup"):
 				silentcleanup()
+			elif (sys.argv[2] == "sysprep"):
+				sysprep(sys.argv[3])
 	except Exception as error:
 		print_info("Unrecognized command")
 
