@@ -70,8 +70,10 @@ def sysprep(payload):
 				return False
 		else:
 			print_error("Unable to create cabinet file")
+			return False
 	else:
 		print_error("Unable to create cabinet file, the payload is not present in: {}".format(tempfile.gettempdir()))
+		return False
 	
 	print_info("Pausing for 5 seconds before extracting the cabinet file")
 	time.sleep(5)
