@@ -43,6 +43,10 @@ sysprep = ["sysprep",
 		"7600", # Works from
 		"10240"] # Fixed in
 
+cliconfg = ["cliconfg",
+		"7600", # Works from
+		"10240"] # Fixed in	
+
 runas = ["runas", 
 		"2600", # Works from
 		"999999"] # Fixed in
@@ -72,6 +76,7 @@ def scan():
 			fodhelper,
 			perfmon,
 			sysprep,
+			cliconfg,
 			slui):
 		
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
