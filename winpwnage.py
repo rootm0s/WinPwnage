@@ -11,6 +11,7 @@ from functions.uac_silentcleanup import *
 from functions.uac_compmgmtlauncher import *
 from functions.uac_computerdefaults import *
 from functions.uac_sdcltisolatedcommand import *
+from functions.uac_dll_sysprep import *
 
 print """
         _                               
