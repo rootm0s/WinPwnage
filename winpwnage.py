@@ -13,6 +13,7 @@ from functions.uac_computerdefaults import *
 from functions.uac_sdcltisolatedcommand import *
 from functions.uac_dll_sysprep import *
 from functions.uac_dll_cliconfg import *
+from functions.uac_dll_mcx2prov import *
 
 print """
         _                               
@@ -56,6 +57,8 @@ def main():
 				sysprep(sys.argv[3])
 			elif (sys.argv[2] == "cliconfg"):
 				cliconfg(sys.argv[3])
+			elif (sys.argv[2] == "mcx2prov"):
+				mcx2prov(sys.argv[3])
 	except Exception as error:
 		print_info("Unrecognized command")
 
