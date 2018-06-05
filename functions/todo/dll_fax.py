@@ -14,8 +14,6 @@ def windows_directory():
 	for os in wmi.Win32_OperatingSystem():
 		return os.WindowsDirectory
 
-dll_name = "fxsst.dll"
-
 def fax_dll(payload):
 	print """
  -------------------------------------------------------------
