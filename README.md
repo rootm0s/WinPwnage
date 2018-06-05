@@ -20,3 +20,4 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * https://github.com/hfiref0x/UACME
 * https://bytecode77.com/hacking/exploits/uac-bypass/performance-monitor-privilege-escalation
 * https://bytecode77.com/hacking/exploits/uac-bypass/slui-file-handler-hijack-privilege-escalation
+* https://media.defcon.org/DEF%20CON%2025/DEF%20CON%2025%20workshops/DEFCON-25-Workshop-Ruben-Boobeb-UAC-0day-All-Day.pdf
