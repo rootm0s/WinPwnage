@@ -66,7 +66,6 @@ def sysprep(payload):
 			try:
 				os.remove(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"))
 			except Exception as error:
-				print_error("Unable to create cabinet file")
 				return False
 		else:
 			print_error("Unable to create cabinet file")
@@ -95,7 +94,6 @@ def sysprep(payload):
 			try:
 				os.remove(os.path.join(tempfile.gettempdir(),"suspicious.cab"))
 			except Exception as error:
-				print_error("Unable to extract cabinet file")
 				return False
 		else:
 			print_error("Unable to extract cabinet file")
