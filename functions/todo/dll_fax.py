@@ -126,7 +126,7 @@ def fax_dll(payload):
 		if (restart_explorer() == None):
 			print_success("We should now have persistence on system")
 		else:
-			print_error("Unable to restart explorer process, we get persistence once the system reboots")
+			print_warning("Unable to restart explorer process, we get persistence once the system reboots")
 	else:
 		print_error("Unable to get persistence on system, file copy failed")
 		return False
