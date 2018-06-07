@@ -129,3 +129,4 @@ def fax_dll(payload):
 			print_error("Unable to restart explorer process, we get persistence once the system reboots")
 	else:
 		print_error("Unable to get persistence on system, file copy failed")
+		return False
