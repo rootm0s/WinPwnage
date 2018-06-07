@@ -8,7 +8,7 @@ wmi = wmi.WMI()
 
 def windows_directory():
 	"""
-	Get system directory
+	Get Windows directory
 	"""
 	try:
 		for os in wmi.Win32_OperatingSystem():
