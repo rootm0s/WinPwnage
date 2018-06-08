@@ -14,6 +14,8 @@ from functions.uac_sdcltisolatedcommand import *
 from functions.uac_dll_sysprep import *
 from functions.uac_dll_cliconfg import *
 from functions.uac_dll_mcx2prov import *
+from functions.uac_dll_migwiz import *
+from functions.persist_dll_explorer import *
 
 print """
         _                               
@@ -59,6 +61,10 @@ def main():
 				cliconfg(sys.argv[3])
 			elif (sys.argv[2] == "mcx2prov"):
 				mcx2prov(sys.argv[3])
+			elif (sys.argv[2] == "migwiz"):
+				migwiz(sys.argv[3])
+			elif (sys.argv[2] == "explorer"):
+				fax_dll(sys.argv[3])
 	except Exception as error:
 		print_info("Unrecognized command")
 
