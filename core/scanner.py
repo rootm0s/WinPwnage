@@ -51,6 +51,14 @@ mcx2prov = ["mcx2prov",
 		"7600", # Works from
 		"10240"] # Fixed in
 
+migwiz = ["migwiz", 
+		"7600", # Works from
+		"10240"] # Fixed in
+
+explorer = ["explorer", 
+		"7600", # Works from
+		"9600"] # Fixed in
+
 runas = ["runas", 
 		"2600", # Works from
 		"999999"] # Fixed in
@@ -81,7 +89,9 @@ def scan():
 			perfmon,
 			sysprep,
 			cliconfg,
-			mcx2prov,			 
+			mcx2prov,
+			migwiz,
+			explorer,
 			slui):
 		
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
