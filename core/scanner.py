@@ -59,6 +59,10 @@ explorer = ["explorer",
 		"7600", # Works from
 		"9600"] # Fixed in
 
+schtask = ["schtask", 
+		"7600", # Works from
+		"999999"] # Fixed in
+
 runas = ["runas", 
 		"2600", # Works from
 		"999999"] # Fixed in
@@ -92,6 +96,7 @@ def scan():
 			mcx2prov,
 			migwiz,
 			explorer,
+			schtask,			 
 			slui):
 		
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
