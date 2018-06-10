@@ -16,6 +16,7 @@ from functions.uac_dll_cliconfg import *
 from functions.uac_dll_mcx2prov import *
 from functions.uac_dll_migwiz import *
 from functions.persist_dll_explorer import *
+from functions.persist_schtask import *
 
 print """
         _                               
@@ -65,6 +66,8 @@ def main():
 				migwiz(sys.argv[3])
 			elif (sys.argv[2] == "explorer"):
 				fax_dll(sys.argv[3])
+			elif (sys.argv[2] == "schtask"):
+				schtask(sys.argv[3])
 	except Exception as error:
 		print_info("Unrecognized command")
 
