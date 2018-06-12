@@ -8,7 +8,7 @@ from uac import *
 def manifests(exe_path):
 	"""
 	Simple technique to identify if the executable has autoElevate
-	in its manifest, very n00bie
+	set to True in its manifest, very n00bie
 	"""
 	strings = ["<autoElevate>true</autoElevate>",
 			"<autoElevate xmlns=\"http://schemas.microsoft.com/SMI/2005/WindowsSettings\">true</autoElevate>"]
