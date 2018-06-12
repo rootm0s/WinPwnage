@@ -11,7 +11,7 @@ def manifests(exe_path):
 	in its manifest, very n00bie
 	"""
 	strings = ["<autoElevate>true</autoElevate>",
-				"<autoElevate xmlns=\"http://schemas.microsoft.com/SMI/2005/WindowsSettings\">true</autoElevate>"]
+			"<autoElevate xmlns=\"http://schemas.microsoft.com/SMI/2005/WindowsSettings\">true</autoElevate>"]
 	
 	try:
 		manifest = open(os.path.join(exe_path), "rb").read()
