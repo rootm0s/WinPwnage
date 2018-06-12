@@ -2,9 +2,9 @@
 
 The meaning of this repo is to study the techniques.
 
-All of the samples, techniques are found online, on different blogs and repos here on GitHub. I do not take credit for any of the findings, thanks to all the researchers.
+Techniques are found online, on different blogs and repos here on GitHub. I do not take credit for any of the findings, thanks to all the researchers.
 
-Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not tested, do not expect it to work.
+Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not tested, do not expect it to work. 
 
 #### Requirements:
 ```pip install -r requirements.txt```
