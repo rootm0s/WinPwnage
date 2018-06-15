@@ -17,6 +17,7 @@ from functions.uac_dll_mcx2prov import *
 from functions.uac_dll_migwiz import *
 from functions.persist_dll_explorer import *
 from functions.persist_schtask import *
+from functions.persist_ifeo import *
 
 print """
         _                               
