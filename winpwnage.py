@@ -69,6 +69,8 @@ def main():
 				fax_dll(sys.argv[3])
 			elif (sys.argv[2] == "schtask"):
 				schtask(sys.argv[3])
+			elif (sys.argv[2] == "ifeo"):
+				ifeo(sys.argv[3],sys.argv[4])
 	except Exception as error:
 		print_info("Unrecognized command")
 
