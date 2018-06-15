@@ -66,7 +66,7 @@ def runas(exe_path):
 	elevate executable.
 	"""
 	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
-		print_info("We are already running as administrator, cannot proceed")
+		print_info("We are already running as administrator, there's no need to proceed")
 		return False
 	else:
 		print_success("Attempting to identify UAC level")
@@ -77,6 +77,7 @@ def runas(exe_path):
 					print_success("Successfully elevated our process with runas")
 				else:
 					print_error("Unable to elevate our process with runas")
+					return False
 			except Exception as error:
 				print_error("Unable to elevate our process with runas")
 				return False
