@@ -19,6 +19,7 @@ migwiz = ["migwiz", "7600", "10240"]
 runas = ["runas", "2600","999999"]
 explorer = ["explorer", "7600", "9600"]	
 schtask = ["schtask","7600", "999999"]
+ifeo = ["ifeo","7600", "999999"]
 
 def scan():
 	"""
@@ -53,7 +54,7 @@ def scan():
 	"""
 	Pestistence techniques
 	"""
-	for function in (schtask,explorer):
+	for function in (schtask,explorer,ifeo):
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
 			print_success("Persist > We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 		else:
