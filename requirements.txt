@@ -1,3 +1,2 @@
 wmi
 colorama
-pypiwin32
