@@ -5,7 +5,6 @@ Fixed in: unfixed
 import os
 import wmi
 import time
-import ctypes
 import _winreg
 from core.prints import *
 
