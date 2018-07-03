@@ -52,7 +52,7 @@ def runas(exe_path):
 				print_success("Process started successfully using runas")
 				sys.exit()
 			else:
-				print_success("Problem creating process using runas")
+				print_error("Problem creating process using runas")
 				return False
 		else:
 			print_warning("The process is NOT set to auto-elevate...")
