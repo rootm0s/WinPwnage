@@ -43,7 +43,7 @@ def silentcleanup():
 
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="schtasks /Run /TN \Microsoft\Windows\DiskCleanup\SilentCleanup /I",
-															ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
+										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
 		if (result[1] == 0):
 			print_success("Successfully ran schtask")
 		else:
