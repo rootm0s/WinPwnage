@@ -116,11 +116,7 @@ def sysprep(payload):
 		time.sleep(5)
 
 		if (sysprep[1] == 0):
-			try:
-				print_success("Successfully ran sysprep executable")
-			except Exception as error:
-				print_error("Unable to run sysprep executable")
-				return False
+			print_success("Successfully ran sysprep executable")
 		else:
 			print_error("Unable to run sysprep executable")
 			return False
