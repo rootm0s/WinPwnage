@@ -35,10 +35,11 @@ def scan():
 		cbn = _winreg.QueryValueEx(key,
 					"CurrentBuildNumber")
 		_winreg.CloseKey(key)
-		print_info("Build number: {}".format(cbn[0]))
 	except Exception as error:
 		print_error("Unable to identify build number: {}".format(error))
 		return False
+	else:
+		print_info("Build number: {}".format(cbn[0]))
 
 	"""
 	UAC bypass techniques
