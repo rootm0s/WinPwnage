@@ -22,6 +22,7 @@ schtask = ["schtask","7600", "999999"]
 ifeo = ["ifeo","7600", "999999"]
 hklmrun = ["hklm_run","2900","999999"]
 hkcurun = ["hkcu_run","2900","999999"]
+userinit = ["userinit","7600","999999"]
 
 def scan():
 	"""
@@ -56,7 +57,7 @@ def scan():
 	"""
 	Pestistence techniques
 	"""
-	for function in (schtask,explorer,ifeo,hklmrun,hkcurun):
+	for function in (schtask,explorer,ifeo,hklmrun,hkcurun,userinit):
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
 			print_success("Persist > We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 		else:
