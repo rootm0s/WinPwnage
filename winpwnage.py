@@ -73,7 +73,7 @@ def main():
 			elif (sys.argv[2] == "ifeo"):
 				ifeo(sys.argv[3],sys.argv[4])
 			elif (sys.argv[2] == "ifeo_delete"):
-				ifeo(sys.argv[3])
+				ifeo_delete(sys.argv[3])
 			elif (sys.argv[2] == "hklm_run"):
 				hklm_run(sys.argv[3])
 			elif (sys.argv[2] == "hklm_run_delete"):
