@@ -71,6 +71,8 @@ def main():
 				schtask(sys.argv[3])
 			elif (sys.argv[2] == "ifeo"):
 				ifeo(sys.argv[3],sys.argv[4])
+			elif (sys.argv[2] == "ifeo_delete"):
+				ifeo(sys.argv[3])
 	except Exception as error:
 		print_info("Unrecognized command")
 
