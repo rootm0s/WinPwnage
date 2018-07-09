@@ -18,6 +18,7 @@ from functions.uac_dll_migwiz import *
 from functions.persist_dll_explorer import *
 from functions.persist_schtask import *
 from functions.persist_ifeo import *
+from functions.persist_hklm_run import *
 
 print """
         _                               
@@ -73,6 +74,10 @@ def main():
 				ifeo(sys.argv[3],sys.argv[4])
 			elif (sys.argv[2] == "ifeo_delete"):
 				ifeo(sys.argv[3])
+			elif (sys.argv[2] == "hklm_run"):
+				hklm_run(sys.argv[3])
+			elif (sys.argv[2] == "hklm_run_delete"):
+				hklm_run_delete()
 	except Exception as error:
 		print_info("Unrecognized command")
 
