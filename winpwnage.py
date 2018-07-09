@@ -78,6 +78,10 @@ def main():
 				hklm_run(sys.argv[3])
 			elif (sys.argv[2] == "hklm_run_delete"):
 				hklm_run_delete()
+			elif (sys.argv[2] == "hkcu_run"):
+				hkcu_run(sys.argv[3])
+			elif (sys.argv[2] == "hkcu_run_delete"):
+				hkcu_run_delete()
 	except Exception as error:
 		print_info("Unrecognized command")
 
