@@ -20,6 +20,7 @@ from functions.persist_schtask import *
 from functions.persist_ifeo import *
 from functions.persist_hklm_run import *
 from functions.persist_hkcu_run import *
+from functions.persist_userinit import *
 
 print """
         _                               
@@ -83,6 +84,10 @@ def main():
 				hkcu_run(sys.argv[3])
 			elif (sys.argv[2] == "hkcu_run_delete"):
 				hkcu_run_delete()
+			elif (sys.argv[2] == "userinit"):
+				userinit(sys.argv[3])
+			elif (sys.argv[2] == "userinit_delete"):
+				userinit_delete()
 	except Exception as error:
 		print_info("Unrecognized command")
 
