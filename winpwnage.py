@@ -19,6 +19,7 @@ from functions.persist_dll_explorer import *
 from functions.persist_schtask import *
 from functions.persist_ifeo import *
 from functions.persist_hklm_run import *
+from functions.persist_hkcu_run import *
 
 print """
         _                               
