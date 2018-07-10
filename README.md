@@ -27,7 +27,7 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Persistence using schtask
 * Persistence using explorer dll hijack
 
-## Installing the Dependencies
+## Installing the Dependencies:
 ```pip install -r requirements.txt```
 
 ## Read:
