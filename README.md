@@ -6,10 +6,31 @@ Techniques are found online, on different blogs and repos here on GitHub. I do n
 
 Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not tested, do not expect it to work. 
 
-#### Requirements:
+## Techniques implemented:
+* UAC bypass using fodhelper
+* UAC bypass using computerdefaults
+* UAC bypass using slui
+* UAC bypass using silentcleanup
+* UAC bypass using compmgmtlauncher
+* UAC bypass using sdclt (isolatedcommand)
+* UAC bypass using sdclt (App Paths)
+* UAC bypass using perfmon
+* UAC bypass using eventviewer
+* UAC bypass using sysprep (dll payload supported)
+* UAC bypass using migwiz (dll payload supported)
+* UAC bypass using mcx2prov (dll payload supported)
+* UAC bypass using cliconfg (dll payload supported)
+* Persistence using userinit
+* Persistence using image file execution option
+* Persistence using hklm run
+* Persistence using hkcu run
+* Persistence using schtask
+* Persistence using explorer dll hijack
+
+## Installing the Dependencies
 ```pip install -r requirements.txt```
 
-#### Read:
+## Read:
 * https://wikileaks.org/ciav7p1/cms/page_2621770.html
 * https://wikileaks.org/ciav7p1/cms/page_2621767.html
 * https://wikileaks.org/ciav7p1/cms/page_2621760.html
