@@ -30,6 +30,9 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
 
+## Build:
+In order for a successful build, install the py2exe module and use the provided build.py script to compile all the scripts in to a portable executable. On Windows 10, Access Denied errors can accure while compiling, rerun until success or elevate the prompt. 
+
 ## Read:
 * https://wikileaks.org/ciav7p1/cms/page_2621770.html
 * https://wikileaks.org/ciav7p1/cms/page_2621767.html
