@@ -30,18 +30,18 @@ print """
              |_|               |___|
 
  Usage:
-   * winpwnage.py -s
-   * winpwnage.py -u <function> <payload>
-   * winpwnage.py -r <payload>
+   * winpwnage.py -scan
+   * winpwnage.py -use <function> <payload>
+   * winpwnage.py -runas <payload>
  """
 
 def main():
 	try:
-		if (sys.argv[1] == "-s"):
+		if (sys.argv[1] == "-scan"):
 			scan()
-		elif (sys.argv[1] == "-r"):
+		elif (sys.argv[1] == "-runas"):
 			runas(sys.argv[2])
-		elif (sys.argv[1] == "-u"):
+		elif (sys.argv[1] == "-use"):
 			if (sys.argv[2] == "slui"):
 				slui(sys.argv[3])
 			elif (sys.argv[2] == "perfmon"):
