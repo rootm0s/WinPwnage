@@ -59,7 +59,7 @@ def main():
 			elif (sys.argv[2] == "sdcltisolatedcommand"):
 				sdclt_isolatedcommand(sys.argv[3])
 			elif (sys.argv[2] == "silentcleanup"):
-				silentcleanup()
+				silentcleanup(sys.argv[3])
 			elif (sys.argv[2] == "sysprep"):
 				sysprep(sys.argv[3])
 			elif (sys.argv[2] == "cliconfg"):
