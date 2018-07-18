@@ -26,6 +26,7 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Persistence using hkcu run
 * Persistence using schtask
 * Persistence using explorer dll hijack
+* Persistence using WMI
 
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
