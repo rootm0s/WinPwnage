@@ -89,6 +89,8 @@ def main():
 				userinit(sys.argv[3])
 			elif (sys.argv[2] == "userinit_delete"):
 				userinit_delete()
+			elif (sys.argv[2] == "wmievent"):
+				persist_wmi(sys.argv[3])				
 	except Exception as error:
 		print_info("Unrecognized command")
 
