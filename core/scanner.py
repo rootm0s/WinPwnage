@@ -59,7 +59,7 @@ def scan():
 	"""
 	Pestistence techniques
 	"""
-	for function in (schtask,explorer,ifeo,hklmrun,hkcurun,userinit):
+	for function in (schtask,explorer,ifeo,hklmrun,hkcurun,userinit,wmievent):
 		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
 			print_success("Persist > We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
 		else:
