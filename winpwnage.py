@@ -21,6 +21,7 @@ from functions.persist_ifeo import *
 from functions.persist_hklm_run import *
 from functions.persist_hkcu_run import *
 from functions.persist_userinit import *
+from functions.persist_wmievent import *
 
 print """
         _                               
