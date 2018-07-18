@@ -23,6 +23,7 @@ ifeo = ["ifeo","7600", "999999"]
 hklmrun = ["hklm_run","2900","999999"]
 hkcurun = ["hkcu_run","2900","999999"]
 userinit = ["userinit","7600","999999"]
+wmievent = ["wmievent","7600","999999"]
 
 def scan():
 	"""
