@@ -1,66 +1,52 @@
 import os
-import _winreg
 from prints import *
-from uac import *
+from utils import *
+from functions.uac_runas import *
+from functions.uac_slui import *
+from functions.uac_perfmon import *
+from functions.uac_fodhelper import *
+from functions.uac_eventviewer import *
+from functions.uac_sdcltcontrol import *
+from functions.uac_silentcleanup import *
+from functions.uac_compmgmtlauncher import *
+from functions.uac_computerdefaults import *
+from functions.uac_sdcltisolatedcommand import *
+from functions.uac_dll_sysprep import *
+from functions.uac_dll_cliconfg import *
+from functions.uac_dll_mcx2prov import *
+from functions.uac_dll_migwiz import *
+from functions.persist_userinit import *
+from functions.persist_schtask import *
+from functions.persist_ifeo import *
+from functions.persist_hkcu_run import *
+from functions.persist_hklm_run import *
+from functions.persist_dll_explorer import *
+from functions.persist_wmievent import *
 
-silentcleanup = ["silentcleanup","9600","999999"]
-sdclt_isolatedcommand = ["sdcltisolatedcommand","10240","17025"]
-computerdefaults = ["computerdefaults","10240","999999"]			
-compmgmtlauncher = ["compmgmtlauncher","7600","15031"]
-sdclt_control = ["sdcltcontrol","10240","16215"]
-eventviewer = ["eventviewer","7600","15031"]
-fodhelper = ["fodhelper","10240","999999"]
-perfmon = ["perfmon","7600","16299"]
-slui = ["slui","9600","17134"] 
-sysprep = ["sysprep","7600","10240"] 
-cliconfg = ["cliconfg","7600","10240"] 
-mcx2prov = ["mcx2prov","7600", "10240"]	
-migwiz = ["migwiz", "7600", "10240"]
-runas = ["runas", "2600","999999"]
-explorer = ["explorer", "7600", "9600"]	
-schtask = ["schtask","7600", "999999"]
-ifeo = ["ifeo","7600", "999999"]
-hklmrun = ["hklm_run","2900","999999"]
-hkcurun = ["hkcu_run","2900","999999"]
-userinit = ["userinit","7600","999999"]
-wmievent = ["wmievent","7600","999999"]
+functions = (runas_info,fodhelper_info,slui_info,silentcleanup_info,sdcltisolatedcommand_info,sdcltcontrol_info,perfmon_info,eventviewer_info,compmgmtlauncher_info,computerdefaults_info,cliconfg_info,mcx2prov_info,migwiz_info,sysprep_info,explorer_info,wmievent_info,schtask_info,ifeo_info,userinit_info,hklmrun_info,hkcurun_info)
 
-def scan():
-	"""
-	Read build number from registry in attempt to match
-	it against our exploits and functions
-	"""
-	try:
-		key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
-					os.path.join("Software\Microsoft\Windows NT\CurrentVersion"),0,_winreg.KEY_READ)
-		cbn = _winreg.QueryValueEx(key,
-					"CurrentBuildNumber")
-		_winreg.CloseKey(key)
-	except Exception as error:
-		print_error("Unable to identify build number: {}".format(error))
-		return False
-	else:
-		print_info("Build number: {}".format(cbn[0]))
+class scanner():
+	def start(self):
+		print_table()
+		for info in (functions):
+			if int(information().build_number()) < int(info["Fixed In"]) and int(information().build_number()) > int(info["Works From"]):
+				table_success(info["Id"],
+								"\t{}\t{}\t\t\t{}\t\t\t{}".format(str(info["Type"]),
+								str(info["Function Payload"]),
+								str(info["Admin"]),
+								str(info["Description"])))
+			else:
+				table_error(info["Id"],
+								"\t{}\t{}\t\t\t{}\t\t\t{}".format(str(info["Type"]),
+								str(info["Function Payload"]),
+								str(info["Admin"]),
+								str(info["Description"])))
 
-	"""
-	UAC bypass techniques
-	"""
-	for function in (sdclt_isolatedcommand,silentcleanup,computerdefaults,compmgmtlauncher,sdclt_control,eventviewer,fodhelper,sysprep,cliconfg,mcx2prov,migwiz,perfmon,slui):
-		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
-			print_success("UAC bypass > We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
-		else:
-			print_error("UAC bypass > Cannot use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
-
-	if (uac_status() == True):
-		print_success("UAC bypass > We can use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
-	else:
-		print_error("UAC bypass > Cannot use ({}) supposed to work on build number: {}-{}".format(runas[0],runas[1],runas[2]))
-
-	"""
-	Pestistence techniques
-	"""
-	for function in (schtask,explorer,ifeo,hklmrun,hkcurun,userinit,wmievent):
-		if int(cbn[0]) < int(function[2]) and int(cbn[0]) > int(function[1]):
-			print_success("Persist > We can use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
-		else:
-			print_error("Persist > Cannot use ({}) supposed to work on build number: {}-{}".format(function[0],function[1],function[2]))
+class function():
+	def run(self,id,payload):
+		print_info("Attempting to run id ({}) configured with payload ({})".format(id,payload))
+		for info in (functions):
+			if (id in str(info["Id"])):
+				globals()[info["Function Name"]](os.path.join(payload))
+			else:
+				pass
