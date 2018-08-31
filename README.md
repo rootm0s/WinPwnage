@@ -28,6 +28,10 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Persistence using explorer dll hijack
 * Persistence using WMI (SYSTEM privileges)
 
+## Preview:
+![alt text](https://i.imgur.com/5j4pKue.jpg)
+![alt text](https://i.imgur.com/4Csq6AQ.jpg)
+
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
 
