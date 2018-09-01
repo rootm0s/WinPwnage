@@ -78,10 +78,7 @@ class information():
 
 	def build_number(self):
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
-									os.path.join("Software\Microsoft\Windows NT\CurrentVersion"),
-									0,_winreg.KEY_READ)
-									
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows NT\CurrentVersion"),0,_winreg.KEY_READ)									
 			cbn = _winreg.QueryValueEx(key,"CurrentBuildNumber")
 			_winreg.CloseKey(key)
 		except Exception as error:
@@ -91,10 +88,7 @@ class information():
 		
 	def uac_level(self):
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
-									os.path.join("Software\Microsoft\Windows\CurrentVersion\Policies\System"),
-									0,_winreg.KEY_READ)									
-					
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows\CurrentVersion\Policies\System"),0,_winreg.KEY_READ)											
 			cpba = _winreg.QueryValueEx(key,"ConsentPromptBehaviorAdmin")							
 			cpbu = _winreg.QueryValueEx(key,"ConsentPromptBehaviorUser")
 			posd = _winreg.QueryValueEx(key,"PromptOnSecureDesktop")
