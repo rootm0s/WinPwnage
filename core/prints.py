@@ -2,8 +2,8 @@ from colorama import init, Fore
 init(convert=True)
 
 table = """
- Id:    Type:           Custom payload:         Requires admin:         Description:
- ----   -----------     ----------------        ----------------        -----------------------"""
+ Id:    Type:           Payload:        Admin:          Description:
+ ----   -----------     -----------     --------        -----------------------"""
 
 def print_table():
 	print (table)
