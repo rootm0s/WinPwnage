@@ -31,16 +31,16 @@ class scanner():
 		for info in (functions):
 			if int(information().build_number()) < int(info["Fixed In"]) and int(information().build_number()) > int(info["Works From"]):
 				table_success(info["Id"],
-								"\t{}\t{}\t\t\t{}\t\t\t{}".format(str(info["Type"]),
-								str(info["Function Payload"]),
-								str(info["Admin"]),
-								str(info["Description"])))
+						"\t{}\t{}\t\t{}\t\t{}".format(str(info["Type"]),
+						str(info["Function Payload"]),
+						str(info["Admin"]),
+						str(info["Description"])))
 			else:
 				table_error(info["Id"],
-								"\t{}\t{}\t\t\t{}\t\t\t{}".format(str(info["Type"]),
-								str(info["Function Payload"]),
-								str(info["Admin"]),
-								str(info["Description"])))
+						"\t{}\t{}\t\t{}\t\t{}".format(str(info["Type"]),
+						str(info["Function Payload"]),
+						str(info["Admin"]),
+						str(info["Description"])))
 
 class function():
 	def run(self,id,payload):
