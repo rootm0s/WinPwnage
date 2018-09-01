@@ -2,7 +2,6 @@ import os
 import wmi
 import ctypes
 import _winreg
-from prints import *
 
 wmi = wmi.WMI()
 
