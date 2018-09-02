@@ -1,6 +1,4 @@
 import os
-import wmi
-import ctypes
 import _winreg
 from core.prints import *
 from core.utils import *
