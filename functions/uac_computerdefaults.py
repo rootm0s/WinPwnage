@@ -1,5 +1,4 @@
 import os
-import wmi
 import time
 import _winreg
 from core.prints import *
