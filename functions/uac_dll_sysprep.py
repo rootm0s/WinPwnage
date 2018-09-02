@@ -1,5 +1,4 @@
 import os
-import wmi
 import time
 import tempfile
 from core.prints import *
