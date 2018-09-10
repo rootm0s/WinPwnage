@@ -31,22 +31,26 @@ def manifests(payload):
 			return False
 
 def runas(payload):
-	if (os.path.isfile(os.path.join(payload)) == True):
-		if (manifests(os.path.join(payload)) == True):
-			process().runas(os.path.join(payload))
-		else:
-			if (information().admin() == True):
-				print_error("Cannot proceed, we are already elevated")
-				return False
+	if (payloads().exe(payload) == True):
+		if (os.path.isfile(os.path.join(payload)) == True):
+			if (manifests(os.path.join(payload)) == True):
+				process().runas(os.path.join(payload))
 			else:
-				if (information().uac_level() == 1):
-					if (process().runas(os.path.join(payload)) == True):
-						print_success("Successfully elevated process ({})".format(os.path.join(payload)))
-					else:
-						print_error("Unable to elevate process ({})".format(os.path.join(payload)))
-				else:
-					print_error("Unable to execute payload ({}) UAC level is to high".format(os.path.join(payload)))
+				if (information().admin() == True):
+					print_error("Cannot proceed, we are already elevated")
 					return False
+				else:
+					if (information().uac_level() == 1):
+						if (process().runas(os.path.join(payload)) == True):
+							print_success("Successfully elevated process ({})".format(os.path.join(payload)))
+						else:
+							print_error("Unable to elevate process ({})".format(os.path.join(payload)))
+					else:
+						print_error("Unable to execute payload ({}) UAC level is to high".format(os.path.join(payload)))
+						return False
+		else:
+			print_error("Unable to execute payload ({}) cannot find payload on disk".format(os.path.join(payload)))
+			return False
 	else:
-		print_error("Unable to execute payload ({}) cannot find payload on disk".format(os.path.join(payload)))
-		return False
+		print_error("Cannot proceed, invalid payload")
+		return False							

