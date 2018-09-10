@@ -19,6 +19,23 @@ class disable_fsr():
 		if self.success:
 			self.revert(self.old_value)
 
+class payloads():
+	"""
+	Checks if payload exsists on disk and if the 
+	file extention is correct
+	"""
+	def exe(self,payload):
+		if (os.path.isfile(os.path.join(payload)) == True) and payload.endswith(".exe"):
+			return True
+		else:
+			return False
+			
+	def dll(self,payload):
+		if (os.path.isfile(os.path.join(payload)) == True) and payload.endswith(".dll"):
+			return True
+		else:
+			return False			
+			
 class process():
 	"""
 	A class to spawn, elevate or terminate processes
