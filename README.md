@@ -20,13 +20,14 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * UAC bypass using migwiz (dll payload supported)
 * UAC bypass using mcx2prov (dll payload supported)
 * UAC bypass using cliconfg (dll payload supported)
-* Persistence using userinit
-* Persistence using image file execution option
-* Persistence using hklm run
-* Persistence using hkcu run
+* Persistence using userinit key
+* Persistence using image file execution option and magnifier
+* Persistence using hkey_local_machine run key
+* Persistence using hkey_current_user run key
 * Persistence using schtask (SYSTEM privileges)
 * Persistence using explorer dll hijack
-* Persistence using WMI (SYSTEM privileges)
+* Persistence using mofcomp and mof file (SYSTEM privileges)
+* Persistence using wmic (SYSTEM privileges)
 
 ## Preview:
 ![alt text](https://i.imgur.com/5j4pKue.jpg)
