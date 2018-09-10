@@ -21,12 +21,19 @@ from functions.persist_ifeo import *
 from functions.persist_hkcu_run import *
 from functions.persist_hklm_run import *
 from functions.persist_dll_explorer import *
-from functions.persist_wmievent import *
+from functions.persist_mofcomp import *
+from functions.persist_wmic import *
 
-functions = (runas_info,fodhelper_info,slui_info,silentcleanup_info,sdcltisolatedcommand_info,sdcltcontrol_info,perfmon_info,eventviewer_info,compmgmtlauncher_info,computerdefaults_info,cliconfg_info,mcx2prov_info,migwiz_info,sysprep_info,explorer_info,wmievent_info,schtask_info,ifeo_info,userinit_info,hklmrun_info,hkcurun_info)
+functions = (runas_info,fodhelper_info,slui_info,silentcleanup_info,
+		sdcltisolatedcommand_info,sdcltcontrol_info,perfmon_info,
+		eventviewer_info,compmgmtlauncher_info,computerdefaults_info,
+		cliconfg_info,mcx2prov_info,migwiz_info,sysprep_info,
+		explorer_info,mofcomp_info,schtask_info,ifeo_info,
+		userinit_info,hklmrun_info,hkcurun_info,wmic_info)
 
 class scanner():
 	def start(self):
+		print_info("Comparing build number ({}) against 'Fixed In' build numbers, false positives might happen.".format(information().build_number()))
 		print_table()
 		for info in (functions):
 			if int(information().build_number()) < int(info["Fixed In"]) and int(information().build_number()) > int(info["Works From"]):
@@ -41,7 +48,7 @@ class scanner():
 						str(info["Function Payload"]),
 						str(info["Admin"]),
 						str(info["Description"])))
-
+												
 class function():
 	def run(self,id,payload):
 		print_info("Attempting to run id ({}) configured with payload ({})".format(id,payload))
