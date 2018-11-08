@@ -3,7 +3,15 @@ import wmi
 import ctypes
 import _winreg
 
+try:
+	# WMI returned a syntax error: you're probably running inside a thread without first calling pythoncom.CoInitialize
+	import pythoncom
+	pythoncom.CoInitialize()
+except Exception:
+	pass
+
 wmi = wmi.WMI()
+
 
 class disable_fsr():
 	"""
@@ -15,61 +23,72 @@ class disable_fsr():
 	def __enter__(self):
 		self.old_value = ctypes.c_long()
 		self.success = self.disable(ctypes.byref(self.old_value))
-	def __exit__(self,type,value,traceback):
+
+	def __exit__(self, type, value, traceback):
 		if self.success:
 			self.revert(self.old_value)
 
+
 class payloads():
 	"""
-	Checks if payload exsists on disk and if the 
-	file extention is correct
+	Checks if payload exists on disk and if the
+	file extension is correct
 	"""
-	def exe(self,payload):
-		if (os.path.isfile(os.path.join(payload)) == True) and payload.endswith(".exe"):
+	def exe(self, payload):
+		if os.path.isfile(os.path.join(payload)) and payload.endswith(".exe"):
+			return True
+		else:
+			# Check if payload is a bin with args (e.g C:\\Windows\\System32\\cmd.exe /k whoami)
+			p = payload.split(' ', 1)[0]
+			if os.path.isfile(p):
+				return True
+
+			return False
+
+	def dll(self, payload):
+		if os.path.isfile(os.path.join(payload)) and payload.endswith(".dll"):
 			return True
 		else:
 			return False
-			
-	def dll(self,payload):
-		if (os.path.isfile(os.path.join(payload)) == True) and payload.endswith(".dll"):
-			return True
-		else:
-			return False			
-			
+
+
 class process():
 	"""
 	A class to spawn, elevate or terminate processes
 	"""
-	def create(self,payload,window):
+	def create(self, payload, window):
 		try:
-			pid,result = wmi.Win32_Process.Create(CommandLine=os.path.join(payload),ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=window))
+			pid, result = wmi.Win32_Process.Create(
+				CommandLine=os.path.join(payload),
+				ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=window)
+			)
 		except Exception as error:
 			return False
 
-		if (result == 0):
+		if result == 0:
 			return True
 		else:
 			return False
 
-	def runas(self,payload):
+	def runas(self, payload):
 		try:
-			if (ctypes.windll.Shell32.ShellExecuteA(None,"runas",os.path.join(payload),None,None,1) >= 42):
+			if ctypes.windll.Shell32.ShellExecuteA(None, "runas", os.path.join(payload), None, None, 1) >= 42:
 				return True
 			else:
 				return False
 		except Exception as error:
 			return False
-		
-	def terminate(self,processname):
+
+	def terminate(self, processname):
 		for process in wmi.Win32_Process():
-				if (process.Caption == processname):
+				if process.Caption == processname:
 					try:
 						process.Terminate(process.ParentProcessId)
 					except Exception as error:
 						return False
 					else:
 						return True
-						break
+
 
 class information():
 	"""
@@ -85,34 +104,36 @@ class information():
 			
 	def architecture(self):
 		for os in wmi.Win32_OperatingSystem():
-			return os.OSArchitecture				
+			return os.OSArchitecture
 
 	def admin(self):
-		if (ctypes.windll.shell32.IsUserAnAdmin() == True):
+		if ctypes.windll.shell32.IsUserAnAdmin() == True:
 			return True
 		else:
 			return False
 
 	def build_number(self):
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows NT\CurrentVersion"),0,_winreg.KEY_READ)									
-			cbn = _winreg.QueryValueEx(key,"CurrentBuildNumber")
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(
+				"Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, _winreg.KEY_READ)
+			cbn = _winreg.QueryValueEx(key, "CurrentBuildNumber")
 			_winreg.CloseKey(key)
 		except Exception as error:
 			return False
 		else:
 			return cbn[0]
-		
+
 	def uac_level(self):
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join("Software\Microsoft\Windows\CurrentVersion\Policies\System"),0,_winreg.KEY_READ)											
-			cpba = _winreg.QueryValueEx(key,"ConsentPromptBehaviorAdmin")							
-			cpbu = _winreg.QueryValueEx(key,"ConsentPromptBehaviorUser")
-			posd = _winreg.QueryValueEx(key,"PromptOnSecureDesktop")
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(
+				"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, _winreg.KEY_READ)
+			cpba = _winreg.QueryValueEx(key, "ConsentPromptBehaviorAdmin")
+			cpbu = _winreg.QueryValueEx(key, "ConsentPromptBehaviorUser")
+			posd = _winreg.QueryValueEx(key, "PromptOnSecureDesktop")
 			_winreg.CloseKey(key)
 		except Exception as error:
 			return False
-				
+
 		if (cpba[0] == 0) and (cpbu[0] == 3) and (posd[0] == 0):
 			return 1
 		elif (cpba[0] == 5) and (cpbu[0] == 3) and (posd[0] == 0):
@@ -122,4 +143,4 @@ class information():
 		elif (cpba[0] == 2) and (cpbu[0] == 3) and (posd[0] == 1):
 			return 4
 		else:
-			return False				
+			return False
