@@ -60,7 +60,11 @@ def perfmon(payload):
 		time.sleep(5)
 
 		try:
-			shutil.copy(payload,os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
+			if not os.path.exists(payload):
+				print_error('Args are not allowed with this technique.')
+				return False
+
+			shutil.copy(payload, os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
 		except shutil.Error as error:
 			return False
 		except IOError as error:
