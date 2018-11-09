@@ -24,7 +24,7 @@ from winpwnage.functions.persist.persist_dll_explorer import *
 from winpwnage.functions.persist.persist_mofcomp import *
 from winpwnage.functions.persist.persist_wmic import *
 
-from winpwnage.core.prints import print_info, print_table, table_success, table_error, Constant
+from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
 
 functions = {
@@ -100,7 +100,10 @@ class function():
 
 			for info in functions[i]:
 				if id in str(info["Id"]):
-					globals()[info["Function Name"]](os.path.join(payload))
+					if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
+						globals()[info["Function Name"]](os.path.join(payload))
+					else:
+						print_error('Technique not compatible with this system.')
 					return Constant.output
 				else:
 					pass
