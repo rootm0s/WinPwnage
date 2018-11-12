@@ -81,13 +81,13 @@ class process():
 
 	def terminate(self, processname):
 		for process in wmi.Win32_Process():
-				if process.Caption == processname:
-					try:
-						process.Terminate(process.ParentProcessId)
-					except Exception as error:
-						return False
-					else:
-						return True
+			if process.Caption == processname:
+				try:
+					process.Terminate(process.ParentProcessId)
+				except Exception as error:
+					return False
+				else:
+					return True
 
 
 class information():

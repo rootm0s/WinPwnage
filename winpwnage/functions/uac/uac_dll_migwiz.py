@@ -8,7 +8,7 @@ migwiz_info = {
 	"Description": "Bypass UAC using migwiz (DLL) and registry key manipulation",
 	"Id": "13",
 	"Type": "UAC bypass",
-	"Fixed In": "9800",
+	"Fixed In": "10147",
 	"Works From": "7600",
 	"Admin": False,
 	"Function Name": "migwiz",
