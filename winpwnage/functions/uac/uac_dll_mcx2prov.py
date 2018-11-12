@@ -8,7 +8,7 @@ mcx2prov_info = {
 	"Description": "Bypass UAC using mcx2prov (DLL) and registry key manipulation",
 	"Id": "12",
 	"Type": "UAC bypass",
-	"Fixed In": "9800",
+	"Fixed In": "10147",
 	"Works From": "7600",
 	"Admin": False,
 	"Function Name": "mcx2prov",
@@ -52,7 +52,7 @@ def mcx2prov(payload):
 					information().windows_directory()), 0):
 				print_success("Successfully extracted cabinet file")
 			else:
-				print_error("Unable to extract cabinet file")	
+				print_error("Unable to extract cabinet file")
 				return False
 		else:
 			print_error("Unable to extract cabinet file, cabinet file is not found")

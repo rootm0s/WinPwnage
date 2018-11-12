@@ -1,5 +1,4 @@
 import os
-import wmi
 import time
 import tempfile
 from winpwnage.core.prints import *
@@ -9,7 +8,7 @@ sysprep_info = {
 	"Description": "Bypass UAC using sysprep (DLL) and registry key manipulation",
 	"Id": "14",
 	"Type": "UAC bypass",
-	"Fixed In": "9800",
+	"Fixed In": "9600",
 	"Works From": "7600",
 	"Admin": False,
 	"Function Name": "sysprep",

@@ -12,7 +12,7 @@ sdcltisolatedcommand_info = {
 	"Works From": "10240",
 	"Admin": False,
 	"Function Name": "sdclt_isolatedcommand",
-	"Function Payload" : True,
+	"Function Payload": True,
 }
 
 
