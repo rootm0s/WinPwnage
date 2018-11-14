@@ -1,5 +1,4 @@
 import os
-import wmi
 import ctypes
 import platform
 import _winreg
