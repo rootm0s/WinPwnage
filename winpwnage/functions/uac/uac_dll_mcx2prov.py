@@ -84,7 +84,7 @@ def mcx2prov(payload):
 					print_error("Unable to execute mcx2prov executable")
 					return False
 			else:
-				print_error("Cannot found mcx2prov")
+				print_error("Cannot find mcx2prov")
 				return False
 	else:
 		print_error("Cannot proceed, invalid payload")
