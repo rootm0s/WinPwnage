@@ -1,16 +1,10 @@
 import os
 import wmi
 import ctypes
+import platform
 import _winreg
 
-try:
-	# WMI returned a syntax error: you're probably running inside a thread without first calling pythoncom.CoInitialize
-	import pythoncom
-	pythoncom.CoInitialize()
-except Exception:
-	pass
-
-wmi = wmi.WMI()
+from .winstructures import *
 
 
 class disable_fsr():
@@ -56,38 +50,88 @@ class process():
 	"""
 	A class to spawn, elevate or terminate processes
 	"""
-	def create(self, payload, window):
-		try:
-			pid, result = wmi.Win32_Process.Create(
-				CommandLine=os.path.join(payload),
-				ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=window)
-			)
-		except Exception as error:
-			return False
+	def create(self, payload, params='', window=False):
+		shinfo = ShellExecuteInfoW()
+		shinfo.cbSize = sizeof(shinfo)
+		shinfo.fMask = SEE_MASK_NOCLOSEPROCESS
+		shinfo.lpFile = payload
+		shinfo.nShow = SW_SHOW if window else SW_HIDE
+		shinfo.lpParameters = params
 
-		if result == 0:
-			return True
+		if not ShellExecuteEx(byref(shinfo)):
+			return False
 		else:
-			return False
+			return True
 
-	def runas(self, payload):
+	def runas(self, payload, params=''):
+		shinfo = ShellExecuteInfoW()
+		shinfo.cbSize = sizeof(shinfo)
+		shinfo.fMask = SEE_MASK_NOCLOSEPROCESS
+		shinfo.lpVerb = "runas"
+		shinfo.lpFile = payload
+		shinfo.nShow = SW_SHOW
+		shinfo.lpParameters = params
 		try:
-			if ctypes.windll.Shell32.ShellExecuteA(None, "runas", os.path.join(payload), None, None, 1) >= 42:
+			if ShellExecuteEx(byref(shinfo)):
 				return True
 			else:
 				return False
 		except Exception as error:
 			return False
 
+	def enum_processes(self):
+		size            = 0x1000
+		cbBytesReturned = DWORD()
+		unit            = sizeof(DWORD)
+		dwOwnPid        = os.getpid()
+		while 1:
+			process_ids = (DWORD * (size // unit))()
+			cbBytesReturned.value = size
+			EnumProcesses(byref(process_ids), cbBytesReturned, byref(cbBytesReturned))
+			returned = cbBytesReturned.value
+			if returned < size:
+				break
+			size = size + 0x1000
+		process_id_list = list()
+		for pid in process_ids:
+			if pid is None:
+				break
+			if pid == dwOwnPid and pid == 0:
+				continue
+			process_id_list.append(pid)
+		return process_id_list
+
+	def enum_process_names(self):
+		pid_to_name = {}
+		for pid in self.enum_processes():
+			name = False
+			try:
+				process_handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, False, pid)
+			except Exception as e:
+				continue
+			name = get_process_name(process_handle)
+			if name:
+				pid_to_name[pid] = name
+			if process_handle:
+				CloseHandle(process_handle)
+		return pid_to_name
+
+	def get_process_pid(self, processname):
+		pid_to_name = self.enum_process_names()
+		for pid in pid_to_name:
+			if pid_to_name[pid].lower().find(processname) != -1:
+				return pid
+
 	def terminate(self, processname):
-		for process in wmi.Win32_Process():
-			if process.Caption == processname:
-				try:
-					process.Terminate(process.ParentProcessId)
-				except Exception as error:
-					return False
-				else:
-					return True
+		pid = self.get_process_pid(processname)
+		if pid:
+			try:
+				phandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, False, pid)
+				os.kill(pid, phandle)
+				return True
+			except:
+				pass
+		return False
 
 
 class information():
@@ -95,16 +139,13 @@ class information():
 	A class to handle all the information gathering
 	"""
 	def system_directory(self):
-		for os in wmi.Win32_OperatingSystem():
-			return os.SystemDirectory
+		return os.path.join(os.environ.get('windir'), 'system32')
 			
 	def windows_directory(self):
-		for os in wmi.Win32_OperatingSystem():
-			return os.WindowsDirectory
+		return os.environ.get('windir')
 			
 	def architecture(self):
-		for os in wmi.Win32_OperatingSystem():
-			return os.OSArchitecture
+		return platform.machine()
 
 	def admin(self):
 		if ctypes.windll.shell32.IsUserAnAdmin() == True:
