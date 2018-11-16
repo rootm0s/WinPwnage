@@ -38,7 +38,7 @@ def sysprep(payload):
 					os.path.join(tempfile.gettempdir(), "suspicious.cab"))):
 				print_success("Successfully created cabinet file")
 			else:
-				print_success("Unable to create cabinet file")
+				print_error("Unable to create cabinet file")
 				return False
 		else:
 			print_error("Unable to create cabinet file, dll file is not found")
