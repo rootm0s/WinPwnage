@@ -8,7 +8,7 @@ from winpwnage.core.utils import *
 
 computerdefaults_dll_info = {
 	"Description": "Bypass UAC using computerdefaults (DLL) and mock systemroot directory",
-	"Id": "23",
+	"Id": "24",
 	"Type": "UAC bypass",
 	"Fixed In": "Untested",
 	"Works From": "Untested",
