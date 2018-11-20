@@ -7,7 +7,7 @@ from winpwnage.core.utils import *
 #https://medium.com/tenable-techblog/uac-bypass-by-mocking-trusted-directories-24a96675f6e 
 
 fodhelper_dll_info = {
-	"Description": "Bypass UAC using fodhelper (DLL) and mock systemroot directory",
+	"Description": "Bypass UAC using fodhelper (DLL) by mocking trusted directories",
 	"Id": "23",
 	"Type": "UAC bypass",
 	"Fixed In": "Untested",
