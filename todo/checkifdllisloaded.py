@@ -1,9 +1,11 @@
 import os
+import sys
 
 try:
-	import psutil
+	import psutils
 except ImportError:
 	print "Module psutil is required, install it with pip (pip install psutil)"
+	sys.exit()
 
 def get_process_pid(process_name):
 	""" Get process pid by name """
