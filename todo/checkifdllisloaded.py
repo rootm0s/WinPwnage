@@ -1,9 +1,9 @@
 import os
 
 try:
-  import psutil
-except Exception as error:
-  print "psutil is required, install it with (pip install psutil)"
+	import psutil
+except ImportError:
+	print "Module psutil is required, install it with pip (pip install psutil)"
 
 def get_process_pid(process_name):
 	""" Get process pid by name """
@@ -15,9 +15,8 @@ def search_dll(dllname,pid):
 	""" Returns true if dll is found """
 	loaded_dlls = []
 	sorted_dlls = []
-	open_process = psutil.Process(pid)
-	
-	for x in open_process.memory_maps():
+
+	for x in psutil.Process(pid).memory_maps():
 		for dll in x:
 			loaded_dlls.append(str(dll))
 			
