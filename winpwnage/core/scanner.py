@@ -23,6 +23,7 @@ from winpwnage.functions.persist.persist_hklm_run import *
 from winpwnage.functions.persist.persist_dll_explorer import *
 from winpwnage.functions.persist.persist_mofcomp import *
 from winpwnage.functions.persist.persist_wmic import *
+from winpwnage.functions.persist.persist_startup_files import *
 
 from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
@@ -51,7 +52,8 @@ functions = {
 		userinit_info,
 		hkcurun_info,
 		hklmrun_info,
-		wmic_info
+		wmic_info, 
+		startup_files_info
 	)
 }
 
@@ -92,7 +94,7 @@ class function():
 		self.persist = persist
 		Constant.output = []
 
-	def run(self, id, payload):
+	def run(self, id, payload, **kwargs):
 		print_info("Attempting to run id ({}) configured with payload ({})".format(id, payload))
 		for i in functions:
 			if i == 'uac' and not self.uac or i == 'persist' and not self.persist:
@@ -101,7 +103,12 @@ class function():
 			for info in functions[i]:
 				if id in str(info["Id"]):
 					if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
-						globals()[info["Function Name"]](os.path.join(payload))
+						f = globals()[info["Function Name"]]
+						attr = str(f.__code__.co_varnames)
+						if len(attr) >=1:
+							f(payload, name=kwargs.get('name', ''), add=kwargs.get('add', True))
+						else:
+							f(payload)
 					else:
 						print_error('Technique not compatible with this system.')
 					return Constant.output

