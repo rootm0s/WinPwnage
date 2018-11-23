@@ -49,7 +49,7 @@ class process():
 	"""
 	A class to spawn, elevate or terminate processes
 	"""
-	def create(self, payload, params='', window=False):
+	def create(self, payload, params='', window=False, get_exit_code=False):
 		shinfo = ShellExecuteInfoW()
 		shinfo.cbSize = sizeof(shinfo)
 		shinfo.fMask = SEE_MASK_NOCLOSEPROCESS
@@ -57,10 +57,17 @@ class process():
 		shinfo.nShow = SW_SHOW if window else SW_HIDE
 		shinfo.lpParameters = params
 
-		if not ShellExecuteEx(byref(shinfo)):
-			return False
-		else:
+		if ShellExecuteEx(byref(shinfo)):
+			if get_exit_code:
+				ctypes.windll.kernel32.WaitForSingleObject(shinfo.hProcess, -1)
+				i = ctypes.c_int(0)
+				pi = ctypes.pointer(i)
+				if ctypes.windll.kernel32.GetExitCodeProcess(shinfo.hProcess, pi) != 0:
+					return i.value
+
 			return True
+		else:
+			return False
 
 	def runas(self, payload, params=''):
 		shinfo = ShellExecuteInfoW()
@@ -128,9 +135,41 @@ class process():
 				phandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, False, pid)
 				os.kill(pid, phandle)
 				return True
-			except:
+			except Exception:
 				pass
 		return False
+
+
+class registry():
+	def __init__(self):
+		self.hkeys = {
+			'hkcu': _winreg.HKEY_CURRENT_USER,
+			'hklm': _winreg.HKEY_LOCAL_MACHINE
+		}
+
+	def modify_key(self, hkey, path, name, value, create=False):
+		try:
+			if not create:
+				key = _winreg.OpenKey(self.hkeys[hkey], path, 0, _winreg.KEY_ALL_ACCESS)
+			else:
+				key = _winreg.CreateKey(self.hkeys[hkey], os.path.join(path))
+			_winreg.SetValueEx(key, name, 0, _winreg.REG_SZ, value)
+			_winreg.CloseKey(key)
+			return True
+		except Exception as e:
+			return False
+
+	def remove_key(self, hkey, path, name='', delete_key=False):
+		try:
+			if delete_key:
+				_winreg.DeleteKey(self.hkeys[hkey], path)
+			else:
+				key = _winreg.OpenKey(self.hkeys[hkey], path, 0, _winreg.KEY_ALL_ACCESS)
+				_winreg.DeleteValue(key, name)
+				_winreg.CloseKey(key)
+			return True
+		except Exception as e:
+			return False
 
 
 class information():
