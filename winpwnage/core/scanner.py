@@ -105,7 +105,7 @@ class function():
 					if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
 						f = globals()[info["Function Name"]]
 						attr = str(f.__code__.co_varnames)
-						if len(attr) >=1:
+						if 'name' in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
 							f(payload, name=kwargs.get('name', ''), add=kwargs.get('add', True))
 						else:
 							f(payload)
