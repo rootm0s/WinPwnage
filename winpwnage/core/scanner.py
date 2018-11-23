@@ -114,4 +114,3 @@ class function():
 					return Constant.output
 				else:
 					pass
-		return False
