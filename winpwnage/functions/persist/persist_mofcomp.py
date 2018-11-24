@@ -12,7 +12,7 @@ mofcomp_info = {
 	"Description": "Gain persistence with system privilege using mofcomp and mof file",
 	"Id": "16",
 	"Type": "Persistence",
-	"Fixed In": "999999",
+	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
 	"Function Name": "persist_mofcomp",

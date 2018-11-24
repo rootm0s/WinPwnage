@@ -9,7 +9,7 @@ schtask_info = {
 	"Description": "Gain persistence with system privilege using schtasks",
 	"Id": "17",
 	"Type": "Persistence",
-	"Fixed In": "99999",
+	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
 	"Function Name": "schtask",

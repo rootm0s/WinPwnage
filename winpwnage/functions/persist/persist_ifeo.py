@@ -5,7 +5,7 @@ ifeo_info = {
 	"Description": "Gain persistence using IFEO debugger registry key",
 	"Id": "18",
 	"Type": "Persistence",
-	"Fixed In": "99999",
+	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
 	"Function Name": "ifeo",

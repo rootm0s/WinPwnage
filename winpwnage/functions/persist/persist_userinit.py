@@ -6,7 +6,7 @@ userinit_info = {
 	"Description": "Gain persistence using Userinit registry key",
 	"Id": "19",
 	"Type": "Persistence",
-	"Fixed In": "99999",
+	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
 	"Function Name": "userinit",

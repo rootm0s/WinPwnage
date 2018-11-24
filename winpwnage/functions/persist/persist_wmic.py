@@ -7,7 +7,7 @@ wmic_info = {
 	"Description": "Gain persistence with system privilege using wmic",
 	"Id": "22",
 	"Type": "Persistence",
-	"Fixed In": "99999",
+	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
 	"Function Name": "persist_wmic",

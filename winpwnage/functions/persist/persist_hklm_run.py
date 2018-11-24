@@ -5,7 +5,7 @@ hklmrun_info = {
 	"Description": "Gain persistence using HKEY_LOCAL_MACHINE Run registry key",
 	"Id": "20",
 	"Type": "Persistence",
-	"Fixed In": "99999",
+	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
 	"Function Name": "hklm_run",
