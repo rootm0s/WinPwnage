@@ -3,7 +3,7 @@ from winpwnage.core.utils import *
 
 hklmrun_info = {
 	"Description": "Gain persistence using HKEY_LOCAL_MACHINE Run registry key",
-	"Id": "20",
+	"Id": "7",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -13,7 +13,7 @@ hklmrun_info = {
 }
 
 
-def hklm_run(payload, name='OneDriveUpdate', add=True):
+def hklm_run(payload, name="", add=True):
 	if not information().admin():
 		print_error("Cannot proceed, we are not elevated")
 		return False

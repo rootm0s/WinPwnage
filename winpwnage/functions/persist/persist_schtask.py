@@ -7,7 +7,7 @@ from winpwnage.core.utils import *
 
 schtask_info = {
 	"Description": "Gain persistence with system privilege using schtasks",
-	"Id": "17",
+	"Id": "3",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -17,7 +17,7 @@ schtask_info = {
 }
 
 
-def schtask(payload, name='OneDriveUpdate', add=True):
+def schtask(payload, name="", add=True):
 	if not information().admin():
 		print_error("Cannot proceed, we are not elevated")
 		return False

@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 explorer_info = {
 	"Description": "Gain persistence using explorer and dll hijacking",
-	"Id": "15",
+	"Id": "1",
 	"Type": "Persistence",
 	"Fixed In": "9800",
 	"Works From": "7600",
@@ -16,7 +16,7 @@ explorer_info = {
 }
 
 
-def fax_dll(payload, name='', add=True):
+def fax_dll(payload, add=True):
 	if add:
 		if payloads().dll(payload):
 			try:

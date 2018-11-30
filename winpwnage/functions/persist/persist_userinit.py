@@ -4,7 +4,7 @@ from winpwnage.core.utils import *
 
 userinit_info = {
 	"Description": "Gain persistence using Userinit registry key",
-	"Id": "19",
+	"Id": "5",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -14,7 +14,7 @@ userinit_info = {
 }
 
 
-def userinit(payload, name='', add=True):
+def userinit(payload, name="", add=True):
 	if not information().admin():
 		print_error("Cannot proceed, we are not elevated")
 		return False

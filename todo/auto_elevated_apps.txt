@@ -1,0 +1,66 @@
+C:\Windows\system32\AcGenral.dll: autoElevate
+C:\Windows\system32\appinfo.dll: autoElevate
+C:\Windows\system32\BitLockerWizardElev.exe:       <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\bthudtask.exe:           <autoElevate>true</autoElevate>
+C:\Windows\system32\changepk.exe:             <autoElevate>true</autoElevate>
+C:\Windows\system32\chkntfs.exe:         <autoElevate>false</autoElevate>
+C:\Windows\system32\cleanmgr.exe:         <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\cliconfg.exe:         <autoElevate>false</autoElevate>
+C:\Windows\system32\CompMgmtLauncher.exe:             <autoElevate>false</autoElevate>
+C:\Windows\system32\ComputerDefaults.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\dccw.exe:       <autoElevate>true</autoElevate>
+C:\Windows\system32\dcomcnfg.exe:           <autoElevate>true</autoElevate>
+C:\Windows\system32\DeviceEject.exe:             <autoElevate>true</autoElevate>
+C:\Windows\system32\DeviceProperties.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\dfrgui.exe:         <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\djoin.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\easinvoker.exe:       <autoElevate>true</autoElevate>
+C:\Windows\system32\EASPolicyManagerBrokerHost.exe:       <autoElevate>true</autoElevate>
+C:\Windows\system32\eudcedit.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\eventvwr.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\fodhelper.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\fsavailux.exe:         <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\fsquirt.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\FXSUNATD.exe:           <autoElevate>true</autoElevate>
+C:\Windows\system32\immersivetpmvscmgrsvr.exe:       <autoElevate>true</autoElevate>
+C:\Windows\system32\iscsicli.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\iscsicpl.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\lpksetup.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\MdSched.exe:             <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\MSchedExe.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\msconfig.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\msdt.exe:       <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\msra.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\MultiDigiMon.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\Netplwiz.exe:         <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\newdev.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\odbcad32.exe:             <autoElevate>true</autoElevate>
+C:\Windows\system32\OptionalFeatures.exe:         <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\PasswordOnWakeSettingFlyout.exe:          <autoElevate>true</autoElevate>
+C:\Windows\system32\perfmon.exe: <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\printui.exe:             <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\pwcreator.exe:             <autoElevate>true</autoElevate>
+C:\Windows\system32\rdpshell.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\recdisc.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\rrinstaller.exe:             <autoElevate>true</autoElevate>
+C:\Windows\system32\rstrui.exe:         <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\sdclt.exe:         <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\shrpubw.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\slui.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SndVol.exe:             <autoElevate xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\SystemPropertiesAdvanced.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemPropertiesComputerName.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemPropertiesDataExecutionPrevention.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemPropertiesHardware.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemPropertiesPerformance.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemPropertiesProtection.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemPropertiesRemote.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\systemreset.exe:             <autoElevate  xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</autoElevate>
+C:\Windows\system32\SystemSettingsAdminFlows.exe:          <autoElevate>true</autoElevate>
+C:\Windows\system32\SystemSettingsRemoveDevice.exe:          <autoElevate>true</autoElevate>
+C:\Windows\system32\Taskmgr.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\tcmsetup.exe:         <autoElevate>true</autoElevate>
+C:\Windows\system32\TpmInit.exe:             <autoElevate>true</autoElevate>
+C:\Windows\system32\WindowsUpdateElevatedInstaller.exe:          <autoElevate>true</autoElevate>
+C:\Windows\system32\WSReset.exe:     <autoElevate>true</autoElevate>
+C:\Windows\system32\wusa.exe:             <autoElevate>true</autoElevate>

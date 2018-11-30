@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 compmgmtlauncher_info = {
 	"Description": "Bypass UAC using compmgmtlauncher and registry key manipulation",
-	"Id": "09",
+	"Id": "9",
 	"Type": "UAC bypass",
 	"Fixed In": "15031",
 	"Works From": "7600",

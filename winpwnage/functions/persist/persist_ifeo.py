@@ -3,7 +3,7 @@ from winpwnage.core.utils import *
 
 ifeo_info = {
 	"Description": "Gain persistence using IFEO debugger registry key",
-	"Id": "18",
+	"Id": "4",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -13,7 +13,7 @@ ifeo_info = {
 }
 
 
-def ifeo(payload, name='', add=True):
+def ifeo(payload, name="", add=True):
 	if not information().admin():
 		print_error("Cannot proceed, we are not elevated")
 		return False

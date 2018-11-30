@@ -5,7 +5,7 @@ from winpwnage.core.utils import *
 
 wmic_info = {
 	"Description": "Gain persistence with system privilege using wmic",
-	"Id": "22",
+	"Id": "8",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -15,7 +15,7 @@ wmic_info = {
 }
 
 
-def persist_wmic(payload, name='WinPwnage', add=True):
+def persist_wmic(payload, name="", add=True):
 	if not information().admin():
 		print_error("Cannot proceed, we are not elevated")
 		return False

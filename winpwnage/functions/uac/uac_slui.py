@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 slui_info = {
 	"Description": "Bypass UAC using slui and registry key manipulation",
-	"Id": "03",
+	"Id": "3",
 	"Type": "UAC bypass",
 	"Fixed In": "17134",
 	"Works From": "9600",

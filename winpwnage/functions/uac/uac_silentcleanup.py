@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 silentcleanup_info = {
 	"Description": "Bypass UAC using silentcleanup and registry key manipulation",
-	"Id": "04",
+	"Id": "4",
 	"Type": "UAC bypass",
 	"Fixed In": "999999",
 	"Works From": "9600",

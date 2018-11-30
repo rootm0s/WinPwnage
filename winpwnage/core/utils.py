@@ -170,8 +170,7 @@ class registry():
 			return True
 		except Exception as e:
 			return False
-
-
+			
 class information():
 	"""
 	A class to handle all the information gathering

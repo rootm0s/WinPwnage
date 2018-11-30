@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 eventviewer_info = {
 	"Description": "Bypass UAC using eventviewer and registry key manipulation",
-	"Id": "08",
+	"Id": "8",
 	"Type": "UAC bypass",
 	"Fixed In": "15031",
 	"Works From": "7600",

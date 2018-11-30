@@ -3,7 +3,7 @@ from winpwnage.core.utils import *
 
 startup_files_info = {
 	"Description": "Gain persistence using Startup Files",
-	"Id": "23",
+	"Id": "9",
 	"Type": "Persistence",
 	"Fixed In": "99999",
 	"Works From": "7600",
@@ -13,7 +13,7 @@ startup_files_info = {
 }
 
 
-def startup_files(payload, name='OneDriveUpdate', add=True):
+def startup_files(payload, name="", add=True):
 	appdata = os.path.expandvars("%AppData%")
 	startup_dir = os.path.join(appdata, r'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
 	if not os.path.exists(startup_dir):

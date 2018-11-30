@@ -5,7 +5,7 @@ from winpwnage.core.prints import *
 runas_info = {
 	"Description": "Bypass UAC using runas, this only works if UAC is set to never notify",
 	"Method": "Registry key manipulation",
-	"Id": "01",
+	"Id": "1",
 	"Type": "UAC bypass",
 	"Fixed In": "99999" if information().uac_level() == 1 else "0",
 	"Works From": "7600",

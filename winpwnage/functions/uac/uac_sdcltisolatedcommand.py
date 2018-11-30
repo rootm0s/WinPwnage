@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 sdcltisolatedcommand_info = {
 	"Description": "Bypass UAC using sdclt (isolatedcommand) and registry key manipulation",
-	"Id": "05",
+	"Id": "5",
 	"Type": "UAC bypass",
 	"Fixed In": "17025",
 	"Works From": "10240",

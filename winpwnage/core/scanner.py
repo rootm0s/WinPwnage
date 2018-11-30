@@ -24,6 +24,8 @@ from winpwnage.functions.persist.persist_dll_explorer import *
 from winpwnage.functions.persist.persist_mofcomp import *
 from winpwnage.functions.persist.persist_wmic import *
 from winpwnage.functions.persist.persist_startup_files import *
+from winpwnage.functions.persist.persist_cortana import *
+from winpwnage.functions.persist.persist_people import *
 
 from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
@@ -53,7 +55,9 @@ functions = {
 		hkcurun_info,
 		hklmrun_info,
 		wmic_info, 
-		startup_files_info
+		startup_files_info,
+		cortana_appx_info,
+		people_appx_info
 	)
 }
 
@@ -87,7 +91,6 @@ class scanner():
 						str(info["Description"])))
 		return Constant.output
 
-
 class function():
 	def __init__(self, uac=True, persist=True):
 		self.uac = uac
@@ -104,12 +107,23 @@ class function():
 				if id in str(info["Id"]):
 					if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
 						f = globals()[info["Function Name"]]
-						if 'name' in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
-							f(payload, name=kwargs.get('name', ''), add=kwargs.get('add', True))
+						
+						# if name is not needed in function, just keep goin
+						if 'name' not in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
+							f(payload, add=kwargs.get('add', True))
+						
+						# if name is needed for the function to run, just add a dummy
+						# this is mainly to support pupy intergration, wich needs custom
+						# names in order to work.
+						elif 'name' in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
+							f(payload, name=kwargs.get('name', 'WinPwnage'), add=kwargs.get('add', True))
+						
+						# if function only needs payload as argument, eg. uac functions
 						else:
 							f(payload)
 					else:
 						print_error('Technique not compatible with this system.')
+						
 					return Constant.output
 				else:
 					pass

@@ -6,7 +6,7 @@ from winpwnage.core.utils import *
 
 fodhelper_info = {
 	"Description": "Bypass UAC using fodhelper and registry key manipulation",
-	"Id": "02",
+	"Id": "2",
 	"Type": "UAC bypass",
 	"Fixed In": "999999",
 	"Works From": "10240",

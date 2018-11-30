@@ -8,7 +8,7 @@ from winpwnage.core.utils import *
 
 perfmon_info = {
 	"Description": "Bypass UAC using perfmon and registry key manipulation",
-	"Id": "07",
+	"Id": "7",
 	"Type": "UAC bypass",
 	"Fixed In": "16299",
 	"Works From": "7600",

@@ -10,7 +10,7 @@ from winpwnage.core.utils import *
 
 mofcomp_info = {
 	"Description": "Gain persistence with system privilege using mofcomp and mof file",
-	"Id": "16",
+	"Id": "2",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -20,7 +20,7 @@ mofcomp_info = {
 }
 
 
-def persist_mofcomp(payload, name='wpEventFilter', add=True):
+def persist_mofcomp(payload, name="", add=True):
 	if add:
 		if payloads().exe(payload):
 			mof_template = '''#PRAGMA AUTORECOVER
