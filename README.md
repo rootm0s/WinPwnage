@@ -29,6 +29,8 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Persistence using mofcomp and mof file (SYSTEM privileges)
 * Persistence using wmic (SYSTEM privileges)
 * Persistence using startup files
+* Persistence using Cortana App
+* Persistence using People App
 
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
