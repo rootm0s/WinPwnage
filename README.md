@@ -6,7 +6,7 @@ Techniques are found online, on different blogs and repos here on GitHub. I do n
 
 Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not tested, do not expect it to work. 
 
-## Techniques implemented:
+## UAC bypass techniques:
 * UAC bypass using fodhelper
 * UAC bypass using computerdefaults
 * UAC bypass using slui
@@ -20,6 +20,8 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * UAC bypass using migwiz (dll payload supported)
 * UAC bypass using mcx2prov (dll payload supported)
 * UAC bypass using cliconfg (dll payload supported)
+
+## Persistence techniques:
 * Persistence using userinit key
 * Persistence using image file execution option and magnifier
 * Persistence using hkey_local_machine run key
