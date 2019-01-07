@@ -20,6 +20,7 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * UAC bypass using migwiz (dll payload supported)
 * UAC bypass using mcx2prov (dll payload supported)
 * UAC bypass using cliconfg (dll payload supported)
+* UAC bypass using token manipulation
 
 ## Persistence techniques:
 * Persistence using userinit key
