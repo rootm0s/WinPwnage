@@ -14,6 +14,7 @@ from winpwnage.functions.uac.uac_dll_sysprep import *
 from winpwnage.functions.uac.uac_dll_cliconfg import *
 from winpwnage.functions.uac.uac_dll_mcx2prov import *
 from winpwnage.functions.uac.uac_dll_migwiz import *
+from winpwnage.functions.uac.uac_token_manipulation import *
 
 from winpwnage.functions.persist.persist_userinit import *
 from winpwnage.functions.persist.persist_schtask import *
@@ -44,7 +45,8 @@ functions = {
 		cliconfg_info,
 		mcx2prov_info,
 		migwiz_info,
-		sysprep_info
+		sysprep_info,
+		tokenmanipulation_info
 	),
 	'persist': (
 		explorer_info,
