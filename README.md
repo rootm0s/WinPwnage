@@ -35,6 +35,11 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Persistence using Cortana App
 * Persistence using People App
 
+## Elevation techniques:
+* Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
+* Elevate from administrator to NT AUTHORITY SYSTEM using named pipe impersonation
+* Elevate from administrator to NT AUTHORITY SYSTEM using token impersonation
+
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
 
