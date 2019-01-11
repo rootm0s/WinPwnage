@@ -28,6 +28,10 @@ from winpwnage.functions.persist.persist_startup_files import *
 from winpwnage.functions.persist.persist_cortana import *
 from winpwnage.functions.persist.persist_people import *
 
+from winpwnage.functions.elevate.elevate_handle_inheritance import *
+from winpwnage.functions.elevate.elevate_token_impersonation import *
+from winpwnage.functions.elevate.elevate_named_pipe_impersonation import *
+
 from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
 
@@ -60,26 +64,31 @@ functions = {
 		startup_files_info,
 		cortana_appx_info,
 		people_appx_info
+	),
+	'elevate': (
+		handleinheritance_info,
+		tokenimpersonation_info,
+		namedpipeimpersonation_info
 	)
 }
 
 
 class scanner():
-	def __init__(self, uac=True, persist=True):
+	def __init__(self, uac=True, persist=True, elevate=True):
 		self.uac = uac
 		self.persist = persist
+		self.elevate = elevate
 		Constant.output = []
 
 	def start(self):
 		print_info("Comparing build number ({}) against 'Fixed In' build numbers, false positives might happen.".format(information().build_number()))
 		print_table()
 		for i in functions:
-			if i == 'uac' and not self.uac or i == 'persist' and not self.persist:
+			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
 				continue
 
 			for info in functions[i]:
 				if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
-
 					table_success(info["Id"],
 						"\t{}\t{}\t\t{}\t\t{}".format(str(info["Type"]),
 						str(info["Function Payload"]),
@@ -94,15 +103,16 @@ class scanner():
 		return Constant.output
 
 class function():
-	def __init__(self, uac=True, persist=True):
+	def __init__(self, uac=True, persist=True, elevate=True):
 		self.uac = uac
 		self.persist = persist
+		self.elevate = elevate
 		Constant.output = []
 
 	def run(self, id, payload, **kwargs):
 		print_info("Attempting to run id ({}) configured with payload ({})".format(id, payload))
 		for i in functions:
-			if i == 'uac' and not self.uac or i == 'persist' and not self.persist:
+			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
 				continue
 
 			for info in functions[i]:
