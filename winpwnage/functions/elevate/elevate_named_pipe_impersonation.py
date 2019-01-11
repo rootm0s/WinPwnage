@@ -3,6 +3,8 @@ from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
 import os
 
+#Creds to: https://gist.github.com/highsenburger69/09b816daa16f020d188c289fd401b0b2
+
 namedpipeimpersonation_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using named pipe impersonation",
 	"Id": "3",
