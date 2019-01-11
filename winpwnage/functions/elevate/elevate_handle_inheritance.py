@@ -3,6 +3,8 @@ from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
 import os
 
+#Creds to: https://gist.github.com/highsenburger69/acc7b1b4589e51905a93db46ac5f81b2
+
 handleinheritance_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance",
 	"Id": "1",
