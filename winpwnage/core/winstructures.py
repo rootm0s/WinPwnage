@@ -246,9 +246,9 @@ AdjustTokenPrivileges = advapi32.AdjustTokenPrivileges
 AdjustTokenPrivileges.restype = BOOL
 AdjustTokenPrivileges.argtypes = [HANDLE, BOOL, c_void_p, DWORD, c_void_p, POINTER(DWORD)]	
 
-EnumProcesses = psapi.EnumProcesses                                             
-EnumProcesses.restype = BOOL                                                    
-EnumProcesses.argtypes = [PDWORD, DWORD, PDWORD]
+EnumProcesses = psapi.EnumProcesses
+EnumProcesses.argtypes = [LPVOID, DWORD, LPDWORD]
+EnumProcesses.restype = BOOL
 
 GetProcessImageFileName = psapi.GetProcessImageFileNameA
 GetProcessImageFileName.restype = DWORD
