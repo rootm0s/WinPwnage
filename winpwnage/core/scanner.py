@@ -31,6 +31,8 @@ from winpwnage.functions.persist.persist_people import *
 from winpwnage.functions.elevate.elevate_handle_inheritance import *
 from winpwnage.functions.elevate.elevate_token_impersonation import *
 from winpwnage.functions.elevate.elevate_named_pipe_impersonation import *
+from winpwnage.functions.elevate.elevate_schtasks import *
+from winpwnage.functions.elevate.elevate_wmic import *
 
 from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
@@ -68,7 +70,9 @@ functions = {
 	'elevate': (
 		handleinheritance_info,
 		tokenimpersonation_info,
-		namedpipeimpersonation_info
+		namedpipeimpersonation_info,
+		elevate_schtasks_info,
+		elevate_wmic_info
 	)
 }
 
