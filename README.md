@@ -39,6 +39,8 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
 * Elevate from administrator to NT AUTHORITY SYSTEM using named pipe impersonation
 * Elevate from administrator to NT AUTHORITY SYSTEM using token impersonation
+* Elevate from administrator to NT AUTHORITY SYSTEM using schtasks (non interactive)
+* Elevate from administrator to NT AUTHORITY SYSTEM using wmic (non interactive)
 
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
