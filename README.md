@@ -34,6 +34,7 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Persistence using startup files
 * Persistence using Cortana App
 * Persistence using People App
+* Persistence using bitsadmin
 
 ## Elevation techniques:
 * Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
