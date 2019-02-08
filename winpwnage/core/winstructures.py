@@ -6,27 +6,30 @@ import enum
 LPWSTR 	= c_wchar_p
 LPVOID 	= c_void_p	
 DWORD 	= c_uint32
+SIZE_T  = c_size_t
+PVOID   = c_void_p
+LPTSTR  = c_void_p
+LPBYTE  = c_char_p
+LPCTSTR = c_char_p
 LPDWORD = POINTER(DWORD)
 PULONG  = POINTER(ULONG)
 PHANDLE = POINTER(HANDLE)
 PDWORD  = POINTER(DWORD)
-SIZE_T  = c_size_t
-PVOID   = c_void_p
-LPVOID  = PVOID
-LPTSTR  = c_void_p
-LPBYTE  = c_char_p
-LPCTSTR = c_char_p
 SW_HIDE = 0
 SW_SHOW = 5
 MAX_PATH = 260
 SEE_MASK_NOCLOSEPROCESS = 0x00000040
+
+# Process constants
 PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
 PROCESS_ALL_ACCESS = (0x0080 | 0x0002 | 0x0040 | 0x0400 | 0x1000 | 0x0200 | 0x0100 | 0x0800 | 0x0001 | 0x0008 | 0x0010 | 0x0020 | 0x00100000L)
+
+# Token constants
 TOKEN_ALL_ACCESS = (0x000F0000 | 0x0001| 0x0002| 0x0004| 0x00000008| 0x0010| 0x00000020| 0x0040| 0x0080 | 0x0100)
 TOKEN_PRIVS = (0x00000008 | (0x00020000 | 0x00000008) | 0x0004  | 0x0010 | 0x0002 | 0x0001 | (131072L | 4))
 
-class c_enum(enum.IntEnum):                                   
+class c_enum(enum.IntEnum):
     @classmethod
     def from_param(cls, obj):
         return c_int(cls(obj))
@@ -35,7 +38,7 @@ class LUID(Structure):
      _fields_ = [('LowPart', DWORD),
 				('HighPart', LONG)]
 
-class LUID_AND_ATTRIBUTES(Structure):                         
+class LUID_AND_ATTRIBUTES(Structure):
      _fields_ = [('Luid', LUID),
 				('Attributes',DWORD)]
                                                 
@@ -54,12 +57,12 @@ class TOKEN_INFORMATION_CLASS(c_enum):
      TokenElevation = 20
      TokenIntegrityLevel = 25
 
-class PROC_THREAD_ATTRIBUTE_ENTRY(Structure):                 
+class PROC_THREAD_ATTRIBUTE_ENTRY(Structure):
     _fields_ = [("Attribute", DWORD),
 				("cbSize", SIZE_T),
 				("lpValue", PVOID)]
 
-class PROC_THREAD_ATTRIBUTE_LIST(Structure):                
+class PROC_THREAD_ATTRIBUTE_LIST(Structure):
     _fields_ = [("dwFlags", DWORD),
 				("Size", ULONG),
 				("Count", ULONG),
@@ -67,7 +70,7 @@ class PROC_THREAD_ATTRIBUTE_LIST(Structure):
 				("Unknown", PULONG),
 				("Entries", PROC_THREAD_ATTRIBUTE_ENTRY * 1)]
 
-class STARTUPINFO(Structure):                               
+class STARTUPINFO(Structure):
     _fields_ = [
                ('cb', DWORD),
                ('lpReserved', LPTSTR),
@@ -115,7 +118,10 @@ class TOKEN_TYPE(c_enum):
 
 class TOKEN_USER(Structure):
     _fields_ = [('User', SID_AND_ATTRIBUTES),]
-	
+
+class TOKEN_MANDATORY_LABEL(Structure):
+    _fields_ = [('Label', SID_AND_ATTRIBUTES),]	
+
 class IntegrityLevel(object):
     SECURITY_MANDATORY_UNTRUSTED_RID = 0x00000000
     SECURITY_MANDATORY_LOW_RID = 0x00001000
@@ -143,9 +149,6 @@ class SECURITY_ATTRIBUTES(Structure):
 
 class SID_IDENTIFIER_AUTHORITY(Structure): 
     _fields_ = [('Value', BYTE * 6)]  			   
-
-class TOKEN_MANDATORY_LABEL(Structure):
-    _fields_ = [('Label', SID_AND_ATTRIBUTES),]
 
 class ShellExecuteInfoW(Structure):
 	_fields_ = [

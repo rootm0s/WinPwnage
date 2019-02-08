@@ -35,6 +35,23 @@ from winpwnage.functions.elevate.elevate_named_pipe_impersonation import *
 from winpwnage.functions.elevate.elevate_schtasks import *
 from winpwnage.functions.elevate.elevate_wmic import *
 
+from winpwnage.functions.execute.exec_forfiles import *
+from winpwnage.functions.execute.exec_pcalua import *
+from winpwnage.functions.execute.exec_vsjitdebugger import *
+from winpwnage.functions.execute.exec_bash import *
+from winpwnage.functions.execute.exec_diskshadow import *
+from winpwnage.functions.execute.exec_advpack import *
+from winpwnage.functions.execute.exec_dxcap import *
+from winpwnage.functions.execute.exec_forfiles import *
+from winpwnage.functions.execute.exec_ieadvpack import *
+from winpwnage.functions.execute.exec_ieframe import *
+from winpwnage.functions.execute.exec_pcwutl import *
+from winpwnage.functions.execute.exec_shdocvw import *
+from winpwnage.functions.execute.exec_url import *
+from winpwnage.functions.execute.exec_zipfldr import *
+from winpwnage.functions.execute.exec_ftp import *
+from winpwnage.functions.execute.exec_sqltoolsps import *
+
 from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
 
@@ -75,22 +92,40 @@ functions = {
 		namedpipeimpersonation_info,
 		elevate_schtasks_info,
 		elevate_wmic_info
+	),
+	'execute': (
+		forfiles_info,
+		pcalua_info,
+		vsjitdebugger_info,
+		bash_info,
+		diskshadow_info,
+		advpack_info,
+		dxcap_info,
+		ieadvpack_info,
+		ieframe_info,
+		pcwutl_info,
+		ftp_info,
+		shdocvw_info,
+		url_info,
+		zipfldr_info,
+		sqltoolsps_info
 	)
 }
 
 
 class scanner():
-	def __init__(self, uac=True, persist=True, elevate=True):
+	def __init__(self, uac=True, persist=True, elevate=True, execute=True):
 		self.uac = uac
 		self.persist = persist
 		self.elevate = elevate
+		self.execute = execute
 		Constant.output = []
 
 	def start(self):
 		print_info("Comparing build number ({}) against 'Fixed In' build numbers, false positives might happen.".format(information().build_number()))
 		print_table()
 		for i in functions:
-			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
+			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate or i == 'execute' and not self.execute:
 				continue
 
 			for info in functions[i]:
@@ -109,16 +144,18 @@ class scanner():
 		return Constant.output
 
 class function():
-	def __init__(self, uac=True, persist=True, elevate=True):
+	def __init__(self, uac=True, persist=True, elevate=True, execute=True):
 		self.uac = uac
 		self.persist = persist
 		self.elevate = elevate
+		self.execute = execute
 		Constant.output = []
 
 	def run(self, id, payload, **kwargs):
 		print_info("Attempting to run id ({}) configured with payload ({})".format(id, payload))
 		for i in functions:
-			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
+			#if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
+			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate or i == 'execute' and not self.execute:
 				continue
 
 			for info in functions[i]:
