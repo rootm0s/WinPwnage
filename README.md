@@ -21,6 +21,7 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * UAC bypass using mcx2prov (dll payload supported)
 * UAC bypass using cliconfg (dll payload supported)
 * UAC bypass using token manipulation
+* UAC bypass using sdclt and Folder class
 
 ## Persistence techniques:
 * Persistence using userinit key
@@ -61,3 +62,4 @@ In order for a successful build, install the py2exe (http://www.py2exe.org) modu
 * https://bytecode77.com/hacking/exploits/uac-bypass/performance-monitor-privilege-escalation
 * https://bytecode77.com/hacking/exploits/uac-bypass/slui-file-handler-hijack-privilege-escalation
 * https://media.defcon.org/DEF%20CON%2025/DEF%20CON%2025%20workshops/DEFCON-25-Workshop-Ruben-Boobeb-UAC-0day-All-Day.pdf
+* https://lolbas-project.github.io
