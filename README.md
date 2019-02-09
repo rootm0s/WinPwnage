@@ -44,6 +44,24 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * Elevate from administrator to NT AUTHORITY SYSTEM using schtasks (non interactive)
 * Elevate from administrator to NT AUTHORITY SYSTEM using wmic (non interactive)
 
+## Execution techniques:
+* Execute payload by calling the RegisterOCX function in Advpack.dll
+* Execute payload using appvlp binary
+* Execute payload from bash.exe if linux subsystem is installed
+* Execute payload using diskshadow.exe from a prepared diskshadow script
+* Execute payload as a subprocess of Dxcap.exe
+* Execute payload since there is a match for notepad.exe in the system directory
+* Execute payload using ftp binary
+* Execute payload by calling the RegisterOCX function in ieadvpack.dll
+* Execute payload by calling OpenURL in ieframe.dll
+* Execute payload using the Program Compatibility Assistant
+* Execute payload by calling the LaunchApplication function
+* Execute payload by calling OpenURL in shdocvw.dll
+* Execute payload using sqltoolsps binary
+* Execute payload by calling OpenURL in url.dll
+* Execute payload as a subprocess of vsjitdebugger.exe
+* Execute payload by calling RouteTheCall in zipfldr.dll
+
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
 
