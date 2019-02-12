@@ -70,6 +70,9 @@ def persist_bitsadmin(payload, name="", add=True):
 				print_success("Successfully started payload PID: {}".format(pid))
 			else:
 				print_error("Unable to start payload")
+		else:
+			print_error("Cannot proceed, invalid payload")
+			return False
 	else:
 		print_info("Performing cleanup")
 		exit_code = process().create("bitsadmin.exe",
