@@ -72,3 +72,6 @@ def elevate_wmic(payload):
 				print_success("Successfully deleted {action} (exit code: {code})".format(action=x[0], code=exit_code))
 			else:
 				print_error("Unable to delete {action} (exit code: {code})".format(action=x[0], code=exit_code))
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False				

@@ -110,3 +110,6 @@ def named_pipe_impersonation(payload):
 				print_success("Successfully elevated process PID: {}".format(lpProcessInformation.dwProcessId))
 			
 		Deleteservice()
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False		

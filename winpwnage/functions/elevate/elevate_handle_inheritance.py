@@ -106,3 +106,6 @@ def elevate_handle_inheritance(payload):
 			 
 		CloseHandle(handle)
 		DeleteProcThreadAttributeList(AttributeList)
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False

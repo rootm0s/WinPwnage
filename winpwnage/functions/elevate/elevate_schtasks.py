@@ -130,3 +130,6 @@ def elevate_schtasks(payload):
 		else:
 			print_error("Unable to create scheduled task, xml file not found")
 			return False
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False			
