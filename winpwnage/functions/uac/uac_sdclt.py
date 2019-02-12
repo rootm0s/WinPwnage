@@ -11,7 +11,7 @@ sdclt_info = {
 	"Id": "16",
 	"Type": "UAC bypass",
 	"Fixed In": "999999" if not information().uac_level() == 4 else "0",
-	"Works From": "10240",
+	"Works From": "14393",
 	"Admin": False,
 	"Function Name": "sdclt_uacbypass",
 	"Function Payload": True,
