@@ -2,7 +2,6 @@ import os
 import random
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
-from winpwnage.core.winstructures import *
 
 #https://lolbas-project.github.io/lolbas/Libraries/Pcwutl/
 
@@ -46,3 +45,6 @@ def exec_pcwutl(payload):
 			else:
 				print_error("Unable to create process ({}) exit code ({})".format(payload, exit_code))
 				return False
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False				

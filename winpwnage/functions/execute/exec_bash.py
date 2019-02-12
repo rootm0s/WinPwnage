@@ -2,7 +2,6 @@ import os
 import random
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
-from winpwnage.core.winstructures import *
 
 #https://lolbas-project.github.io/lolbas/Binaries/Bash/
 
@@ -46,4 +45,7 @@ def exec_bash(payload):
 				print_success("Successfully created process ({}) exit code ({})".format(payload, exit_code))
 			else:
 				print_error("Unable to create process ({}) exit code ({})".format(payload, exit_code))
-				return False	
+				return False
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False				

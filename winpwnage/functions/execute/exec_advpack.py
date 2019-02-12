@@ -1,9 +1,7 @@
 import os
 import random
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
-from winpwnage.core.winstructures import *
 
 #https://lolbas-project.github.io/lolbas/Libraries/Advpack
 
@@ -48,3 +46,6 @@ def exec_advpack(payload):
 			else:
 				print_error("Unable to create process ({}) exit code ({})".format(payload, exit_code))
 				return False
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False				

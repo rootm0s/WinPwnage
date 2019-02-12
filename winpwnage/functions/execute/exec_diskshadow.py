@@ -3,7 +3,6 @@ import random
 import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
-from winpwnage.core.winstructures import *
 
 #https://lolbas-project.github.io/lolbas/Binaries/Diskshadow/
 
@@ -62,3 +61,6 @@ def exec_diskshadow(payload):
 				os.remove(os.path.join(tempfile.gettempdir(),"tmp.txt"))
 			except Exception:
 				pass
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False				

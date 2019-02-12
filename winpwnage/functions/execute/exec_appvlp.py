@@ -3,7 +3,6 @@ import random
 import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
-from winpwnage.core.winstructures import *
 
 #https://lolbas-project.github.io/lolbas/OtherMSBinaries/Appvlp/
 
@@ -56,3 +55,6 @@ def exec_appvlp(payload):
 				os.remove(os.path.join(tempfile.gettempdir(),"appvlp.bat"))
 			except Exception:
 				pass
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False				
