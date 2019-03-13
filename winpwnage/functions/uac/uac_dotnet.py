@@ -4,6 +4,8 @@ import tempfile
 import uuid
 import time
 
+# https://gist.github.com/clavoillotte/f2fba9fa4ba8db14093a62164963d4a9
+
 dotnet_info = {
 	"Description": "Bypass UAC using .NET Code Profiler (dll payload)",
 	"Id": "18",
@@ -14,7 +16,7 @@ dotnet_info = {
 	"Function Name": "dotnet_uacbypass",
 	"Function Payload": True,
 }
-
+ 
 guid_array = []
 
 def GenerateGUID():
