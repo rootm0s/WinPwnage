@@ -18,6 +18,7 @@ from winpwnage.functions.uac.uac_token_manipulation import *
 from winpwnage.functions.uac.uac_sdclt import *
 from winpwnage.functions.uac.uac_cmstp import *
 from winpwnage.functions.uac.uac_dotnet import *
+from winpwnage.functions.uac.uac_mockdir import *
 
 from winpwnage.functions.persist.persist_userinit import *
 from winpwnage.functions.persist.persist_schtask import *
@@ -76,7 +77,8 @@ functions = {
 		tokenmanipulation_info,
 		sdclt_info,
 		cmstp_info,
-		dotnet_info
+		dotnet_info,
+		mock_info
 	),
 	'persist': (
 		explorer_info,
