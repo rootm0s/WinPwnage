@@ -23,7 +23,8 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 * UAC bypass using token manipulation
 * UAC bypass using sdclt and Folder class
 * UAC bypass using cmstp
-* UAC bypass using .NET Code Profiler
+* UAC bypass using .NET Code Profiler (dll payload supported)
+* UAC bypass using mocking trusted directories (dll payload supported)
 
 ## Persistence techniques:
 * Persistence using userinit key
