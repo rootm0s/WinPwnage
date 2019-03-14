@@ -41,7 +41,7 @@ def fax_dll(payload, add=True):
 			if process().create("makecab.exe", params="{} {}".format(tmp_fxsst, tmp_cabinet)):
 				print_success("Successfully created cabinet file")
 			else:
-				print_success("Unable to create cabinet file")
+				print_error("Unable to create cabinet file")
 				return False
 
 			time.sleep(5)
@@ -73,7 +73,7 @@ def fax_dll(payload, add=True):
 				if process().terminate("explorer.exe"):
 					print_success("Successfully restarted explorer process, enjoy!")
 				else:
-					print_success("Unable to restart explorer process, reboot!")
+					print_error("Unable to restart explorer process, reboot!")
 			else:
 				return False
 		else:
