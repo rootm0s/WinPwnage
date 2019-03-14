@@ -54,6 +54,7 @@ def runas(payload):
 						print_success("Successfully elevated process ({})".format(os.path.join(payload)))
 					else:
 						print_error("Unable to elevate process ({})".format(os.path.join(payload)))
+						return False
 		else:
 			print_error("Unable to execute payload ({}) cannot find payload on disk".format(os.path.join(payload)))
 			return False

