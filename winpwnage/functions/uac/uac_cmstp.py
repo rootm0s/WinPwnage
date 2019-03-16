@@ -27,7 +27,7 @@ def cmstp_cleanup():
 		print_error("Unable to clean up, manual cleaning is needed")
 		return False
 	else:
-		print_success("Successfully cleaned up, enjoy!")	
+		print_success("Successfully cleaned up")	
 
 def cmstp(payload):
 	if payloads().exe(payload):
