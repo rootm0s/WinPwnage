@@ -20,6 +20,7 @@ cmstp_info = {
 
 
 def cmstp_cleanup():
+	print_info("Performing cleaning")
 	try:
 		os.remove(os.path.join(tempfile.gettempdir(), "tmp.ini"))
 	except Exception as error:
