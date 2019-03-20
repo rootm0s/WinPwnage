@@ -2,6 +2,7 @@
 Works from: Windows 10 TH1 (10240)
 Fixed in: unfixed 
 """
+from __future__ import print_function
 import os
 import wmi
 import time
@@ -27,7 +28,7 @@ def warningBox():
 	return (Fore.YELLOW + '[!]' + Fore.RESET)
 
 def computerdefaults():
-	print " {} computerdefaults: Attempting to create registry key".format(infoBox())
+	print(" {} computerdefaults: Attempting to create registry key".format(infoBox()))
 	try:
 		key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER,
 					os.path.join("Software\Classes\ms-settings\shell\open\command"))
@@ -45,34 +46,34 @@ def computerdefaults():
 				None)
 
 		_winreg.CloseKey(key)
-		print " {} computerdefaults: Registry key created".format(successBox())
+		print(" {} computerdefaults: Registry key created".format(successBox()))
 	except Exception as error:
-		print " {} computerdefaults: Unable to create key".format(errorBox())
+		print(" {} computerdefaults: Unable to create key".format(errorBox()))
 		return False
 
-	print " {} computerdefaults: Pausing for 5 seconds before executing".format(infoBox())	
+	print(" {} computerdefaults: Pausing for 5 seconds before executing".format(infoBox()))	
 	time.sleep(5)
 		
-	print " {} computerdefaults: Attempting to create process".format(infoBox())
+	print(" {} computerdefaults: Attempting to create process".format(infoBox()))
 	try:
 		result = wmi.Win32_Process.Create(CommandLine="cmd.exe /c start computerdefaults.exe",
 						ProcessStartupInformation=wmi.Win32_ProcessStartup.new(ShowWindow=win32con.SW_SHOWNORMAL))
 		if (result[1] == 0):
-			print " {} computerdefaults: Process started successfully".format(successBox())
+			print(" {} computerdefaults: Process started successfully".format(successBox()))
 		else:
-			print " {} computerdefaults: Problem creating process".format(errorBox())
+			print(" {} computerdefaults: Problem creating process".format(errorBox()))
 	except Exception as error:
-		print " {} computerdefaults: Problem creating process".format(errorBox())
+		print(" {} computerdefaults: Problem creating process".format(errorBox()))
 		return False
 
-	print " {} computerdefaults: Pausing for 5 seconds before cleaning".format(infoBox())	
+	print(" {} computerdefaults: Pausing for 5 seconds before cleaning".format(infoBox()))	
 	time.sleep(5)
 
-	print " {} computerdefaults: Attempting to remove registry key".format(infoBox())
+	print(" {} computerdefaults: Attempting to remove registry key".format(infoBox()))
 	try:
 		_winreg.DeleteKey(_winreg.HKEY_CURRENT_USER,
 				os.path.join("Software\Classes\ms-settings\shell\open\command"))
-		print " {} computerdefaults: Registry key was deleted".format(successBox())
+		print(" {} computerdefaults: Registry key was deleted".format(successBox()))
 	except Exception as error:
-		print " {} computerdefaults: Unable to delete key".format(errorBox())
+		print(" {} computerdefaults: Unable to delete key".format(errorBox()))
 		return False	

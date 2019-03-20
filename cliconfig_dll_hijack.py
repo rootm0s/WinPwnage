@@ -16,6 +16,7 @@ if fail, we attempt to use makecab and wusa to copy our dll. After
 the copy is done, we execute the executable and enjoys the elevated
 access
 """
+from __future__ import print_function
 import os
 import sys
 import requests
@@ -46,7 +47,7 @@ def cliconfig_dll_hijack(url):
 						except Exception as error:
 							return False
 						try:
-							print os.remove("NTWDBLIB.tmp")
+							print(os.remove("NTWDBLIB.tmp"))
 						except Exception as error:
 							return False	
 						try:

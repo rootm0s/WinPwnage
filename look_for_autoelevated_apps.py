@@ -5,6 +5,7 @@ by searching for strings in binary data:
 * <autoElevate>true</autoElevate>
 * <autoElevate xmlns=\"http://schemas.microsoft.com/SMI/2005/WindowsSettings\">true</autoElevate>
 """
+from __future__ import print_function
 import os
 from colorama import init, Fore
 init(convert=True)
@@ -39,7 +40,7 @@ def parse_manifests(path):
 				if ("<autoElevate xmlns=\"http://schemas.microsoft.com/SMI/2005/WindowsSettings\">true</autoElevate>" in manifest):
 					process_list.append(os.path.join(path,file))
 	
-	print " {} Listing processes:".format(infoBox())
+	print(" {} Listing processes:".format(infoBox()))
 	for process in process_list:
-		print " {} {}".format(successBox(),process)
+		print(" {} {}".format(successBox(),process))
 	return process_list
