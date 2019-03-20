@@ -1,15 +1,16 @@
+from __future__ import print_function
 import sys
 from winpwnage.core.prints import print_info
 from winpwnage.core.scanner import scanner, function
 from winpwnage.core.utils import information
 
-print """
+print("""
         _                               
   _ _ _|_|___ ___ _ _ _ ___ ___ ___ ___ 
  | | | | |   | . | | | |   | .'| . | -_|
  |_____|_|_|_|  _|_____|_|_|__,|_  |___|
              |_|               |___|
-"""
+""")
 
 print_info("UAC level: {}".format(information().uac_level()))
 print_info("Build number: {}".format(information().build_number()))
