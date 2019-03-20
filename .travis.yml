@@ -8,12 +8,12 @@ matrix:
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
       before_install:
         - choco install python
-        - python -m pip install py2exe
+        #- python -m pip install py2exe
     - name: "Python 2 on Windows"
       env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
       before_install:
-        - choco install python2 vcpython27
-        - python -m pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
+        - choco install python2  # vcpython27
+        # - python -m pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
   allow_failures:
     - name: "Python 3 on Windows"
 
@@ -23,4 +23,4 @@ install:
 
 script:
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
-  - python build.py
+  # - python build.py
