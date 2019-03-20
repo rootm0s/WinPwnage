@@ -1,24 +1,22 @@
 os: windows
 language: shell  # 'language: python' is not yet supported on Windows
-env:
-  - PYTHONUNBUFFERED=1
+env: PYTHONUNBUFFERED=1
 
 matrix:
   include:
     - name: "Python 3 on Windows"
-      env: PATH=/c/Python37:$PATH
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
       before_install: choco install python
     - name: "Python 2 on Windows"
-      env: PATH=/c/Python27:$PATH
+      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
       before_install: choco install python2
   allow_failures:
     - name: "Python 3 on Windows"
 
-
 install:
   - python -m pip install --upgrade pip
-  - python -m pip install flake8 -r requirements.txt
+  - python -m pip install flake8 py2exe -r requirements.txt
 
 script:
-  - python -m flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
+  - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
   - python build.py
