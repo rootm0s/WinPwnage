@@ -19,6 +19,7 @@ from winpwnage.functions.uac.uac_sdclt import *
 from winpwnage.functions.uac.uac_cmstp import *
 from winpwnage.functions.uac.uac_dotnet import *
 from winpwnage.functions.uac.uac_mockdir import *
+from winpwnage.functions.uac.uac_wsreset import *
 
 from winpwnage.functions.persist.persist_userinit import *
 from winpwnage.functions.persist.persist_schtask import *
@@ -32,7 +33,7 @@ from winpwnage.functions.persist.persist_startup_files import *
 from winpwnage.functions.persist.persist_cortana import *
 from winpwnage.functions.persist.persist_people import *
 from winpwnage.functions.persist.persist_bitsadmin import *
- 
+
 from winpwnage.functions.elevate.elevate_handle_inheritance import *
 from winpwnage.functions.elevate.elevate_token_impersonation import *
 from winpwnage.functions.elevate.elevate_named_pipe_impersonation import *
@@ -78,7 +79,8 @@ functions = {
 		sdclt_info,
 		cmstp_info,
 		dotnet_info,
-		mock_info
+		mock_info,
+		wsreset_info
 	),
 	'persist': (
 		explorer_info,
