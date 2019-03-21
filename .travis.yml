@@ -25,6 +25,9 @@ script:
   # - mkdir dist
   #- ls dist
   #- chmod +w dist
+  - python build.py install
+  - ls
+  - cp build.py setup.py
   - python setup.py py2exe
   - ls
   - ls dist
