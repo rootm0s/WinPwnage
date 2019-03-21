@@ -20,14 +20,15 @@ def main():
 	#
 	# Scanner
 	#
-	if sys.argv[1].lower() == "-scan" and sys.argv[2].lower() == "-uac":
-		scanner(uac=True, persist=False, elevate=False, execute=False).start()
-	elif sys.argv[1].lower() == "-scan" and sys.argv[2].lower() == "-persist":
-		scanner(uac=False, persist=True, elevate=False, execute=False).start()
-	elif sys.argv[1].lower() == "-scan" and sys.argv[2].lower() == "-elevate":
-		scanner(uac=False, persist=False, elevate=True, execute=False).start()
-	elif sys.argv[1].lower() == "-scan" and sys.argv[2].lower() == "-execute":
-		scanner(uac=False, persist=False, elevate=False, execute=True).start()
+	if sys.argv[1].lower() == "-scan":
+		if sys.argv[2].lower() == "-uac":
+			scanner(uac=True, persist=False, elevate=False, execute=False).start()
+		elif sys.argv[2].lower() == "-persist":
+			scanner(uac=False, persist=True, elevate=False, execute=False).start()
+		elif sys.argv[2].lower() == "-elevate":
+			scanner(uac=False, persist=False, elevate=True, execute=False).start()
+		elif sys.argv[2].lower() == "-execute":
+			scanner(uac=False, persist=False, elevate=False, execute=True).start()
 
 	#
 	# UAC bypass
