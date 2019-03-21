@@ -22,8 +22,8 @@ install:
 
 script:
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
+  - mkdir dist
+  - ls dist
+  - chmod +w dist
   - python build.py
-  - ls
-  - ls /c/Python27
-  - ls /c/Python27/Scripts
-  - ls /c/Python27/Tools
+  - ls dist
