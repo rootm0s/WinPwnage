@@ -15,8 +15,6 @@ matrix:
         - choco install python2 vcredist2008
         - choco install --ignore-dependencies vcpython27
         - python -m pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
-  allow_failures:
-    - name: "Python 3 on Windows"
 
 install:
   - python -m pip install --upgrade pip
