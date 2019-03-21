@@ -22,12 +22,5 @@ install:
 
 script:
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
-  # - mkdir dist
-  #- ls dist
-  #- chmod +w dist
-  - python build.py install
-  - ls
-  - cp build.py setup.py
-  - python setup.py py2exe
-  - ls
-  - ls dist
+  # - python build.py install  # --> error: bundle-files 1 not yet supported on win64
+  - python winpwnage.py
