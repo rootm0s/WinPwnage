@@ -23,6 +23,7 @@ install:
   - python -m pip install flake8 -r requirements.txt
 
 script:
+  - python --version
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
   # - python build.py install  # --> error: bundle-files 1 not yet supported on win64
   - python winpwnage.py -scan -uac
