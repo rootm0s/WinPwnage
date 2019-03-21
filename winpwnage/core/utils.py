@@ -1,10 +1,7 @@
 import os
 import ctypes
 import platform
-try:
-    import winreg    # Python 3
-except ImportError:  # Python 2
-    import _winreg as winreg
+import _winreg
 
 from .winstructures import *
 
@@ -146,18 +143,18 @@ class process():
 class registry():
 	def __init__(self):
 		self.hkeys = {
-			'hkcu': winreg.HKEY_CURRENT_USER,
-			'hklm': winreg.HKEY_LOCAL_MACHINE
+			'hkcu': _winreg.HKEY_CURRENT_USER,
+			'hklm': _winreg.HKEY_LOCAL_MACHINE
 		}
 
 	def modify_key(self, hkey, path, name, value, create=False):
 		try:
 			if not create:
-				key = winreg.OpenKey(self.hkeys[hkey], path, 0, winreg.KEY_ALL_ACCESS)
+				key = _winreg.OpenKey(self.hkeys[hkey], path, 0, _winreg.KEY_ALL_ACCESS)
 			else:
-				key = winreg.CreateKey(self.hkeys[hkey], os.path.join(path))
-			winreg.SetValueEx(key, name, 0, winreg.REG_SZ, value)
-			winreg.CloseKey(key)
+				key = _winreg.CreateKey(self.hkeys[hkey], os.path.join(path))
+			_winreg.SetValueEx(key, name, 0, _winreg.REG_SZ, value)
+			_winreg.CloseKey(key)
 			return True
 		except Exception as e:
 			return False
@@ -165,11 +162,11 @@ class registry():
 	def remove_key(self, hkey, path, name='', delete_key=False):
 		try:
 			if delete_key:
-				winreg.DeleteKey(self.hkeys[hkey], path)
+				_winreg.DeleteKey(self.hkeys[hkey], path)
 			else:
-				key = winreg.OpenKey(self.hkeys[hkey], path, 0, winreg.KEY_ALL_ACCESS)
-				winreg.DeleteValue(key, name)
-				winreg.CloseKey(key)
+				key = _winreg.OpenKey(self.hkeys[hkey], path, 0, _winreg.KEY_ALL_ACCESS)
+				_winreg.DeleteValue(key, name)
+				_winreg.CloseKey(key)
 			return True
 		except Exception as e:
 			return False
@@ -195,10 +192,10 @@ class information():
 
 	def build_number(self):
 		try:
-			key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, os.path.join(
-				"Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, winreg.KEY_READ)
-			cbn = winreg.QueryValueEx(key, "CurrentBuildNumber")
-			winreg.CloseKey(key)
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(
+				"Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, _winreg.KEY_READ)
+			cbn = _winreg.QueryValueEx(key, "CurrentBuildNumber")
+			_winreg.CloseKey(key)
 		except Exception as error:
 			return False
 		else:
@@ -206,12 +203,12 @@ class information():
 
 	def uac_level(self):
 		try:
-			key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, os.path.join(
-				"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, winreg.KEY_READ)
-			cpba = winreg.QueryValueEx(key, "ConsentPromptBehaviorAdmin")
-			cpbu = winreg.QueryValueEx(key, "ConsentPromptBehaviorUser")
-			posd = winreg.QueryValueEx(key, "PromptOnSecureDesktop")
-			winreg.CloseKey(key)
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(
+				"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, _winreg.KEY_READ)
+			cpba = _winreg.QueryValueEx(key, "ConsentPromptBehaviorAdmin")
+			cpbu = _winreg.QueryValueEx(key, "ConsentPromptBehaviorUser")
+			posd = _winreg.QueryValueEx(key, "PromptOnSecureDesktop")
+			_winreg.CloseKey(key)
 		except Exception as error:
 			return False
 
