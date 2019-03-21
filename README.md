@@ -1,5 +1,7 @@
 # 💻 WinPwnage
 
+![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)
+
 The meaning of this repo is to study the techniques.
 
 Techniques are found online, on different blogs and repos here on GitHub. I do not take credit for any of the findings, thanks to all the researchers.
