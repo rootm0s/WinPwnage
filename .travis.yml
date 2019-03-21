@@ -24,3 +24,6 @@ script:
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
   # - python build.py install  # --> error: bundle-files 1 not yet supported on win64
   - python winpwnage.py -scan -uac
+  - python winpwnage.py -scan -persist
+  - python winpwnage.py -scan -elevate
+  - python winpwnage.py -scan -execute
