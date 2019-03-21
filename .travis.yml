@@ -22,7 +22,7 @@ install:
 
 script:
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
-  - sudo python build.py
+  - python build.py
   - ls
   - ls /c/Python27
   - ls /c/Python27/Scripts
