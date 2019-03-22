@@ -74,7 +74,7 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 ## Build:
 In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.
 
-```python build.py install```
+```python build.py winpwnage.py```
 
 On Windows 10, Access Denied errors can accure while compiling, rerun until success or elevate the prompt. 
 
