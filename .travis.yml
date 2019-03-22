@@ -8,14 +8,14 @@ env:
     - PY37PATH=/c/Python37:/c/Python37/Scripts
 
 py27-steps: &py27-steps
-  env: PATH=PY27PATH:$PATH
+  env: PATH=$PY27PATH:$PATH
   before_install:
     - choco install python2
     - python -m pip install --upgrade pip
     - python -m pip install -r requirements.txt
 
 py37-steps: &py37-steps
-  env: PATH=PY37PATH:$PATH
+  env: PATH=$PY37PATH:$PATH
   before_install:
     - choco install python
     - python -m pip install --upgrade pip
