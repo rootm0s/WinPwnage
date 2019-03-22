@@ -36,7 +36,7 @@ class payloads():
 			return True
 		else:
 			# Check if payload is a bin with args (e.g C:\\Windows\\System32\\cmd.exe /k whoami)
-			return bool(os.path.isfile(payload.split(' ')[0])
+			return bool(os.path.isfile(payload.split(' ')[0]))
 
 	def dll(self, payload):
 		return bool(os.path.isfile(os.path.join(payload)) and payload.endswith(".dll"))
