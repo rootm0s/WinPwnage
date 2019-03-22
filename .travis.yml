@@ -23,5 +23,5 @@ install:
   - python -m pip install flake8 -r requirements.txt
 
 script:
-  - flake8 . --count --select=E9,F4,F63,F72,F82 --show-source --statistics
+  - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
   - python build.py
