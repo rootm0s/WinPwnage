@@ -36,17 +36,10 @@ class payloads():
 			return True
 		else:
 			# Check if payload is a bin with args (e.g C:\\Windows\\System32\\cmd.exe /k whoami)
-			p = payload.split(' ', 1)[0]
-			if os.path.isfile(p):
-				return True
-
-			return False
+			return bool(os.path.isfile(payload.split(' ')[0])
 
 	def dll(self, payload):
-		if os.path.isfile(os.path.join(payload)) and payload.endswith(".dll"):
-			return True
-		else:
-			return False
+		return bool(os.path.isfile(os.path.join(payload)) and payload.endswith(".dll"))
 
 
 class process():
@@ -82,10 +75,7 @@ class process():
 		shinfo.nShow = SW_SHOW
 		shinfo.lpParameters = params
 		try:
-			if ShellExecuteEx(byref(shinfo)):
-				return True
-			else:
-				return False
+			return bool(ShellExecuteEx(byref(shinfo)))
 		except Exception as error:
 			return False
 
@@ -127,9 +117,8 @@ class process():
 		return pid_to_name
 
 	def get_process_pid(self, processname):
-		pid_to_name = self.enum_process_names()
-		for pid in pid_to_name:
-			if pid_to_name[pid].lower().find(processname) != -1:
+		for pid, name in self.enum_process_names().items():
+			if processname in name:
 				return pid
 
 	def terminate(self, processname):
@@ -189,10 +178,7 @@ class information():
 		return platform.machine()
 
 	def admin(self):
-		if ctypes.windll.shell32.IsUserAnAdmin() == True:
-			return True
-		else:
-			return False
+		return bool(ctypes.windll.shell32.IsUserAnAdmin())
 
 	def build_number(self):
 		try:
@@ -215,14 +201,5 @@ class information():
 			_winreg.CloseKey(key)
 		except Exception as error:
 			return False
-
-		if (cpba[0] == 0) and (cpbu[0] == 3) and (posd[0] == 0):
-			return 1
-		elif (cpba[0] == 5) and (cpbu[0] == 3) and (posd[0] == 0):
-			return 2
-		elif (cpba[0] == 5) and (cpbu[0] == 3) and (posd[0] == 1):
-			return 3
-		elif (cpba[0] == 2) and (cpbu[0] == 3) and (posd[0] == 1):
-			return 4
-		else:
-			return False
+		cpba_cpbu_posd = (cpba[0], cpbu[0], posd[0])
+		return {(0, 3, 0): 1, (5, 3, 0): 2, (5, 3, 1): 3, (2, 3, 1): 4}.get(cpba_cpbu_posd, False)
