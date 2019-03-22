@@ -11,7 +11,5 @@ except Exception as error:
 """
 Displays if we are elevated or not
 """	
-if (ctypes.windll.shell32.IsUserAnAdmin() == True):
-	ctypes.windll.user32.MessageBoxA(0,"High IL","",0x0|0x40)
-else:
-	ctypes.windll.user32.MessageBoxA(0,"Medium IL","",0x0|0x40)
+IL = "High IL" if ctypes.windll.shell32.IsUserAnAdmin() else "Medium IL"
+ctypes.windll.user32.MessageBoxA(0,IL,"",0x0|0x40)
