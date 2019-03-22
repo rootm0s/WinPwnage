@@ -11,15 +11,15 @@ py27-steps: &py27-steps
   env: PATH=$PY27PATH:$PATH
   before_install:
     - choco install python2
-    - python -m pip install --upgrade pip
-    - python -m pip install -r requirements.txt
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
 
 py37-steps: &py37-steps
   env: PATH=$PY37PATH:$PATH
   before_install:
     - choco install python
-    - python -m pip install --upgrade pip
-    - python -m pip install -r requirements.txt
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
 
 py2exe-steps: &py2exe-steps
   script:
@@ -32,7 +32,7 @@ py2exe-steps: &py2exe-steps
 
 pyinstaller-steps: &pyinstaller-steps
   install:
-    - python -m pip install pyinstaller
+    - pip install pyinstaller
   script:
     - pyinstaller --onefile winpwnage.py
     - ls dist
@@ -70,7 +70,7 @@ matrix:
       before_script: pip uninstall -y enum34
 
 install:
-  - python -m pip install flake8
+  - pip install flake8
 
 script:
   - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
