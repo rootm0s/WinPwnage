@@ -72,7 +72,7 @@ Rewrote them and ported it to Python. The code under _todo_ folders are not test
 ```pip install -r requirements.txt```
 
 ## Build with py2exe:
-In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python2, not on Python 3.
+In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python 2, not on Python 3.
 
 ```python build.py winpwnage.py```
 
