@@ -1,7 +1,6 @@
 import os
 import time
 import shutil
-import _winreg
 import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *

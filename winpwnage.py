@@ -12,6 +12,7 @@ print("""
              |_|               |___|
 """)
 
+print_info("Python {}.{}.{}".format(*sys.version_info))
 print_info("UAC level: {}".format(information().uac_level()))
 print_info("Build number: {}".format(information().build_number()))
 print_info("Running elevated: {}\n".format(information().admin()))

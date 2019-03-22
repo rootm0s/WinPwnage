@@ -1,6 +1,5 @@
 import os
 import time
-import _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
