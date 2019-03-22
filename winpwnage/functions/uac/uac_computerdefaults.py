@@ -1,9 +1,5 @@
 import os
 import time
-try:
-	import _winreg   # Python 2
-except ImportError:      # Python 3
-	import winreg as _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
