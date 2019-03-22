@@ -16,10 +16,11 @@ py37-steps: &py37-steps
     - python -m pip install -r requirements.txt
 
 scan-steps: &scan-steps
-  - python winpwnage.py -scan -uac
-  - python winpwnage.py -scan -persist
-  - python winpwnage.py -scan -elevate
-  - python winpwnage.py -scan -execute
+  install:
+    - python winpwnage.py -scan -uac
+    - python winpwnage.py -scan -persist
+    - python winpwnage.py -scan -elevate
+    - python winpwnage.py -scan -execute
 
 pyinstaller-steps: &pyinstaller
   install:
@@ -79,4 +80,9 @@ install:
 
 script:
   - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
-  <<: *scan-steps
+  # <<: *scan-steps
+  - python winpwnage.py -scan -uac
+  - python winpwnage.py -scan -persist
+  - python winpwnage.py -scan -elevate
+  - python winpwnage.py -scan -execute
+
