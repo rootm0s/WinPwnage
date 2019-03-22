@@ -1,5 +1,3 @@
-import os
-
 from winpwnage.functions.uac.uac_runas import *
 from winpwnage.functions.uac.uac_slui import *
 from winpwnage.functions.uac.uac_perfmon import *

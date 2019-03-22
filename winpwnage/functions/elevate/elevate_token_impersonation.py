@@ -1,7 +1,6 @@
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
-import os
 
 #Creds to: https://gist.github.com/highsenburger69/147a16dd003b2fd1eacd9afcd1d0fe7f
 
