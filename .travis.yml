@@ -1,37 +1,45 @@
 os: windows
 language: shell  # 'language: python' is not yet supported on Windows
 
+env:
+  global:
+    - PYTHONUNBUFFERED=1
+    - PY27PATH=/c/Python27:/c/Python27/Scripts
+    - PY37PATH=/c/Python37:/c/Python37/Scripts
+
 py27-steps: &py27-steps
-  env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
+  env: PATH=PY27PATH:$PATH
   before_install:
     - choco install python2
     - python -m pip install --upgrade pip
     - python -m pip install -r requirements.txt
 
 py37-steps: &py37-steps
-  env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+  env: PATH=PY37PATH:$PATH
   before_install:
     - choco install python
     - python -m pip install --upgrade pip
     - python -m pip install -r requirements.txt
 
-scan-steps: &scan-steps
-  install:
-    - python winpwnage.py -scan -uac
-    - python winpwnage.py -scan -persist
-    - python winpwnage.py -scan -elevate
-    - python winpwnage.py -scan -execute
+py2exe-steps: &py2exe-steps
+  script:
+    - python build_win64.py winpwnage.py
+    - ls dist
+    - dist/winpwnage.exe  -scan -uac
+    - dist/winpwnage.exe  -scan -persist
+    - dist/winpwnage.exe  -scan -elevate
+    - dist/winpwnage.exe  -scan -execute
 
-pyinstaller-steps: &pyinstaller
+pyinstaller-steps: &pyinstaller-steps
   install:
-    - python -m pip install --upgrade pip
-    - python -m pip install pyinstaller -r requirements.txt
-
-env:
-  global:
-    - PYTHONUNBUFFERED=1
-    - PY27PATH=/c/Python27:/c/Python27/Scripts
-    - PY37PATH=/c/Python37:/c/Python37/Scripts
+    - python -m pip install pyinstaller
+  script:
+    - pyinstaller --onefile winpwnage.py
+    - ls dist
+    - dist/winpwnage.exe  -scan -uac
+    - dist/winpwnage.exe  -scan -persist
+    - dist/winpwnage.exe  -scan -elevate
+    - dist/winpwnage.exe  -scan -execute
 
 matrix:
   include:
@@ -41,39 +49,24 @@ matrix:
       <<: *py37-steps
 
     - name: "Py2: Build exe with py2exe"
-      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
-      before_install:
-        - choco install python2 vcredist2008
+      <<: *py27-steps
+      install:
+        - choco install vcredist2008
         - choco install --ignore-dependencies vcpython27
         - python -m pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
-      install: true
-      script:
-        - python build_win64.py winpwnage.py
-        - ls
-        - ls dist
+      <<: *py2exe-steps
     - name: "Py3: Build exe with py2exe"
-      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-      before_install:
-        - choco install python
+      <<: *py27-steps
+      install:
         - python -m pip install py2exe
-      install: true
-      script:
-        - python build_win64.py winpwnage.py
-        - ls
-        - ls dist
+     <<: *py2exe-steps
 
     - name: "Py2: Build exe with PyInstaller"
-      env: PATH=$PY27PATH:$PATH
-      before_install:
-        - choco install python2
-        - python -m pip install --upgrade pip
-        - python -m pip install pyinstaller -r requirements.txt
+      <<: *py27-steps
+      <<: *pyinstaller-steps
     - name: "Py3: Build exe with PyInstaller"
-      env: PATH=$PY37PATH:$PATH
-      before_install:
-        - choco install python
-        - python -m pip install --upgrade pip
-        - python -m pip install pyinstaller -r requirements.txt
+      <<: *py37-steps
+      <<: *pyinstaller-steps
 
 install:
   - python -m pip install flake8
