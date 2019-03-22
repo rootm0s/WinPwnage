@@ -1,7 +1,11 @@
 import os
 import ctypes
 import platform
-import _winreg
+try:
+	import _winreg   # Python 2
+except ImportError:      # Python 3
+	import winreg as _winreg
+
 
 from .winstructures import *
 

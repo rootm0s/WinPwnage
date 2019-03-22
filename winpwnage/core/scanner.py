@@ -1,5 +1,3 @@
-import os
-
 from winpwnage.functions.uac.uac_runas import *
 from winpwnage.functions.uac.uac_slui import *
 from winpwnage.functions.uac.uac_perfmon import *
@@ -134,23 +132,16 @@ class scanner():
 	def start(self):
 		print_info("Comparing build number ({}) against 'Fixed In' build numbers, false positives might happen.".format(information().build_number()))
 		print_table()
+		fmt = "\t{Type}\t{Function Payload}\t\t{Admin}\t\t{Description}"
 		for i in functions:
 			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate or i == 'execute' and not self.execute:
 				continue
 
 			for info in functions[i]:
 				if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
-					table_success(info["Id"],
-						"\t{}\t{}\t\t{}\t\t{}".format(str(info["Type"]),
-						str(info["Function Payload"]),
-						str(info["Admin"]),
-						str(info["Description"])))
+					table_success(info["Id"], fmt.format(**info))
 				else:
-					table_error(info["Id"],
-						"\t{}\t{}\t\t{}\t\t{}".format(str(info["Type"]),
-						str(info["Function Payload"]),
-						str(info["Admin"]),
-						str(info["Description"])))
+					table_error(info["Id"], fmt.format(**info))
 		return Constant.output
 
 class function():

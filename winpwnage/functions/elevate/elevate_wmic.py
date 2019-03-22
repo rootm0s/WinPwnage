@@ -1,7 +1,5 @@
 import os
 import time
-import datetime
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
