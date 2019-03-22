@@ -2,20 +2,17 @@ os: windows
 language: shell  # 'language: python' is not yet supported on Windows
 
 env:
-  global:
-    - PYTHONUNBUFFERED=1
-    - PY27PATH=/c/Python27:/c/Python27/Scripts
-    - PY37PATH=/c/Python37:/c/Python37/Scripts
+  global: PYTHONUNBUFFERED=1
 
 py27-steps: &py27-steps
-  env: PATH=$PY27PATH:$PATH
+  env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
   before_install:
     - choco install python2
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
 py37-steps: &py37-steps
-  env: PATH=$PY37PATH:$PATH
+  env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
   before_install:
     - choco install python
     - python -m pip install --upgrade pip
