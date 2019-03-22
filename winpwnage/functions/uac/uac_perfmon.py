@@ -1,10 +1,6 @@
 import os
 import time
 import shutil
-try:
-	import _winreg   # Python 2
-except ImportError:      # Python 3
-	import winreg as _winreg
 import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
