@@ -56,10 +56,10 @@ matrix:
         - python -m pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
       <<: *py2exe-steps
     - name: "Py3: Build exe with py2exe"
-      <<: *py27-steps
+      <<: *py37-steps
       install:
         - python -m pip install py2exe
-     <<: *py2exe-steps
+      <<: *py2exe-steps
 
     - name: "Py2: Build exe with PyInstaller"
       <<: *py27-steps
