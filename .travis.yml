@@ -34,7 +34,7 @@ pyinstaller-steps: &pyinstaller-steps
   install:
     - pip install pyinstaller
   script:
-    - pyinstaller --onefile winpwnage.py
+    - pyinstaller --console --onefile winpwnage.py
     - ls dist
     - dist/winpwnage.exe  -scan -uac
     - dist/winpwnage.exe  -scan -persist
@@ -67,8 +67,9 @@ matrix:
     - name: "Py3: Build exe with PyInstaller"
       <<: *py37-steps
       <<: *pyinstaller-steps
-      before_script: pip uninstall -y enum34
-
+  allow_failures:
+    - name: "Py3: Build exe with py2exe"
+ 
 install:
   - pip install flake8
 
