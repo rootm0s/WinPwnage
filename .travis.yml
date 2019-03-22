@@ -25,3 +25,5 @@ install:
 script:
   - flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
   - python build.py winpwnage.py
+  - ls
+  - ls dist
