@@ -86,3 +86,5 @@ script:
   - $RUN_WINPWNAGE -scan -persist
   - $RUN_WINPWNAGE -scan -elevate
   - $RUN_WINPWNAGE -scan -execute
+  - $RUN_WINPWNAGE -use -uac 2 /c/windows/system32/cmd.exe  # the "fodhelper" UAC bypass
+
