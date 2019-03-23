@@ -1,8 +1,8 @@
 # 💻 WinPwnage
 
-![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)
+[![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)](https://travis-ci.com/rootm0s/WinPwnage)
 
-The meaning of this repo is to study the techniques.
+The goal of this repo is to study the Windows penetration techniques.
 
 Techniques are found online, on different blogs and repos here on GitHub. I do not take credit for any of the findings, thanks to all the researchers.
 
