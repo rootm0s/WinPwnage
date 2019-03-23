@@ -72,7 +72,7 @@ matrix:
     - name: "Py3: Build exe with py2exe"
       <<: *py35-steps
       install:
-        - pip install py2exe
+        - pip install py2exe pyreadline
       before_script:
         - python -m py2exe.build_exe --bundle-files 0 winpwnage.py
         - ls -l dist  # See file size, etc.
