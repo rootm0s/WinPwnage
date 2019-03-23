@@ -3,7 +3,6 @@ language: shell  # 'language: python' is not yet supported on Windows
 
 env:
   global:
-    - PYTHONUNBUFFERED=1
     - PY27PATH=/c/Python27:/c/Python27/Scripts
     - PY37PATH=/c/Python37:/c/Python37/Scripts
 
