@@ -14,6 +14,7 @@ language: shell  # 'language: python' is not yet supported on Travis CI Windows
 env:
   global:
     - PY27PATH=/c/Python27:/c/Python27/Scripts
+    - PY35PATH=/c/Python35:/c/Python35/Scripts
     - PY37PATH=/c/Python37:/c/Python37/Scripts
 
 py27-steps: &py27-steps
@@ -27,6 +28,13 @@ py37-steps: &py37-steps
   env: PATH=$PY37PATH:$PATH
   before_install:
     - choco install python
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+py35-steps: &py35-steps
+  env: PATH=$PY35PATH:$PATH
+  before_install:
+    - choco install python --version 3.5.4
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
@@ -62,7 +70,7 @@ matrix:
         - ls -l dist  # See file size, etc.
         - RUN_WINPWNAGE=dist/winpwnage.exe
     - name: "Py3: Build exe with py2exe"
-      <<: *py37-steps
+      <<: *py35-steps
       install:
         - pip install py2exe
       before_script:
