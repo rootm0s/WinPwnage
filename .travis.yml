@@ -1,29 +1,88 @@
-os: windows
-language: shell  # 'language: python' is not yet supported on Windows
-env: PYTHONUNBUFFERED=1
+# https://blog.travis-ci.com/2018-10-11-windows-early-release
+# https://docs.travis-ci.com/user/reference/windows
+# https://chocolatey.org/packages/python
+# https://www.pyinstaller.org
+
+# before_install: Installs Python, upgrades pip, pip installs requirements.txt
+# install: Installs run-specific tools like Flake8, py2exe, PyInstaller
+# before_script: Executes run-specific tools and then sets $RUN_WINPWNAGE
+# script: Executes WinPwnage
+
+os: windows      # Windows Server, version 1803 -- Platform: Windows-10-10.0.17134-SP0
+language: shell  # 'language: python' is not yet supported on Travis CI Windows
+
+env:
+  global:
+    - PY27PATH=/c/Python27:/c/Python27/Scripts
+    - PY37PATH=/c/Python37:/c/Python37/Scripts
+
+py27-steps: &py27-steps
+  env: PATH=$PY27PATH:$PATH
+  before_install:
+    - choco install python2
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+py37-steps: &py37-steps
+  env: PATH=$PY37PATH:$PATH
+  before_install:
+    - choco install python
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+py2exe-steps: &py2exe-steps
+  before_script:
+    - python build_win64.py winpwnage.py
+    - ls -l dist  # See file size, etc.
+    - RUN_WINPWNAGE=dist/winpwnage.exe
+
+pyinstaller-steps: &pyinstaller-steps
+  install:
+    - pip install pyinstaller
+  before_script:
+    - pyinstaller --onefile winpwnage.py
+    - sleep 1  # Give PyInstaller a second to finish writing to stdout
+    - ls -l dist  # See file size, etc.
+    - RUN_WINPWNAGE=dist/winpwnage.exe
 
 matrix:
   include:
-    - name: "Python 3 on Windows"
-      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-      before_install:
-        - choco install python
-        - python -m pip install py2exe
-    - name: "Python 2 on Windows"
-      env: PATH=/c/Python27:/c/Python27/Scripts:$PATH
-      before_install:
-        - choco install python2 vcredist2008
-        - choco install --ignore-dependencies vcpython27
-        - python -m pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
+    - name: "Py2: Run tests"
+      <<: *py27-steps
+    - name: "Py3: Run tests"
+      <<: *py37-steps
 
+    - name: "Py2: Build exe with py2exe"
+      <<: *py27-steps
+      install:
+        - choco install vcredist2008
+        - choco install --ignore-dependencies vcpython27
+        - pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
+      <<: *py2exe-steps
+    - name: "Py3: Build exe with py2exe"
+      <<: *py37-steps
+      install:
+        - pip install py2exe
+      <<: *py2exe-steps
+
+    - name: "Py2: Build exe with PyInstaller"
+      <<: *py27-steps
+      <<: *pyinstaller-steps
+    - name: "Py3: Build exe with PyInstaller"
+      <<: *py37-steps
+      <<: *pyinstaller-steps
+  allow_failures:
+    - name: "Py3: Build exe with py2exe"
+ 
 install:
-  - python -m pip install --upgrade pip
-  - python -m pip install flake8 -r requirements.txt
+  - pip install flake8
+
+before_script:
+  - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
+  - RUN_WINPWNAGE="python winpwnage.py"
 
 script:
-  - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
-  # - python build.py winpwnage.py  # --> error: bundle-files 1 not yet supported on win64
-  - python winpwnage.py -scan -uac
-  - python winpwnage.py -scan -persist
-  - python winpwnage.py -scan -elevate
-  - python winpwnage.py -scan -execute
+  - $RUN_WINPWNAGE -scan -uac
+  - $RUN_WINPWNAGE -scan -persist
+  - $RUN_WINPWNAGE -scan -elevate
+  - $RUN_WINPWNAGE -scan -execute
