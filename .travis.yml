@@ -30,12 +30,6 @@ py37-steps: &py37-steps
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
-py2exe-steps: &py2exe-steps
-  before_script:
-    - python build_win64.py winpwnage.py
-    - ls -l dist  # See file size, etc.
-    - RUN_WINPWNAGE=dist/winpwnage.exe
-
 pyinstaller-steps: &pyinstaller-steps
   install:
     - pip install pyinstaller
@@ -63,12 +57,18 @@ matrix:
         - choco install vcredist2008
         - choco install --ignore-dependencies vcpython27
         - pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
-      <<: *py2exe-steps
+      before_script:
+        - python build_win64.py winpwnage.py
+        - ls -l dist  # See file size, etc.
+        - RUN_WINPWNAGE=dist/winpwnage.exe
     - name: "Py3: Build exe with py2exe"
       <<: *py37-steps
       install:
         - pip install py2exe
-      <<: *py2exe-steps
+      before_script:
+        - python -m py2exe.build_exe --bundle-files 0 winpwnage.py
+        - ls -l dist  # See file size, etc.
+        - RUN_WINPWNAGE=dist/winpwnage.exe
 
     - name: "Py2: Build exe with PyInstaller"
       <<: *py27-steps
