@@ -40,7 +40,12 @@ pyinstaller-steps: &pyinstaller-steps
   install:
     - pip install pyinstaller
   before_script:
-    - pyinstaller --onefile winpwnage.py
+    # The next line makes a .exe that fails to write to stdout
+    # - pyinstaller --onefile winpwnage.py
+    # Workaround: The next three lines inexplicably build a usable .exe
+    - cp winpwnage.py winpwnage_copy.py              # flip
+    - pyinstaller --onefile winpwnage_copy.py
+    - mv dist/winpwnage_copy.exe dist/winpwnage.exe  # flop
     - sleep 1  # Give PyInstaller a second to finish writing to stdout
     - ls -l dist  # See file size, etc.
     - RUN_WINPWNAGE=dist/winpwnage.exe
