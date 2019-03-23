@@ -8,7 +8,7 @@
 # before_script: Executes run-specific tools and then sets $RUN_WINPWNAGE
 # script: Executes WinPwnage
 
-os: windows      # Windows Server, version 1803
+os: windows      # Windows Server, version 1803 -- Platform: Windows-10-10.0.17134-SP0
 language: shell  # 'language: python' is not yet supported on Travis CI Windows
 
 env:
