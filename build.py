@@ -1,6 +1,8 @@
 from distutils.core import setup
 import sys
 
+import py2exe  # noqa: F401
+
 try:
 	args = sys.argv[1]
 except Exception as error:
