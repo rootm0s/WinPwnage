@@ -1,12 +1,12 @@
 # 💻 WinPwnage
 
-![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)
+[![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)](https://travis-ci.com/rootm0s/WinPwnage)
 
-The meaning of this repo is to study the techniques.
+The goal of this repo is to study the Windows penetration techniques.
 
 Techniques are found online, on different blogs and repos here on GitHub. I do not take credit for any of the findings, thanks to all the researchers.
 
-Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not tested, do not expect it to work. 
+Rewrote them and ported it to Python. The code under _todo_ folders are not tested, do not expect it to work. 
 
 ## UAC bypass techniques:
 * UAC bypass using fodhelper
@@ -71,11 +71,17 @@ Rewrote them and ported it to Python 2.7. The code under _todo_ folders are not 
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
 
-## Build:
-In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.
+## Build with py2exe:
+In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python 2, not on Python 3.
 
 ```python build.py winpwnage.py```
 
+## Build with PyInstaller:
+This build works on both Python 2 and Python 3 and puts the .exe file into the __dist__ directory.
+```
+pip install pyinstaller
+pyinstaller --onefile winpwnage.py
+```
 On Windows 10, Access Denied errors can accure while compiling, rerun until success or elevate the prompt. 
 
 ## Read:
