@@ -19,11 +19,12 @@ print_info("Running elevated: {}\n".format(information().admin()))
 
     
 def main():
-    try:  # Each of the next 4 lines can raise IndexError
+    try:  # These 2 lines can raise an IndexError
         verb = sys.argv[1].lstrip("-").lower()
-        verb in ("scan", "use")
         function_group = sys.argv[2].lstrip("-").lower()
-        function_group in function_groups
+        # These 2 lines can raise an ValueError
+        ("scan", "use").index(verb)
+        list(function_groups).index(function_group)
 
         if verb == "scan":
             scanner(function_group).start()
