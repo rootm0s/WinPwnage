@@ -19,12 +19,13 @@ print_info("Running elevated: {}\n".format(information().admin()))
 
 
 def main():
-    #
-    # Scanner
-    #
-    verb = sys.argv[1].lstrip("-").lower()
+    try:
+        verb = sys.argv[1].lstrip("-").lower()
+        function_group = sys.argv[2].lstrip("-").lower()
+    except IndexError:
+        print("winpwnage [-scan, -use] [-uac, -persist, -elevate, -execute] ...")
+        return
     assert verb in ("scan", "use"), verb
-    function_group = sys.argv[2].lstrip("-").lower()
     assert function_group in ("uac", "persist", "elevate", "execute"), function_group
 
     if verb == "scan":
