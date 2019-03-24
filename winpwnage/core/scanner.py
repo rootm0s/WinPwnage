@@ -58,7 +58,7 @@ from winpwnage.functions.execute.exec_sqltoolsps import *
 from winpwnage.core.prints import print_info, print_error, print_table, table_success, table_error, Constant
 from winpwnage.core.utils import information
 
-functions = {
+function_groups = {
 	'uac': (
 		runas_info,
 		fodhelper_info,
@@ -122,64 +122,49 @@ functions = {
 
 
 class scanner():
-	def __init__(self, uac=True, persist=True, elevate=True, execute=True):
-		self.uac = uac
-		self.persist = persist
-		self.elevate = elevate
-		self.execute = execute
+	def __init__(self, function_group='uac'):
+		self.function_group = function_group.lower()
+		assert self.function_group in function_groups
 		Constant.output = []
 
 	def start(self):
 		print_info("Comparing build number ({}) against 'Fixed In' build numbers, false positives might happen.".format(information().build_number()))
 		print_table()
 		fmt = "\t{Type}\t{Function Payload}\t\t{Admin}\t\t{Description}"
-		for i in functions:
-			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate or i == 'execute' and not self.execute:
-				continue
-
-			for info in functions[i]:
-				if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
-					table_success(info["Id"], fmt.format(**info))
-				else:
-					table_error(info["Id"], fmt.format(**info))
+		for info in function_groups[self.function_group]:
+			if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
+				table_success(info["Id"], fmt.format(**info))
+			else:
+				table_error(info["Id"], fmt.format(**info))
 		return Constant.output
 
 class function():
-	def __init__(self, uac=True, persist=True, elevate=True, execute=True):
-		self.uac = uac
-		self.persist = persist
-		self.elevate = elevate
-		self.execute = execute
+	def __init__(self, function_group='uac'):
+		self.function_group = function_group.lower()
+		assert self.function_group in function_groups
 		Constant.output = []
 
 	def run(self, id, payload, **kwargs):
 		print_info("Attempting to run id ({}) configured with payload ({})".format(id, payload))
-		for i in functions:
-			#if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
-			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate or i == 'execute' and not self.execute:
-				continue
-
-			for info in functions[i]:
-				if id in str(info["Id"]):
-					if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
-						f = globals()[info["Function Name"]]
+		for info in function_groups[self.function_group]:
+			if id in str(info["Id"]):
+				if int(info["Works From"]) <= int(information().build_number()) < int(info["Fixed In"]):
+					f = globals()[info["Function Name"]]
 						
-						# if name is not needed in function, just keep goin
-						if 'name' not in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
-							f(payload, add=kwargs.get('add', True))
+					# if name is not needed in function, just keep goin
+					if 'name' not in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
+						f(payload, add=kwargs.get('add', True)) 
 						
-						# if name is needed for the function to run, just add a dummy
-						# this is mainly to support pupy intergration, wich needs custom
-						# names in order to work.
-						elif 'name' in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
-							f(payload, name=kwargs.get('name', 'WinPwnage'), add=kwargs.get('add', True))
+					# if name is needed for the function to run, just add a dummy
+					# this is mainly to support pupy intergration, wich needs custom
+					# names in order to work.
+					elif 'name' in f.__code__.co_varnames and 'add' in f.__code__.co_varnames:
+						f(payload, name=kwargs.get('name', 'WinPwnage'), add=kwargs.get('add', True))
 						
-						# if function only needs payload as argument, eg. uac functions
-						else:
-							f(payload)
+					# if function only needs payload as argument, eg. uac functions
 					else:
-						print_error('Technique not compatible with this system.')
-						
-					return Constant.output
+						f(payload)
 				else:
-					pass
+					print_error('Technique not compatible with this system.')
+						
+				return Constant.output
