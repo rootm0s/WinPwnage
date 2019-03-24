@@ -17,51 +17,27 @@ print_info("UAC level: {}".format(information().uac_level()))
 print_info("Build number: {}".format(information().build_number()))
 print_info("Running elevated: {}\n".format(information().admin()))
 
+
 def main():
     #
     # Scanner
     #
-    if sys.argv[1].lower() == "-scan":
-        if sys.argv[2].lower() == "-uac":
-            scanner(uac=True, persist=False, elevate=False, execute=False).start()
-        elif sys.argv[2].lower() == "-persist":
-            scanner(uac=False, persist=True, elevate=False, execute=False).start()
-        elif sys.argv[2].lower() == "-elevate":
-            scanner(uac=False, persist=False, elevate=True, execute=False).start()
-        elif sys.argv[2].lower() == "-execute":
-            scanner(uac=False, persist=False, elevate=False, execute=True).start()
+    verb = sys.argv[1].lstrip("-").lower()
+    assert verb in ("scan", "use"), verb
+    function_group = sys.argv[2].lstrip("-").lower()
+    assert function_group in ("uac", "persist", "elevate", "execute"), function_group
 
-    #
-    # UAC bypass
-    #
-    elif sys.argv[1].lower() == "-use" and sys.argv[2].lower() == "-uac":
-        function(uac=True, persist=False, elevate=False,
-                 execute=False).run(id=sys.argv[3], payload=sys.argv[4])
+    if verb == "scan":
+        scanner(function_group).start()
 
-    #
-    # Persistence
-    #
-    elif sys.argv[1].lower() == "-use" and sys.argv[2].lower() == "-persist" and sys.argv[3].lower() == "-add":
-        function(uac=False, persist=True, elevate=False,
-                 execute=False).run(id=sys.argv[4], payload=sys.argv[5], add=True)
+    elif function_group == "persist":  # use Persistence
+        # False if "-remove", True if "-add", raise ValueError on all other values
+        add = bool(("-remove", "-add").index(sys.argv[3].lower()))
+        function(function_group).run(id=sys.argv[4], payload=sys.argv[5], add=add)
 
-    elif sys.argv[1].lower() == "-use" and sys.argv[2].lower() == "-persist" and sys.argv[3].lower() == "-remove":
-        function(uac=False, persist=True, elevate=False,
-                 execute=False).run(id=sys.argv[4], payload=sys.argv[5], add=False)
+    else:  # use User Account Control or Elevate or Execute
+        function(function_group).run(id=sys.argv[3], payload=sys.argv[4])
 
-    #
-    # Elevate
-    #
-    elif sys.argv[1].lower() == "-use" and sys.argv[2].lower() == "-elevate":
-        function(uac=False, persist=False, elevate=True,
-                 execute=False).run(id=sys.argv[3], payload=sys.argv[4])
-
-    #
-    # Execute
-    #
-    elif sys.argv[1].lower() == "-use" and sys.argv[2].lower() == "-execute":
-        function(uac=False, persist=False, elevate=False,
-                 execute=True).run(id=sys.argv[3], payload=sys.argv[4])
 
 if __name__ == "__main__":
     main()
