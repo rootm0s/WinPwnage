@@ -57,7 +57,7 @@ matrix:
     - name: "Py3: Build exe with PyInstaller"
       <<: *py37-steps
       <<: *pyinstaller-steps
- 
+
     - name: "Py2: Build exe with py2exe"
       <<: *py27-steps
       install:
@@ -77,7 +77,18 @@ before_script:
   - RUN_WINPWNAGE="python winpwnage.py"
 
 script:
+  # Scan the function groups
   - $RUN_WINPWNAGE -scan -uac
   - $RUN_WINPWNAGE -scan -persist
   - $RUN_WINPWNAGE -scan -elevate
   - $RUN_WINPWNAGE -scan -execute
+  # Use tests: User Account Control -- Travis timesout on -use -uac 2, 16
+  - $RUN_WINPWNAGE -use -uac 1 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -uac 3 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -uac 4 /c/windows/system32/cmd.exe
+  # Use tests: Execution -- Travis timesout on -use -execute 1
+  - $RUN_WINPWNAGE -use -execute 11 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -execute 13 /c/windows/system32/cmd.exe
+  # Use tests: Persist -- Travis timesout on -use -persist 12
+  - $RUN_WINPWNAGE -use -persist -add 6 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -persist -add 9 /c/windows/system32/cmd.exe
