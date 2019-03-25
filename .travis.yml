@@ -45,8 +45,6 @@ pyinstaller-steps: &pyinstaller-steps
     - RUN_WINPWNAGE=dist/winpwnage.exe
 
 matrix:
-  allow_failures:
-    - install: true
   include:
     - name: "Py2: Run tests"
       <<: *py27-steps
