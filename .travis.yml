@@ -71,66 +71,6 @@ matrix:
         - ls -l dist  # See file size, etc.
         - RUN_WINPWNAGE=dist/winpwnage.exe
 
-    # Use tests: User Account Control
-    - name: "Py3: winpwnage.py -use -uac 1"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -uac 1 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -uac 2"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -uac 2 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -uac 3"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -uac 3 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -uac 4"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -uac 4 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -uac 16"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -uac 16 /c/windows/system32/cmd.exe
-
-    # Use tests: Execution
-    - name: "Py3: winpwnage.py -use -execute 1"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -execute 1 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -execute 11"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -execute 11 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -execute 13"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -execute 13 /c/windows/system32/cmd.exe
-    # Use tests: Persist
-    - name: "Py3: winpwnage.py -use -persist -add 6"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -persist -add 6 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -persist -add 9"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -persist -add 9 /c/windows/system32/cmd.exe
-    - name: "Py3: winpwnage.py -use -persist -add 12"
-      <<: *py37-steps
-      install: true
-      before_script: true
-      script: python winpwnage.py -use -persist -add 12 /c/windows/system32/cmd.exe
-
 install:
   - pip install flake8
 
@@ -139,7 +79,18 @@ before_script:
   - RUN_WINPWNAGE="python winpwnage.py"
 
 script:
+  # Scan the function groups
   - $RUN_WINPWNAGE -scan -uac
   - $RUN_WINPWNAGE -scan -persist
   - $RUN_WINPWNAGE -scan -elevate
   - $RUN_WINPWNAGE -scan -execute
+  # Use tests: User Account Control -- Travis timesout on -use -uac 2, 16
+  - $RUN_WINPWNAGE -use -uac 1 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -uac 3 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -uac 4 /c/windows/system32/cmd.exe
+  # Use tests: Execution -- Travis timesout on -use -execute 1
+  - $RUN_WINPWNAGE -use -execute 11 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -execute 13 /c/windows/system32/cmd.exe
+  # Use tests: Persist -- Travis timesout on -use -persist 12
+  - $RUN_WINPWNAGE -use -persist -add 6 /c/windows/system32/cmd.exe
+  - $RUN_WINPWNAGE -use -persist -add 9 /c/windows/system32/cmd.exe
