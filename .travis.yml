@@ -45,6 +45,8 @@ pyinstaller-steps: &pyinstaller-steps
     - RUN_WINPWNAGE=dist/winpwnage.exe
 
 matrix:
+  allow_failures:
+    - install: true
   include:
     - name: "Py2: Run tests"
       <<: *py27-steps
@@ -57,7 +59,7 @@ matrix:
     - name: "Py3: Build exe with PyInstaller"
       <<: *py37-steps
       <<: *pyinstaller-steps
- 
+
     - name: "Py2: Build exe with py2exe"
       <<: *py27-steps
       install:
@@ -68,6 +70,66 @@ matrix:
         - python build.py winpwnage.py
         - ls -l dist  # See file size, etc.
         - RUN_WINPWNAGE=dist/winpwnage.exe
+
+    # Use tests: User Account Control
+    - name: "Py3: winpwnage.py -use -uac 1"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -uac 1 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -uac 2"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -uac 2 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -uac 3"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -uac 3 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -uac 4"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -uac 4 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -uac 16"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -uac 16 /c/windows/system32/cmd.exe
+
+    # Use tests: Execution
+    - name: "Py3: winpwnage.py -use -execute 1"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -execute 1 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -execute 11"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -execute 11 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -execute 13"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -execute 13 /c/windows/system32/cmd.exe
+    # Use tests: Persist
+    - name: "Py3: winpwnage.py -use -persist -add 6"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -persist -add 6 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -persist -add 9"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -persist -add 9 /c/windows/system32/cmd.exe
+    - name: "Py3: winpwnage.py -use -persist -add 12"
+      <<: *py37-steps
+      install: true
+      before_script: true
+      script: python winpwnage.py -use -persist -add 12 /c/windows/system32/cmd.exe
 
 install:
   - pip install flake8
