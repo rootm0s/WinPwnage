@@ -19,6 +19,7 @@ def compmgmtlauncher_cleanup(path):
 	print_info("Performing cleaning")
 	if registry().remove_key(hkey="hkcu", path=path, name=None, delete_key=True):
 		print_success("Successfully cleaned up")
+		print_success("All done!")
 	else:
 		print_error("Unable to cleanup")
 		return False
