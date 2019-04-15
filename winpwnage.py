@@ -1,5 +1,5 @@
 from __future__ import print_function
-from winpwnage.core.prints import print_info, print_error
+from winpwnage.core.prints import print_info
 from winpwnage.core.scanner import scanner, function
 from winpwnage.core.utils import *
 import argparse
