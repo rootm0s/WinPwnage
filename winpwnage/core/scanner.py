@@ -31,6 +31,7 @@ from winpwnage.functions.persist.persist_startup_files import *
 from winpwnage.functions.persist.persist_cortana import *
 from winpwnage.functions.persist.persist_people import *
 from winpwnage.functions.persist.persist_bitsadmin import *
+from winpwnage.functions.elevate.elevate_service import *
 
 from winpwnage.functions.elevate.elevate_handle_inheritance import *
 from winpwnage.functions.elevate.elevate_token_impersonation import *
@@ -93,7 +94,8 @@ functions = {
 		startup_files_info,
 		cortana_appx_info,
 		people_appx_info,
-		bitsadmin_info
+		bitsadmin_info,
+		persist_service_info
 	),
 	'elevate': (
 		handleinheritance_info,
