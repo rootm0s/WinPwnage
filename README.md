@@ -40,6 +40,7 @@ Techniques are found online, on different blogs and repos here on GitHub. I do n
 * Persistence using Cortana App
 * Persistence using People App
 * Persistence using bitsadmin
+* Persistence using Windows Service (SYSTEM privileges)
 
 ## Elevation techniques:
 * Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
