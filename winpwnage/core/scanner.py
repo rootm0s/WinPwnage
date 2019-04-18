@@ -31,7 +31,7 @@ from winpwnage.functions.persist.persist_startup_files import *
 from winpwnage.functions.persist.persist_cortana import *
 from winpwnage.functions.persist.persist_people import *
 from winpwnage.functions.persist.persist_bitsadmin import *
-from winpwnage.functions.elevate.elevate_service import *
+from winpwnage.functions.elevate.persist_service import *
 
 from winpwnage.functions.elevate.elevate_handle_inheritance import *
 from winpwnage.functions.elevate.elevate_token_impersonation import *
