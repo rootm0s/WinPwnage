@@ -58,7 +58,6 @@ def elevate_service(payload):
 		svcHandle = OpenService(schSCManager, servicename, 0x0010)
 		if not StartService(svcHandle, 0, None):
 			print_success("Successfully triggered service ({name}) to load ({payload})".format(name=servicename, payload=payload))
-			print (GetLastError())
 		else:
 			print_error("Unable to trigger service ({name}) to load ({payload})".format(name=servicename, payload=payload))
 
