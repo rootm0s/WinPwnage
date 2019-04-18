@@ -37,6 +37,7 @@ from winpwnage.functions.elevate.elevate_token_impersonation import *
 from winpwnage.functions.elevate.elevate_named_pipe_impersonation import *
 from winpwnage.functions.elevate.elevate_schtasks import *
 from winpwnage.functions.elevate.elevate_wmic import *
+from winpwnage.functions.elevate.elevate_service import *
 
 from winpwnage.functions.execute.exec_forfiles import *
 from winpwnage.functions.execute.exec_pcalua import *
@@ -99,7 +100,8 @@ functions = {
 		tokenimpersonation_info,
 		namedpipeimpersonation_info,
 		elevate_schtasks_info,
-		elevate_wmic_info
+		elevate_wmic_info,
+		elevate_service_info
 	),
 	'execute': (
 		forfiles_info,
