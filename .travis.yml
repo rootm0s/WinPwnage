@@ -93,4 +93,3 @@ script:
   - $RUN_WINPWNAGE --use persist --id 6 --payload /c/windows/system32/cmd.exe --add
   - $RUN_WINPWNAGE --use persist --id 9 --payload /c/windows/system32/cmd.exe --add
   - $RUN_WINPWNAGE --use persist --id 3 --payload /c/windows/system32/cmd.exe --add
-  - $RUN_WINPWNAGE --use persist --id 7 --payload /c/windows/system32/cmd.exe --add
