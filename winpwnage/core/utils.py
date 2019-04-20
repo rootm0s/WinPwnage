@@ -1,5 +1,4 @@
 import os
-import time
 import ctypes
 import platform
 
