@@ -1,14 +1,14 @@
 import os
+import time
 import ctypes
 import platform
+
 try:
-	import _winreg   # Python 2
-except ImportError:      # Python 3
+	import _winreg	# Python 2
+except ImportError:	# Python 3
 	import winreg as _winreg
 
-
 from .winstructures import *
-
 
 class disable_fsr():
 	"""
@@ -80,10 +80,10 @@ class process():
 			return False
 
 	def enum_processes(self):
-		size            = 0x1000
+		size = 0x1000
 		cbBytesReturned = DWORD()
-		unit            = sizeof(DWORD)
-		dwOwnPid        = os.getpid()
+		unit = sizeof(DWORD)
+		dwOwnPid = os.getpid()
 		while 1:
 			process_ids = (DWORD * (size // unit))()
 			cbBytesReturned.value = size
@@ -163,19 +163,26 @@ class registry():
 			return True
 		except Exception as e:
 			return False
-			
+
+
 class information():
 	"""
 	A class to handle all the information gathering
 	"""
 	def system_directory(self):
 		return os.path.join(os.environ.get('windir'), 'system32')
-			
+	
+	def system_drive(self):
+		return os.environ.get('systemdrive')
+	
 	def windows_directory(self):
 		return os.environ.get('windir')
 			
 	def architecture(self):
 		return platform.machine()
+
+	def username(self):
+		return os.environ.get('username')
 
 	def admin(self):
 		return bool(ctypes.windll.shell32.IsUserAnAdmin())
