@@ -5,6 +5,8 @@ from winpwnage.core.utils import *
 import argparse
 import sys
 
+__version__ = "1.0"
+
 print("""
         _
   _ _ _|_|___ ___ _ _ _ ___ ___ ___ ___
