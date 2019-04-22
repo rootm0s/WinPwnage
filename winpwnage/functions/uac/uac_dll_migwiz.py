@@ -75,13 +75,13 @@ def migwiz(payload):
 				print_error("Unable to create cabinet file")
 				for x in Constant.output:
 					if "error" in x:
-						migwiz_cleanup(path)
+						migwiz_cleanup()
 						return False
 		else:
 			print_error("Unable to create cabinet file, dll file is not found")
 			for x in Constant.output:
 				if "error" in x:
-					migwiz_cleanup(path)
+					migwiz_cleanup()
 					return False
 		
 		time.sleep(5)
@@ -95,13 +95,13 @@ def migwiz(payload):
 				print_error("Unable to extract cabinet file")
 				for x in Constant.output:
 					if "error" in x:
-						migwiz_cleanup(path)
+						migwiz_cleanup()
 						return False
 		else:
 			print_error("Unable to extract cabinet file, cabinet file is not found")
 			for x in Constant.output:
 				if "error" in x:
-					migwiz_cleanup(path)
+					migwiz_cleanup()
 					return False
 
 		time.sleep(5)
@@ -118,7 +118,7 @@ def migwiz(payload):
 				print_error("Unable to execute sysprep executable")
 				for x in Constant.output:
 					if "error" in x:
-						migwiz_cleanup(path)
+						migwiz_cleanup()
 						return False
 	else:
 		print_error("Cannot proceed, invalid payload")

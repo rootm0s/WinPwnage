@@ -75,13 +75,13 @@ def mcx2prov(payload):
 				print_error("Unable to create cabinet file")
 				for x in Constant.output:
 					if "error" in x:
-						mcx2prov_cleanup(path)
+						mcx2prov_cleanup()
 						return False
 		else:
 			print_error("Unable to create cabinet file, dll file is not found")
 			for x in Constant.output:
 				if "error" in x:
-					mcx2prov_cleanup(path)
+					mcx2prov_cleanup()
 					return False
 			
 		time.sleep(5)
@@ -95,13 +95,13 @@ def mcx2prov(payload):
 				print_error("Unable to extract cabinet file")
 				for x in Constant.output:
 					if "error" in x:
-						mcx2prov_cleanup(path)
+						mcx2prov_cleanup()
 						return False
 		else:
 			print_error("Unable to extract cabinet file, cabinet file is not found")
 			for x in Constant.output:
 				if "error" in x:
-					mcx2prov_cleanup(path)
+					mcx2prov_cleanup()
 					return False
 		
 		time.sleep(5)
@@ -119,13 +119,13 @@ def mcx2prov(payload):
 					print_error("Unable to execute mcx2prov executable")
 					for x in Constant.output:
 						if "error" in x:
-							mcx2prov_cleanup(path)
+							mcx2prov_cleanup()
 							return False
 			else:
 				print_error("Cannot find mcx2prov")
 				for x in Constant.output:
 					if "error" in x:
-						mcx2prov_cleanup(path)
+						mcx2prov_cleanup()
 						return False
 	else:
 		print_error("Cannot proceed, invalid payload")

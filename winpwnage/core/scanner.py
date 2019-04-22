@@ -31,12 +31,14 @@ from winpwnage.functions.persist.persist_startup_files import *
 from winpwnage.functions.persist.persist_cortana import *
 from winpwnage.functions.persist.persist_people import *
 from winpwnage.functions.persist.persist_bitsadmin import *
+from winpwnage.functions.persist.persist_service import *
 
 from winpwnage.functions.elevate.elevate_handle_inheritance import *
 from winpwnage.functions.elevate.elevate_token_impersonation import *
 from winpwnage.functions.elevate.elevate_named_pipe_impersonation import *
 from winpwnage.functions.elevate.elevate_schtasks import *
 from winpwnage.functions.elevate.elevate_wmic import *
+from winpwnage.functions.elevate.elevate_service import *
 
 from winpwnage.functions.execute.exec_forfiles import *
 from winpwnage.functions.execute.exec_pcalua import *
@@ -92,14 +94,16 @@ functions = {
 		startup_files_info,
 		cortana_appx_info,
 		people_appx_info,
-		bitsadmin_info
+		bitsadmin_info,
+		persist_service_info
 	),
 	'elevate': (
 		handleinheritance_info,
 		tokenimpersonation_info,
 		namedpipeimpersonation_info,
 		elevate_schtasks_info,
-		elevate_wmic_info
+		elevate_wmic_info,
+		elevate_service_info
 	),
 	'execute': (
 		forfiles_info,

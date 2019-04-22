@@ -40,6 +40,7 @@ Techniques are found online, on different blogs and repos here on GitHub. I do n
 * Persistence using Cortana App
 * Persistence using People App
 * Persistence using bitsadmin
+* Persistence using Windows Service (SYSTEM privileges)
 
 ## Elevation techniques:
 * Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
@@ -47,6 +48,7 @@ Techniques are found online, on different blogs and repos here on GitHub. I do n
 * Elevate from administrator to NT AUTHORITY SYSTEM using token impersonation
 * Elevate from administrator to NT AUTHORITY SYSTEM using schtasks (non interactive)
 * Elevate from administrator to NT AUTHORITY SYSTEM using wmic (non interactive)
+* Elevate from administrator to NT AUTHORITY SYSTEM using windows service (non interactive)
 
 ## Execution techniques:
 * Execute payload by calling the RegisterOCX function in Advpack.dll
