@@ -5,8 +5,6 @@ from winpwnage.core.utils import *
 import argparse
 import sys
 
-__version__ = "1.0"
-
 print("""
         _
   _ _ _|_|___ ___ _ _ _ ___ ___ ___ ___
@@ -23,7 +21,7 @@ print_info("Python version: {}.{}.{}\n".format(*sys.version_info))
 
 def main():
 	scan_cmds = ["uac",
-		        "persist",
+			"persist",
 			"elevate",
 			"execute"]
 
