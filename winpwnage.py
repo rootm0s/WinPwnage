@@ -21,7 +21,7 @@ print_info("Python version: {}.{}.{}\n".format(*sys.version_info))
 
 def main():
 	scan_cmds = ["uac",
-		        "persist",
+			"persist",
 			"elevate",
 			"execute"]
 

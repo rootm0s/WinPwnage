@@ -31,7 +31,7 @@ def table_error(id, message):
 
 
 def print_success(message):
-	print(Fore.GREEN + " [*] " + Fore.RESET + message)
+	print(Fore.GREEN + " [+] " + Fore.RESET + message)
 	Constant.output.append(("ok", message))
 
 

@@ -159,7 +159,6 @@ class function():
 	def run(self, id, payload, **kwargs):
 		print_info("Attempting to run id ({}) configured with payload ({})".format(id, payload))
 		for i in functions:
-			#if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate:
 			if i == 'uac' and not self.uac or i == 'persist' and not self.persist or i == 'elevate' and not self.elevate or i == 'execute' and not self.execute:
 				continue
 
