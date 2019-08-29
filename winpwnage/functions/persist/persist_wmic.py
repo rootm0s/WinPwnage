@@ -45,7 +45,7 @@ def persist_wmic(payload, name="", add=True):
 	for i, cmd in cmds[action]:
 		exit_code = process().create('wmic.exe', params=cmd.format(name=name, path=payload), get_exit_code=True)
 		if exit_code == 0:
-			print_success("Successfully {action}d {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
+			print_success("Successfully {action} {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
 		else:
 			print_error("Unable to {action} {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
 
