@@ -57,7 +57,7 @@ class TOKEN_TYPE(c_enum):
 	TokenPrimary = 1
 	TokenImpersonation = 2
 
-class SECURITY_IMPERSONATION_LEVEL(ctypes.c_int):
+class SECURITY_IMPERSONATION_LEVEL(INT):
 	""" https://docs.microsoft.com/en-us/windows/win32/api/winnt/ne-winnt-security_impersonation_level """
 	SecurityAnonymous = 0
 	SecurityIdentification = SecurityAnonymous + 1
