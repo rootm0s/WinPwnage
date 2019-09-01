@@ -1,5 +1,6 @@
 from ctypes.wintypes import *
 from ctypes import *
+import ctypes
 import enum
 
 # Wintypes
