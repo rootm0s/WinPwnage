@@ -7,7 +7,7 @@ from winpwnage.core.winstructures import *
 
 elevate_mofcomp_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using mofcomp (non interactive)",
-	"Id": "6",
+	"Id": "7",
 	"Type": "Elevation",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
