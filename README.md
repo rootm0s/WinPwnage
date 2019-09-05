@@ -49,6 +49,7 @@ Techniques are found online, on different blogs and repos here on GitHub. I do n
 * Elevate from administrator to NT AUTHORITY SYSTEM using schtasks (non interactive)
 * Elevate from administrator to NT AUTHORITY SYSTEM using wmic (non interactive)
 * Elevate from administrator to NT AUTHORITY SYSTEM using windows service (non interactive)
+* Elevate from administrator to NT AUTHORITY SYSTEM using mofcomp (non interactive)
 
 ## Execution techniques:
 * Execute payload by calling the RegisterOCX function in Advpack.dll
