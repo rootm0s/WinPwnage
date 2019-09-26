@@ -1,6 +1,8 @@
 # 💻 WinPwnage
 
-[![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)](https://travis-ci.com/rootm0s/WinPwnage)
+[![xd](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)](https://travis-ci.com/rootm0s/WinPwnage)
+![xd](https://img.shields.io/badge/Python-2-blue.svg "Python 2")
+![xd](https://img.shields.io/badge/Python-3-blue.svg "Python 3")
 
 The goal of this repo is to study the Windows penetration techniques.
 
