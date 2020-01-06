@@ -30,48 +30,35 @@ def main():
 	parser.add_argument("-u", "--use", nargs="+", required=False)
 	parser.add_argument("-i", "--id", nargs="+", required=False)
 	parser.add_argument("-p", "--payload", nargs="+", required=False)
-	parser.add_argument("-a", "--add", action="store_true", required=False)
 	parser.add_argument("-r", "--remove", action="store_true", required=False)
 
 	args = parser.parse_args()
 
 	if args.scan:
-		if scan_cmds[0] in args.scan:
-			scanner(uac=True, persist=False, elevate=False, execute=False).start()
-		elif scan_cmds[1] in args.scan:
-			scanner(uac=False, persist=True, elevate=False, execute=False).start()
-		elif scan_cmds[2] in args.scan:
-			scanner(uac=False, persist=False, elevate=True, execute=False).start()
-		elif scan_cmds[3] in args.scan:
-			scanner(uac=False, persist=False, elevate=False, execute=True).start()
-		else:
+		if not all([_ in scan_cmds for _ in args.scan]):
+			parser.print_help()
+		scanner(**{scan_cmds[_]: scan_cmds[_] in args.scan for _ in range(4)}).start()
+
+	if args.use and args.id:
+		if not all([_ in scan_cmds for _ in args.scan]):
 			parser.print_help()
 
-	if args.use:
-		if scan_cmds[0] in args.use:
-			if args.id:
-				if args.payload:
-					function(uac=True, persist=False, elevate=False,
-						execute=False).run(id=args.id[0], payload=args.payload[0])
-		elif scan_cmds[1] in args.use:		
-			if args.add:
-				function(uac=False, persist=True, elevate=False,
-						execute=False).run(id=args.id[0], payload=args.payload[0], add=True)							
-			elif args.remove:
-				function(uac=False, persist=True, elevate=False,
-						execute=False).run(id=args.id[0], payload=args.payload[0], add=False)
-		elif scan_cmds[2] in args.use:
-			if args.id:
-				if args.payload:
-					function(uac=False, persist=False, elevate=True,
-						execute=False).run(id=args.id[0], payload=args.payload[0])
-		elif scan_cmds[3] in args.use:
-			if args.id:
-				if args.payload:
-					function(uac=False, persist=False, elevate=False,
-						execute=True).run(id=args.id[0], payload=args.payload[0])
-		else:
-			parser.print_help()
+		if scan_cmds[0] in args.use and args.payload:
+			function(uac=True, persist=False, elevate=False,
+				execute=False).run(id=args.id[0], payload=args.payload[0])
+
+		if scan_cmds[1] in args.use:		
+			function(uac=False, persist=True, elevate=False,
+					execute=False).run(id=args.id[0], payload=args.payload[0], add=(False if args.remove else True))
+
+		if scan_cmds[2] in args.use and args.payload:
+			function(uac=False, persist=False, elevate=True,
+				execute=False).run(id=args.id[0], payload=args.payload[0])
+
+		if scan_cmds[3] in args.use and args.payload:
+			function(uac=False, persist=False, elevate=False,
+				execute=True).run(id=args.id[0], payload=args.payload[0])
+	
 
 if __name__ == '__main__':
 	main()
