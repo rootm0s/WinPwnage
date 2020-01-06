@@ -27,8 +27,8 @@ py37-steps: &py37-steps
   env: PATH=$PY37PATH:$PATH
   before_install:
     - choco install python
-    - pip3 install --upgrade pip
-    - pip3 install -r requirements.txt
+    - pip install -U pip
+    - pip install -r requirements.txt
 
 pyinstaller-steps: &pyinstaller-steps
   install:
