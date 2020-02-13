@@ -40,7 +40,7 @@ def main():
 		scanner(**{scan_cmds[_]: scan_cmds[_] in args.scan for _ in range(4)}).start()
 
 	if args.use and args.id:
-		if not all([_ in scan_cmds for _ in args.scan]):
+		if not all([_ in scan_cmds for _ in args.use]):
 			parser.print_help()
 
 		if scan_cmds[0] in args.use and args.payload:
