@@ -1,5 +1,5 @@
-# https://blog.travis-ci.com/2018-10-11-windows-early-release
 # https://docs.travis-ci.com/user/reference/windows
+# https://docs.travis-ci.com/user/languages/python
 # https://chocolatey.org/packages/python
 # https://www.pyinstaller.org
 
@@ -8,13 +8,13 @@
 # before_script: Executes run-specific tools and then sets $RUN_WINPWNAGE
 # script: Executes WinPwnage
 
-os: windows      # Windows Server, version 1803 -- Platform: Windows-10-10.0.17134-SP0
+os: windows      # Windows Server, version 1809 -- Platform: Windows-10-10.0.17134-SP0
 language: shell  # 'language: python' is not yet supported on Travis CI Windows
 
 env:
   global:
     - PY27PATH=/c/Python27:/c/Python27/Scripts
-    - PY37PATH=/c/Python37:/c/Python37/Scripts
+    - PY38PATH=/c/Python38:/c/Python38/Scripts
 
 py27-steps: &py27-steps
   env: PATH=$PY27PATH:$PATH
@@ -23,16 +23,15 @@ py27-steps: &py27-steps
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
-py37-steps: &py37-steps
-  env: PATH=$PY37PATH:$PATH
+py38-steps: &py38-steps
+  env: PATH=$PY38PATH:$PATH
   before_install:
-    - choco install python
-    - choco install pip
-    - pip install -r requirements.txt
+    - choco install python --version 3.8.2
+    - pip3 install -r requirements.txt
 
 pyinstaller-steps: &pyinstaller-steps
   install:
-    - pip install pyinstaller
+    - python -m pip install pyinstaller
   before_script:
     # The next line makes a .exe that fails to write to stdout
     # - pyinstaller --onefile winpwnage.py
@@ -49,13 +48,13 @@ matrix:
     - name: "Py2: Run tests"
       <<: *py27-steps
     - name: "Py3: Run tests"
-      <<: *py37-steps
+      <<: *py38-steps
 
     - name: "Py2: Build exe with PyInstaller"
       <<: *py27-steps
       <<: *pyinstaller-steps
     - name: "Py3: Build exe with PyInstaller"
-      <<: *py37-steps
+      <<: *py38-steps
       <<: *pyinstaller-steps
 
     - name: "Py2: Build exe with py2exe"
@@ -70,7 +69,7 @@ matrix:
         - RUN_WINPWNAGE=dist/winpwnage.exe
 
 install:
-  - pip install flake8
+  - python -m pip install flake8
 
 before_script:
   - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
