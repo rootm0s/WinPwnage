@@ -43,7 +43,7 @@ pyinstaller-steps: &pyinstaller-steps
     - ls -l dist  # See file size, etc.
     - RUN_WINPWNAGE=dist/winpwnage.exe
 
-matrix:
+jobs:
   include:
     - name: "Py2: Run tests"
       <<: *py27-steps
