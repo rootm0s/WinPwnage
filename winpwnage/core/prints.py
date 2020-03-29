@@ -35,7 +35,7 @@ def table_error(id, message):
 
 
 def print_success(message):
-	print("033[92m" + " [+] " + "\033[0m" + message)
+	print("\033[92m" + " [+] " + "\033[0m" + message)
 	Constant.output.append(("ok", message))
 
 
