@@ -36,12 +36,12 @@ pyinstaller-steps: &pyinstaller-steps
     # The next line makes a .exe that fails to write to stdout
     # - pyinstaller --onefile winpwnage.py
     # Workaround: The next three lines inexplicably build a usable .exe
-    - cp winpwnage.py winpwnage_copy.py              # flip
-    - pyinstaller --onefile winpwnage_copy.py
-    - mv dist/winpwnage_copy.exe dist/winpwnage.exe  # flop
+    - cp main.py main_copy.py              # flip
+    - pyinstaller --onefile main_copy.py
+    - mv dist/main_copy.exe dist/main.exe  # flop
     - sleep 1  # Give PyInstaller a second to finish writing to stdout
     - ls -l dist  # See file size, etc.
-    - RUN_WINPWNAGE=dist/winpwnage.exe
+    - RUN_WINPWNAGE=dist/main.exe
 
 jobs:
   include:
@@ -64,16 +64,16 @@ jobs:
         - choco install --ignore-dependencies vcpython27
         - pip install https://nchc.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.zip
       before_script:
-        - python build.py winpwnage.py
+        - python build.py main.py
         - ls -l dist  # See file size, etc.
-        - RUN_WINPWNAGE=dist/winpwnage.exe
+        - RUN_WINPWNAGE=dist/main.exe
 
 install:
   - python -m pip install flake8
 
 before_script:
   - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
-  - RUN_WINPWNAGE="python winpwnage.py"
+  - RUN_WINPWNAGE="python main.py"
 
 script:
   # Scan the function groups
