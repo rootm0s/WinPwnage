@@ -70,25 +70,25 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 * UAC bypass using cliconfg.exe (DLL payload only)
     * Id: 11
     * Method: DLL hijack using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 11 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use uac --id 11 --payload payload.dll`
 	* Works from: 7600
 	* Fixed in: 9800
 * UAC bypass using mcx2prov.exe (DLL payload only)
     * Id: 12
     * Method: DLL hijack using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 12 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use uac --id 12 --payload payload.dll`
 	* Works from: 7600
 	* Fixed in: 10147
 * UAC bypass using migwiz.exe (DLL payload only)
     * Id: 13
     * Method: DLL hijack using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 13 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use uac --id 13 --payload payload.dll`
 	* Works from: 7600
 	* Fixed in: 10147	
 * UAC bypass using sysprep.exe (DLL payload only)
     * Id: 14
     * Method: DLL hijack using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 14 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use uac --id 14 --payload payload.dll`
 	* Works from: 7600
 	* Fixed in: 9600
 * UAC bypass using token manipulation
@@ -112,13 +112,13 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 * UAC bypass using .NET Code Profiler (DLL payload only)
     * Id: 18
     * Method: Registry key (Class) manipulation and DLL hijack
-    * Syntax: `winpwnage.py --use uac --id 18 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use uac --id 18 --payload payload.dll`
 	* Works from: 7600
 	* Fixed in: n/a
 * UAC bypass using mocking trusted directories (DLL payload only)
     * Id: 19
     * Method: Mock SystemRoot directory and DLL hijack
-    * Syntax: `winpwnage.py --use uac --id 19 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use uac --id 19 --payload payload.dll`
 	* Works from: 7600
 	* Fixed in: n/a
 * UAC bypass using wsreset.exe
@@ -132,7 +132,7 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 * Persistence using explorer.exe (DLL payload only)
     * Id: 1
     * Method: DLL hijack using makecab and wusa
-    * Syntax: `winpwnage.py --use persist --id 1 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `winpwnage.py --use persist --id 1 --payload payload.dll`
 	* Requires: n/a
 	* Works from: 7600
 	* Fixed in: 9800
