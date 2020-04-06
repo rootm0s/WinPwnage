@@ -278,10 +278,13 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 	* Works from: 7600
 	* Fixed in: n/a
 
-## Installing the Dependencies:
-```pip install -r requirements.txt```
+## Installing:
+If you're running on python version 3.4 or higher then you don't have to install anything. If you're running python2 or earlier versions of python3, please use the pip command below.
+```
+pip install -r requirements.txt
+```
 
-## Importing WinPwnage examples:
+## Importing module:
 Bypass UAC using uacMethod2 with params on payload
 ```
 from winpwnage.functions.uac.uacMethod2 import uacMethod2
@@ -300,18 +303,21 @@ from winpwnage.functions.persist.elevateMethod1 import elevateMethod1
 elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 ```
 
-## Build with py2exe:
-In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python 2, not on Python 3.
+## Building:
+When building executable on Windows 10, Access Denied errors can accure while compiling, rerun until success or elevate the prompt.
 
-```python build.py winpwnage.py```
-
-## Build with PyInstaller:
+#### Using PyInstaller:
 This build works on both Python 2 and Python 3 and puts the .exe file into the __dist__ directory.
 ```
 pip install pyinstaller
 pyinstaller --onefile winpwnage.py
 ```
-On Windows 10, Access Denied errors can accure while compiling, rerun until success or elevate the prompt. 
+
+#### Using py2exe
+In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python 2, not on Python 3.
+```
+python build.py winpwnage.py
+```
 
 ## Read:
 * https://wikileaks.org/ciav7p1/cms/page_2621770.html
