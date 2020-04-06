@@ -1,4 +1,3 @@
-import os
 from winpwnage.core.utils import *
 from winpwnage.core.prints import *
 
