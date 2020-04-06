@@ -80,4 +80,3 @@ script:
   - $RUN_WINPWNAGE --scan uac
   - $RUN_WINPWNAGE --scan persist
   - $RUN_WINPWNAGE --scan elevate
-  - $RUN_WINPWNAGE --scan execute
