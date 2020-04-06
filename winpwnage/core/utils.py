@@ -10,9 +10,6 @@ except ImportError:	# Python 3
 from .winstructures import *
 
 class disable_fsr():
-	"""
-	A class to disable file system redirection
-	"""
 	disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
 	revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
 
@@ -24,28 +21,24 @@ class disable_fsr():
 		if self.success:
 			self.revert(self.old_value)
 
-
 class payloads():
-	"""
-	Checks if payload exists on disk and if the
-	file extension is correct
-	"""
 	def exe(self, payload):
-		if os.path.isfile(os.path.join(payload)) and payload.endswith(".exe"):
-			return True
+		if os.path.isfile(os.path.join(payload[0])) and payload[0].endswith(".exe"):
+			commandline = ""
+			for index, object in enumerate(payload):
+				if index >= len(payload)-1:
+					commandline += payload[index]
+				else:
+					commandline += payload[index] + " "
+			return True, commandline
 		else:
-			# Check if payload is a bin with args (e.g C:\\Windows\\System32\\cmd.exe /k whoami)
-			return bool(os.path.isfile(payload.split(' ')[0]))
+			return False
 
 	def dll(self, payload):
-		return bool(os.path.isfile(os.path.join(payload)) and payload.endswith(".dll"))
-
+		return bool(os.path.isfile(os.path.join(payload[0])) and payload[0].endswith(".dll"))
 
 class process():
-	"""
-	A class to spawn, elevate or terminate processes
-	"""
-	def create(self, payload, params='', window=False, get_exit_code=False):
+	def create(self, payload, params="", window=False, get_exit_code=False):
 		shinfo = ShellExecuteInfoW()
 		shinfo.cbSize = sizeof(shinfo)
 		shinfo.fMask = SEE_MASK_NOCLOSEPROCESS
@@ -65,7 +58,7 @@ class process():
 		else:
 			return False
 
-	def runas(self, payload, params=''):
+	def runas(self, payload, params=""):
 		shinfo = ShellExecuteInfoW()
 		shinfo.cbSize = sizeof(shinfo)
 		shinfo.fMask = SEE_MASK_NOCLOSEPROCESS
@@ -131,12 +124,11 @@ class process():
 				pass
 		return False
 
-
 class registry():
 	def __init__(self):
 		self.hkeys = {
-			'hkcu': _winreg.HKEY_CURRENT_USER,
-			'hklm': _winreg.HKEY_LOCAL_MACHINE
+			"hkcu": _winreg.HKEY_CURRENT_USER,
+			"hklm": _winreg.HKEY_LOCAL_MACHINE
 		}
 
 	def modify_key(self, hkey, path, name, value, create=False):
@@ -163,25 +155,21 @@ class registry():
 		except Exception as e:
 			return False
 
-
 class information():
-	"""
-	A class to handle all the information gathering
-	"""
 	def system_directory(self):
-		return os.path.join(os.environ.get('windir'), 'system32')
+		return os.path.join(os.environ.get("windir"), "system32")
 	
 	def system_drive(self):
-		return os.environ.get('systemdrive')
+		return os.environ.get("systemdrive")
 	
 	def windows_directory(self):
-		return os.environ.get('windir')
+		return os.environ.get("windir")
 			
 	def architecture(self):
 		return platform.machine()
 
 	def username(self):
-		return os.environ.get('username')
+		return os.environ.get("username")
 
 	def admin(self):
 		return bool(ctypes.windll.shell32.IsUserAnAdmin())
