@@ -1,4 +1,3 @@
-import os
 import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
@@ -54,4 +53,4 @@ def elevateMethod5(payload):
 				print_error("Unable to delete {action} (exit code: {code})".format(action=x[0], code=exit_code))
 	else:
 		print_error("Cannot proceed, invalid payload")
-		return False				
+		return False
