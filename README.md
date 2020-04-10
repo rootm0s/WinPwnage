@@ -11,6 +11,7 @@
 * [Installing](#installing)
 * [Importing and usage as module](#importing)
 * [Build into single executable](#building)
+* [Scan for compatible methods](#scanning)
 * [UAC-bypass techniques](#uac-bypass-techniques)
 * [Persistence techniques](#persistence-techniques)
 * [Elevation techniques](#elevation-techniques)
