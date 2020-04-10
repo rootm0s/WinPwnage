@@ -36,17 +36,24 @@ pyinstaller --onefile main.py
 ```
 
 ## Scanning:
-Display which UAC methods that is compatible with os
+Compares build number against 'Fixed In' build numbers and displays the results.
 ```batch
 main.py --scan uac
-```
-Display which Persistence methods that is compatible with os
-```batch
 main.py --scan persist
-```
-Display which Elevation methods that is compatible with os
-```batch
 main.py --scan elevate
+```
+
+Example results when scanning for possible UAC methods
+```
+ Id:    Type:           Compatible:     Description:
+ ----   ------          -----------     -------------
+ 1      UAC bypass      No              UAC bypass using runas
+ 2      UAC bypass      Yes             UAC bypass using fodhelper.exe
+ 3      UAC bypass      Yes             UAC bypass using slui.exe
+ 4      UAC bypass      Yes             UAC bypass using silentcleanup scheduled task
+ 5      UAC bypass      No              UAC bypass using sdclt.exe (isolatedcommand)
+ 6      UAC bypass      No              UAC bypass using sdclt.exe (App Paths)
+ 7      UAC bypass      No              UAC bypass using perfmon.exe
 ```
 
 ## UAC bypass techniques:
