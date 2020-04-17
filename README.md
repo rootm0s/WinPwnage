@@ -174,7 +174,7 @@ Example results when scanning for possible UAC methods
 * UAC bypass using wsreset.exe
     * Id: 20
     * Method: Registry key (Class) manipulation
-    * Syntax: `main.py --use uac --id 19 --payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use uac --id 20 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 17134
 	* Fixed in: n/a
 * UAC bypass using slui.exe and changepk.exe
@@ -251,28 +251,28 @@ Example results when scanning for possible UAC methods
 * Persistence using cortana windows app
     * Id: 10
     * Method: Registry key (Class) manipulation
-    * Syntax: `main.py --use persist --id 10--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use persist --id 10 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: n/a
 	* Works from: 14393
 	* Fixed in: n/a
 * Persistence using people windows app
     * Id: 11
     * Method: Registry key (Class) manipulation
-    * Syntax: `main.py --use persist --id 11--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use persist --id 11 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: n/a
 	* Works from: 14393
 	* Fixed in: n/a
 * Persistence using bitsadmin.exe
     * Id: 12
     * Method: Malicious bitsadmin job
-    * Syntax: `main.py --use persist --id 12--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use persist --id 12 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Persistence using Windows Service (SYSTEM privileges)
     * Id: 13
     * Method: Malicious Windows Service
-    * Syntax: `main.py --use persist --id 13--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use persist --id 13 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
@@ -281,49 +281,49 @@ Example results when scanning for possible UAC methods
 * Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
     * Id: 1
     * Method: Handle inheritance
-    * Syntax: `main.py --use elevate --id 1--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 1 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Elevate from administrator to NT AUTHORITY SYSTEM using token impersonation
     * Id: 2
     * Method: Token impersonation
-    * Syntax: `main.py --use elevate --id 2--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 2 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Elevate from administrator to NT AUTHORITY SYSTEM using named pipe impersonation
     * Id: 3
     * Method: Named pipe impersonation
-    * Syntax: `main.py --use elevate --id 3--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 3 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Elevate from administrator to NT AUTHORITY SYSTEM using schtasks.exe (non interactive)
     * Id: 4
     * Method: Malicious scheduled task that gets deleted once used
-    * Syntax: `main.py --use elevate --id 4--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 4 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Elevate from administrator to NT AUTHORITY SYSTEM using wmic.exe (non interactive)
     * Id: 5
     * Method: Malicious mof file using EventFilter EventConsumer and binding that gets deleted once used
-    * Syntax: `main.py --use elevate --id 5--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 5 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Elevate from administrator to NT AUTHORITY SYSTEM using Windows Service (non interactive)
     * Id: 6
     * Method: Malicious Windows Service that gets deleted once used
-    * Syntax: `main.py --use elevate --id 6--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 6 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
 * Elevate from administrator to NT AUTHORITY SYSTEM using mofcomp.exe (non interactive)
     * Id: 7
     * Method: Malicious mof file using EventFilter EventConsumer and binding that gets deleted once used
-    * Syntax: `main.py --use elevate --id 7--payload c:\\windows\\system32\\cmd.exe`
+    * Syntax: `main.py --use elevate --id 7 --payload c:\\windows\\system32\\cmd.exe`
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
