@@ -15,12 +15,6 @@ from winpwnage.functions.uac.uacMethod12 import *
 from winpwnage.functions.uac.uacMethod13 import *
 from winpwnage.functions.uac.uacMethod14 import *
 from winpwnage.functions.uac.uacMethod15 import *
-from winpwnage.functions.uac.uacMethod16 import *
-from winpwnage.functions.uac.uacMethod17 import *
-from winpwnage.functions.uac.uacMethod18 import *
-from winpwnage.functions.uac.uacMethod19 import *
-from winpwnage.functions.uac.uacMethod20 import *
-from winpwnage.functions.uac.uacMethod21 import *
 from winpwnage.functions.persist.persistMethod1 import *
 from winpwnage.functions.persist.persistMethod2 import *
 from winpwnage.functions.persist.persistMethod3 import *
@@ -33,7 +27,6 @@ from winpwnage.functions.persist.persistMethod9 import *
 from winpwnage.functions.persist.persistMethod10 import *
 from winpwnage.functions.persist.persistMethod11 import *
 from winpwnage.functions.persist.persistMethod12 import *
-from winpwnage.functions.persist.persistMethod13 import *
 from winpwnage.functions.elevate.elevateMethod1 import *
 from winpwnage.functions.elevate.elevateMethod2 import *
 from winpwnage.functions.elevate.elevateMethod3 import *
@@ -58,13 +51,7 @@ functions = {
 		uacMethod12_info,
 		uacMethod13_info,
 		uacMethod14_info,
-		uacMethod15_info,
-		uacMethod16_info,
-		uacMethod17_info,
-		uacMethod18_info,
-		uacMethod19_info,
-		uacMethod20_info,
-		uacMethod21_info
+		uacMethod15_info
 	),
 	"persist": (
 		persistMethod1_info,
@@ -78,8 +65,7 @@ functions = {
 		persistMethod9_info,
 		persistMethod10_info,
 		persistMethod11_info,
-		persistMethod12_info,
-		persistMethod13_info
+		persistMethod12_info
 	),
 	"elevate": (
 		elevateMethod1_info,
