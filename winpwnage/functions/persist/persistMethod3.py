@@ -5,10 +5,10 @@ import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
-persistMethod3_info = {
+persistMethod2_info = {
 	"Description": "Persistence using schtasks.exe (SYSTEM privileges)",
 	"Method": "Malicious scheduled task",
-	"Id": "3",
+	"Id": "2",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
@@ -17,7 +17,7 @@ persistMethod3_info = {
 	"Function Payload": True,
 }
 
-def persistMethod3(payload, name="", add=True):
+def persistMethod2(payload, name="", add=True):
 	if not information().admin():
 		print_error("Cannot proceed, we are not elevated")
 		return False
