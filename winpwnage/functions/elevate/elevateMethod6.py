@@ -1,7 +1,6 @@
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
-import sys
 import os
 
 elevateMethod6_info = {

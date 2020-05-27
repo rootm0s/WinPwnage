@@ -3,7 +3,6 @@ from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
 import tempfile
 import time
-import sys
 import os
 
 elevateMethod7_info = {

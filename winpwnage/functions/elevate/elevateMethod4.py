@@ -3,7 +3,6 @@ from winpwnage.core.utils import *
 import datetime
 import tempfile
 import time
-import sys
 import os
 
 elevateMethod4_info = {
