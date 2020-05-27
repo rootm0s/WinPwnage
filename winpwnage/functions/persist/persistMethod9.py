@@ -4,7 +4,6 @@ except ImportError:      # Python 3
 	import winreg as _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
-import sys
 import os
 
 #https://oddvar.moe/2018/09/06/persistence-using-universal-windows-platform-apps-appx/
