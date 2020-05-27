@@ -1,9 +1,9 @@
-import os
-import time
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
+import tempfile
+import time
+import os
 
 #Creds: https://oddvar.moe and https://github.com/3gstudent/bitsadminexec
 

@@ -1,5 +1,6 @@
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import os
 
 persistMethod8_info = {
 	"Description": "Persistence using startup files",

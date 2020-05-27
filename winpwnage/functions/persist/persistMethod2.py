@@ -1,9 +1,9 @@
-import os
-import time
-import datetime
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import datetime
+import tempfile
+import time
+import os
 
 persistMethod2_info = {
 	"Description": "Persistence using schtasks.exe (SYSTEM privileges)",

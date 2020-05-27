@@ -1,8 +1,8 @@
-import os
-import time
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import tempfile
+import time
+import os
 
 persistMethod1_info = {
 	"Description": "Persistence using mofcomp.exe (SYSTEM privileges)",

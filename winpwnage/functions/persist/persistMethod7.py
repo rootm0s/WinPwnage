@@ -1,6 +1,6 @@
-import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import time
 
 persistMethod7_info = {
 	"Description": "Persistence using wmic.exe (SYSTEM privileges)",

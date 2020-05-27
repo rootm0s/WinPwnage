@@ -1,6 +1,6 @@
-import os
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import os
 
 persistMethod4_info = {
 	"Description": "Persistence using userinit key",
