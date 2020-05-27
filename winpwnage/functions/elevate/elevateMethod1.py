@@ -14,7 +14,6 @@ elevateMethod1_info = {
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
-	"Syntax": os.path.basename(sys.argv[0]) + " --use elevate --id 1 --payload <Fully qualified path>",
 	"Function Name": "elevateMethod1",
 	"Function Payload": True,
 }
