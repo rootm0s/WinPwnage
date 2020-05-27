@@ -1,9 +1,9 @@
-import os
-import time
-import shutil
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import tempfile
+import shutil
+import time
+import os
 
 uacMethod7_info = {
 	"Description": "UAC bypass using perfmon.exe",

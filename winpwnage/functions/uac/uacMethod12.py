@@ -1,7 +1,7 @@
-import os
-import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import time
+import os
 
 #http://blog.sevagas.com/?Yet-another-sdclt-UAC-bypass
 

@@ -1,9 +1,9 @@
-import os
-import time
-import tempfile
-import ctypes
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import tempfile
+import ctypes
+import time
+import os
 
 #https://oddvar.moe/2017/08/15/research-on-cmstp-exe/
 
