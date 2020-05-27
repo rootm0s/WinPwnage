@@ -1,6 +1,7 @@
 import os
 import ctypes
 import platform
+from subprocess import check_output
 
 try:
 	import _winreg	# Python 2
@@ -34,8 +35,37 @@ class payloads():
 		else:
 			return False
 
-	def dll(self, payload):
-		return bool(os.path.isfile(os.path.join(payload[0])) and payload[0].endswith(".dll"))
+	#def dll(self, payload):
+	#	return bool(os.path.isfile(os.path.join(payload[0])) and payload[0].endswith(".dll"))
+
+class makecab():
+	def makecab(self, source, destination):
+		if not os.path.exists(source):
+			return False
+
+		exit_code = process().create("makecab.exe", params="{source} {destination}".format(source=source,
+									destination=destination), window=False, get_exit_code=True)
+		if exit_code == 0:
+			return True
+		else:
+			return False
+
+class wusa():
+	def extract(self, cabinet, destination):
+		if not os.path.exists(cabinet):
+			return False
+
+		results = process().create("wusa.exe", params="{cabinet} /extract:{destination} /quiet".format(cabinet=cabinet,
+									destination=destination), window=False, get_exit_code=True)
+		if results == 0:
+			try:
+				os.remove(cabinet)
+			except Exception as error:
+				pass
+			finally:
+				return True
+		else:
+			return False
 
 class process():
 	def create(self, payload, params="", window=False, get_exit_code=False):
@@ -155,16 +185,93 @@ class registry():
 		except Exception as e:
 			return False
 
+class whoami():
+	def __init__(self):
+		self.privs = {"SeIncreaseQuotaPrivilege" : "Adjust memory quotas for a process",
+					"SeSecurityPrivilege" : "Manage auditing and security log",
+					"SeTakeOwnershipPrivilege" : "Take ownership of files or other objects",
+					"SeLoadDriverPrivilege" : "Load and unload device drivers",
+					"SeSystemProfilePrivilege" : "Profile system performance",
+					"SeSystemtimePrivilege" : "Change the system time",
+					"SeProfileSingleProcessPrivilege" : "Profile single process",
+					"SeIncreaseBasePriorityPrivilege" : "Increase scheduling priority",
+					"SeCreatePagefilePrivilege" : "Create a pagefile",
+					"SeBackupPrivilege" : "Back up files and directories",
+					"SeRestorePrivilege" : "Restore files and directories",
+					"SeShutdownPrivilege" : "Shut down the system",
+					"SeDebugPrivilege" : "Debug programs",
+					"SeSystemEnvironmentPrivilege" : "Modify firmware environment values",
+					"SeChangeNotifyPrivilege" : "Bypass traverse checking",
+					"SeRemoteShutdownPrivilege" : "Force shutdown from a remote system",
+					"SeUndockPrivilege" : "Remove computer from docking station",
+					"SeManageVolumePrivilege" : "Perform volume maintenance tasks",
+					"SeImpersonatePrivilege" : "Impersonate a client after authentication",
+					"SeCreateGlobalPrivilege" : "Create global objects",
+					"SeIncreaseWorkingSetPrivilege" : "Increase a process working set",
+					"SeTimeZonePrivilege" : "Change the time zone",
+					"SeCreateSymbolicLinkPrivilege" : "Create symbolic links",
+					"SeDelegateSessionUserImpersonatePrivilege" : "Obtain an impersonation token for another user in same session"}
+
+		self.sids = {"S-1-2-0" : "Local",
+					"S-1-0-0" : "Nobody",
+					"S-1-1-0" : "Everyone",
+					"S-1-5-32-545" : "Users",
+					"S-1-5-32-546" : "Guests",
+					"S-1-0" : "Null Authority",
+					"S-1-1" : "World Authority",
+					"S-1-2" : "Local Authority",
+					"S-1-5-4" : "Interactive",
+					"S-1-2-1" : "Console Logon",
+					"S-1-5-18" : "Local System",
+					"S-1-5-19" : "Local Service",
+					"S-1-5-20" : "Network Service",
+					"S-1-5-32-547" : "Power Users",
+					"S-1-5-15" : "This Organization",
+					"S-1-5-32-544" : "Administrators",
+					"S-1-5-11" : "Authenticated Users",
+					"S-1-5-32-549" : "Server Operators",
+					"S-1-5-32-550" : "Print Operators",
+					"S-1-5-32-551" : "Backup Operators",
+					"S-1-5-32-548" : "Account Operators",
+					"S-1-5-64-10" : "NTLM Authentication",
+					"S-1-5-32-559" : "Builtin\Performance Log Users",
+					"S-1-5-32-582" : "Storage Replica Administrators"}
+
+	def elevated(self):
+		return bool(ctypes.windll.shell32.IsUserAnAdmin())
+
+	def privileges(self):
+		return check_output(["whoami", "/priv", "/fo", "table",
+								"|", "findstr", "Enabled"], shell=True).decode("latin1")
+	def groups(self):
+		return check_output(["whoami", "/groups"], shell=True).decode("latin1")
+
+	def getgroups(self):
+		result = []
+		groups = self.groups()
+		for sid in self.sids:
+			if sid in groups:
+				result.append(self.sids[sid])
+		return result
+
+	def getprivileges(self):
+		result = []
+		privs = self.privileges()
+		for priv in self.privs:
+			if priv in privs:
+				result.append(priv)
+		return result
+
 class information():
 	def system_directory(self):
 		return os.path.join(os.environ.get("windir"), "system32")
-	
+
 	def system_drive(self):
 		return os.environ.get("systemdrive")
-	
+
 	def windows_directory(self):
 		return os.environ.get("windir")
-			
+
 	def architecture(self):
 		return platform.machine()
 
@@ -176,8 +283,8 @@ class information():
 
 	def build_number(self):
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(
-				"Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, _winreg.KEY_READ)
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
+									os.path.join("Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, _winreg.KEY_READ)
 			cbn = _winreg.QueryValueEx(key, "CurrentBuildNumber")
 			_winreg.CloseKey(key)
 		except Exception as error:
@@ -187,13 +294,14 @@ class information():
 
 	def uac_level(self):
 		try:
-			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, os.path.join(
-				"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, _winreg.KEY_READ)
+			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
+									os.path.join("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, _winreg.KEY_READ)
 			cpba = _winreg.QueryValueEx(key, "ConsentPromptBehaviorAdmin")
 			cpbu = _winreg.QueryValueEx(key, "ConsentPromptBehaviorUser")
 			posd = _winreg.QueryValueEx(key, "PromptOnSecureDesktop")
 			_winreg.CloseKey(key)
 		except Exception as error:
 			return False
-		cpba_cpbu_posd = (cpba[0], cpbu[0], posd[0])
-		return {(0, 3, 0): 1, (5, 3, 0): 2, (5, 3, 1): 3, (2, 3, 1): 4}.get(cpba_cpbu_posd, False)
+		else:
+			cpba_cpbu_posd = (cpba[0], cpbu[0], posd[0])
+			return {(0, 3, 0): 1, (5, 3, 0): 2, (5, 3, 1): 3, (2, 3, 1): 4}.get(cpba_cpbu_posd, False)

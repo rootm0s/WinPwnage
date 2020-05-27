@@ -1,6 +1,8 @@
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
+import sys
+import os
 
 #Creds to: https://gist.github.com/highsenburger69/147a16dd003b2fd1eacd9afcd1d0fe7f
 
@@ -12,6 +14,7 @@ elevateMethod2_info = {
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
+	"Syntax": os.path.basename(sys.argv[0]) + " --use elevate --id 2 --payload <Fully qualified path>",
 	"Function Name": "elevateMethod2",
 	"Function Payload": True,
 }

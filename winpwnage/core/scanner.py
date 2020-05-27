@@ -64,8 +64,7 @@ functions = {
 		persistMethod8_info,
 		persistMethod9_info,
 		persistMethod10_info,
-		persistMethod11_info,
-		persistMethod12_info
+		persistMethod11_info
 	),
 	"elevate": (
 		elevateMethod1_info,

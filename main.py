@@ -31,6 +31,7 @@ def main():
 	if args.scan:
 		if not all([_ in scan_cmds for _ in args.scan]):
 			parser.print_help()
+
 		scanner(**{scan_cmds[_]: scan_cmds[_] in args.scan for _ in range(3)}).start()
 
 	if args.use and args.id:

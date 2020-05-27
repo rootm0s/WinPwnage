@@ -12,7 +12,7 @@ persistMethod1_info = {
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
-	"Function Name": "persistMethod2",
+	"Function Name": "persistMethod1",
 	"Function Payload": True,
 }
 

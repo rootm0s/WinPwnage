@@ -1,9 +1,10 @@
-import os
-import time
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
+import tempfile
+import time
+import sys
+import os
 
 elevateMethod7_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using mofcomp.exe (non interactive)",
@@ -13,6 +14,7 @@ elevateMethod7_info = {
 	"Fixed In": "99999" if information().admin() == True else "0",
 	"Works From": "7600",
 	"Admin": True,
+	"Syntax": os.path.basename(sys.argv[0]) + " --use elevate --id 7 --payload <Fully qualified path>",
 	"Function Name": "elevateMethod7",
 	"Function Payload": True,
 }
