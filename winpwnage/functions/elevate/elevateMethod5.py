@@ -1,7 +1,7 @@
-import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
 from winpwnage.core.winstructures import *
+import time
 
 elevateMethod5_info = {
 	"Description": "Elevate from administrator to NT AUTHORITY SYSTEM using wmic.exe (non interactive)",

