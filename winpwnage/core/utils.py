@@ -35,38 +35,6 @@ class payloads():
 		else:
 			return False
 
-	#def dll(self, payload):
-	#	return bool(os.path.isfile(os.path.join(payload[0])) and payload[0].endswith(".dll"))
-
-class makecab():
-	def makecab(self, source, destination):
-		if not os.path.exists(source):
-			return False
-
-		exit_code = process().create("makecab.exe", params="{source} {destination}".format(source=source,
-									destination=destination), window=False, get_exit_code=True)
-		if exit_code == 0:
-			return True
-		else:
-			return False
-
-class wusa():
-	def extract(self, cabinet, destination):
-		if not os.path.exists(cabinet):
-			return False
-
-		results = process().create("wusa.exe", params="{cabinet} /extract:{destination} /quiet".format(cabinet=cabinet,
-									destination=destination), window=False, get_exit_code=True)
-		if results == 0:
-			try:
-				os.remove(cabinet)
-			except Exception as error:
-				pass
-			finally:
-				return True
-		else:
-			return False
-
 class process():
 	def create(self, payload, params="", window=False, get_exit_code=False):
 		shinfo = ShellExecuteInfoW()
@@ -161,6 +129,19 @@ class registry():
 			"hklm": _winreg.HKEY_LOCAL_MACHINE
 		}
 
+	def query_value(self, hkey, subkey, name):
+		try:
+			key = _winreg.OpenKey(self.hkeys[hkey], subkey, 0, _winreg.KEY_ALL_ACCESS)
+		except Exception as error:
+			return False
+		else:
+			try:
+				query = _winreg.QueryValueEx(key, name)[0]
+			except Exception as error:
+				return False
+			else:
+				return query
+		
 	def modify_key(self, hkey, path, name, value, create=False):
 		try:
 			if not create:
@@ -170,7 +151,7 @@ class registry():
 			_winreg.SetValueEx(key, name, 0, _winreg.REG_SZ, value)
 			_winreg.CloseKey(key)
 			return True
-		except Exception as e:
+		except Exception as error:
 			return False
 
 	def remove_key(self, hkey, path, name="", delete_key=False):
@@ -182,35 +163,35 @@ class registry():
 				_winreg.DeleteValue(key, name)
 				_winreg.CloseKey(key)
 			return True
-		except Exception as e:
+		except Exception as error:
 			return False
 
-class whoami():
+class information():
 	def __init__(self):
 		self.privs = {"SeIncreaseQuotaPrivilege" : "Adjust memory quotas for a process",
-					"SeSecurityPrivilege" : "Manage auditing and security log",
-					"SeTakeOwnershipPrivilege" : "Take ownership of files or other objects",
-					"SeLoadDriverPrivilege" : "Load and unload device drivers",
-					"SeSystemProfilePrivilege" : "Profile system performance",
-					"SeSystemtimePrivilege" : "Change the system time",
-					"SeProfileSingleProcessPrivilege" : "Profile single process",
-					"SeIncreaseBasePriorityPrivilege" : "Increase scheduling priority",
-					"SeCreatePagefilePrivilege" : "Create a pagefile",
-					"SeBackupPrivilege" : "Back up files and directories",
-					"SeRestorePrivilege" : "Restore files and directories",
-					"SeShutdownPrivilege" : "Shut down the system",
-					"SeDebugPrivilege" : "Debug programs",
-					"SeSystemEnvironmentPrivilege" : "Modify firmware environment values",
-					"SeChangeNotifyPrivilege" : "Bypass traverse checking",
-					"SeRemoteShutdownPrivilege" : "Force shutdown from a remote system",
-					"SeUndockPrivilege" : "Remove computer from docking station",
-					"SeManageVolumePrivilege" : "Perform volume maintenance tasks",
-					"SeImpersonatePrivilege" : "Impersonate a client after authentication",
-					"SeCreateGlobalPrivilege" : "Create global objects",
-					"SeIncreaseWorkingSetPrivilege" : "Increase a process working set",
-					"SeTimeZonePrivilege" : "Change the time zone",
-					"SeCreateSymbolicLinkPrivilege" : "Create symbolic links",
-					"SeDelegateSessionUserImpersonatePrivilege" : "Obtain an impersonation token for another user in same session"}
+				"SeSecurityPrivilege" : "Manage auditing and security log",
+				"SeTakeOwnershipPrivilege" : "Take ownership of files or other objects",
+				"SeLoadDriverPrivilege" : "Load and unload device drivers",
+				"SeSystemProfilePrivilege" : "Profile system performance",
+				"SeSystemtimePrivilege" : "Change the system time",
+				"SeProfileSingleProcessPrivilege" : "Profile single process",
+				"SeIncreaseBasePriorityPrivilege" : "Increase scheduling priority",
+				"SeCreatePagefilePrivilege" : "Create a pagefile",
+				"SeBackupPrivilege" : "Back up files and directories",
+				"SeRestorePrivilege" : "Restore files and directories",
+				"SeShutdownPrivilege" : "Shut down the system",
+				"SeDebugPrivilege" : "Debug programs",
+				"SeSystemEnvironmentPrivilege" : "Modify firmware environment values",
+				"SeChangeNotifyPrivilege" : "Bypass traverse checking",
+				"SeRemoteShutdownPrivilege" : "Force shutdown from a remote system",
+				"SeUndockPrivilege" : "Remove computer from docking station",
+				"SeManageVolumePrivilege" : "Perform volume maintenance tasks",
+				"SeImpersonatePrivilege" : "Impersonate a client after authentication",
+				"SeCreateGlobalPrivilege" : "Create global objects",
+				"SeIncreaseWorkingSetPrivilege" : "Increase a process working set",
+				"SeTimeZonePrivilege" : "Change the time zone",
+				"SeCreateSymbolicLinkPrivilege" : "Create symbolic links",
+				"SeDelegateSessionUserImpersonatePrivilege" : "Obtain an impersonation token for another user in same session"}
 
 		self.sids = {"S-1-2-0" : "Local",
 					"S-1-0-0" : "Nobody",
@@ -237,12 +218,27 @@ class whoami():
 					"S-1-5-32-559" : "Builtin\Performance Log Users",
 					"S-1-5-32-582" : "Storage Replica Administrators"}
 
-	def elevated(self):
+	def system_directory(self):
+		return os.path.join(os.environ.get("windir"), "system32")
+
+	def system_drive(self):
+		return os.environ.get("systemdrive")
+
+	def windows_directory(self):
+		return os.environ.get("windir")
+
+	def architecture(self):
+		return platform.machine()
+
+	def username(self):
+		return os.environ.get("username")
+
+	def admin(self):
 		return bool(ctypes.windll.shell32.IsUserAnAdmin())
 
 	def privileges(self):
 		return check_output(["whoami", "/priv", "/fo", "table",
-								"|", "findstr", "Enabled"], shell=True).decode("latin1")
+					"|", "findstr", "Enabled"], shell=True).decode("latin1")
 	def groups(self):
 		return check_output(["whoami", "/groups"], shell=True).decode("latin1")
 
@@ -262,29 +258,10 @@ class whoami():
 				result.append(priv)
 		return result
 
-class information():
-	def system_directory(self):
-		return os.path.join(os.environ.get("windir"), "system32")
-
-	def system_drive(self):
-		return os.environ.get("systemdrive")
-
-	def windows_directory(self):
-		return os.environ.get("windir")
-
-	def architecture(self):
-		return platform.machine()
-
-	def username(self):
-		return os.environ.get("username")
-
-	def admin(self):
-		return bool(ctypes.windll.shell32.IsUserAnAdmin())
-
 	def build_number(self):
 		try:
 			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
-									os.path.join("Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, _winreg.KEY_READ)
+						os.path.join("Software\\Microsoft\\Windows NT\\CurrentVersion"), 0, _winreg.KEY_READ)
 			cbn = _winreg.QueryValueEx(key, "CurrentBuildNumber")
 			_winreg.CloseKey(key)
 		except Exception as error:
@@ -295,7 +272,7 @@ class information():
 	def uac_level(self):
 		try:
 			key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE,
-									os.path.join("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, _winreg.KEY_READ)
+						os.path.join("Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"), 0, _winreg.KEY_READ)
 			cpba = _winreg.QueryValueEx(key, "ConsentPromptBehaviorAdmin")
 			cpbu = _winreg.QueryValueEx(key, "ConsentPromptBehaviorUser")
 			posd = _winreg.QueryValueEx(key, "PromptOnSecureDesktop")
