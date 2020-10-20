@@ -21,7 +21,7 @@ py27-steps: &py27-steps
   before_install:
     - choco install python2
     - python -m pip install --upgrade pip
-    - pip install pyinstaller<4.0 -r requirements.txt
+    - pip install 'pyinstaller < 4.0' -r requirements.txt
 
 py39-steps: &py39-steps
   env: PATH=$PY39PATH:$PATH
