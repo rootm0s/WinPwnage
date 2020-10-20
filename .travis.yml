@@ -14,24 +14,22 @@ language: shell  # 'language: python' is not yet supported on Travis CI Windows
 env:
   global:
     - PY27PATH=/c/Python27:/c/Python27/Scripts
-    - PY39PATH=/c/Python38:/c/Python39/Scripts
+    - PY39PATH=/c/Python39:/c/Python39/Scripts
 
 py27-steps: &py27-steps
   env: PATH=$PY27PATH:$PATH
   before_install:
     - choco install python2
     - python -m pip install --upgrade pip
-    - pip install -r requirements.txt
+    - pip install pyinstaller<4.0 -r requirements.txt
 
 py39-steps: &py39-steps
-  env: PATH=$PY38PATH:$PATH
+  env: PATH=$PY39PATH:$PATH
   before_install:
     - choco install python --version 3.9.0
-    - pip install -r requirements.txt
+    - pip3 install pyinstaller -r requirements.txt
 
 pyinstaller-steps: &pyinstaller-steps
-  install:
-    - python -m pip install pyinstaller
   before_script:
     # The next line makes a .exe that fails to write to stdout
     # - pyinstaller --onefile winpwnage.py
