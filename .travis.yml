@@ -14,7 +14,7 @@ language: shell  # 'language: python' is not yet supported on Travis CI Windows
 env:
   global:
     - PY27PATH=/c/Python27:/c/Python27/Scripts
-    - PY38PATH=/c/Python38:/c/Python38/Scripts
+    - PY39PATH=/c/Python38:/c/Python39/Scripts
 
 py27-steps: &py27-steps
   env: PATH=$PY27PATH:$PATH
@@ -23,10 +23,10 @@ py27-steps: &py27-steps
     - python -m pip install --upgrade pip
     - pip install -r requirements.txt
 
-py38-steps: &py38-steps
+py39-steps: &py39-steps
   env: PATH=$PY38PATH:$PATH
   before_install:
-    - choco install python --version 3.8.2
+    - choco install python --version 3.9.0
     - pip3 install -r requirements.txt
 
 pyinstaller-steps: &pyinstaller-steps
@@ -48,13 +48,13 @@ jobs:
     - name: "Py2: Run tests"
       <<: *py27-steps
     - name: "Py3: Run tests"
-      <<: *py38-steps
+      <<: *py39-steps
 
     - name: "Py2: Build exe with PyInstaller"
       <<: *py27-steps
       <<: *pyinstaller-steps
     - name: "Py3: Build exe with PyInstaller"
-      <<: *py38-steps
+      <<: *py39-steps
       <<: *pyinstaller-steps
 
 install:
