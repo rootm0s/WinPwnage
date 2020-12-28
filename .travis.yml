@@ -31,7 +31,7 @@ jobs:
 
 install:
   - choco install python --version 3.9.1
-  - pip3 install flake8 pyinstaller -r requirements.txt
+  - pip3 install flake8 pyinstaller
 
 before_script:
   - flake8 . --count --select=E9,F401,F63,F72,F82 --show-source --statistics
