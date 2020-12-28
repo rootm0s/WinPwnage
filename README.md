@@ -5,13 +5,11 @@
 ---
 
 [![build_status](https://travis-ci.com/rootm0s/WinPwnage.svg?branch=master)](https://travis-ci.com/rootm0s/WinPwnage)
-![python2_support](https://img.shields.io/badge/Python-2-blue.svg "Python 2")
 ![python3_support](https://img.shields.io/badge/Python-3-blue.svg "Python 3")
 
-* [Installing](#installing)
-* [Importing and usage as module](#importing)
 * [Build into single executable](#building)
 * [Scan for compatible methods](#scanning)
+* [Importing and usage as module](#importing)
 * [UAC-bypass techniques](#uac-bypass-techniques)
 * [Persistence techniques](#persistence-techniques)
 * [Elevation techniques](#elevation-techniques)
@@ -19,14 +17,8 @@
 ## Disclaimer
 This tool is provided for educational and research purposes only. The authors of this project are no way responsible for any misuse of this tool.
 
-## Installing
-If you're running on python version 3.4 or higher then you don't have to install anything. If you're running Python 2.* or earlier versions of Python 3.4, please use the pip command below.
-```batch
-pip install -r requirements.txt
-```
-
 ## Building
-This build works on both Python 2 and Python 3 and puts the .exe file into the __dist__ directory. Install pyinstaller using pip command:
+This build works on Python >= 3.6 and puts the .exe file into the __dist__ directory. Install pyinstaller using pip command:
 ```batch
 pip install pyinstaller
 ```
