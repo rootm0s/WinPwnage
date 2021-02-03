@@ -58,16 +58,22 @@ uacMethod2(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 Persist on system using persistMethod4
 ```python
 from winpwnage.functions.persist.persistMethod4 import persistMethod4
-persistMethod4(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
+persistMethod4(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"], add=True)
+
+# Removal
+persistMethod4(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"], add=False)
 ```
 
 Elevate from administrator to SYSTEM using elevateMethod1
 ```python
-from winpwnage.functions.persist.elevateMethod1 import elevateMethod1
+from winpwnage.functions.elevate.elevateMethod1 import elevateMethod1
 elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 ```
 
 ## UAC bypass techniques
+<details>
+<summary>Functions (Expand/Collapse)</summary>
+
 * UAC bypass using runas
     * Id: 1
     * Method: Windows API, this only works if UAC is set to never notify
@@ -158,8 +164,12 @@ elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
     * Syntax: `main.py --use uac --id 15 --payload c:\\windows\\system32\\cmd.exe`
 	* Works from: 17763
 	* Fixed in: n/a
+</details>
 
 ## Persistence techniques
+<details>
+<summary>Functions (Expand/Collapse)</summary>
+
 * Persistence using mofcomp.exe (SYSTEM privileges)
     * Id: 1
     * Method: Malicious mof file using EventFilter EventConsumer and binding
@@ -244,8 +254,12 @@ elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
+</details>
 
 ## Elevation techniques
+<details>
+<summary>Functions (Expand/Collapse)</summary>
+
 * Elevate from administrator to NT AUTHORITY SYSTEM using handle inheritance
     * Id: 1
     * Method: Handle inheritance
@@ -295,6 +309,7 @@ elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
 	* Requires: Administrator rights
 	* Works from: 7600
 	* Fixed in: n/a
+</details>
 
 ## Read
 * https://wikileaks.org/ciav7p1/cms/page_2621770.html
