@@ -174,86 +174,98 @@ elevateMethod1(["c:\\windows\\system32\\cmd.exe", "/k", "whoami"])
     * Id: 1
     * Method: Malicious mof file using EventFilter EventConsumer and binding
     * Syntax: `main.py --use persist --id 1 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a		
+    * Syntax for removing: `main.py --use persist --id 1 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using schtasks.exe (SYSTEM privileges)
     * Id: 2
     * Method: Malicious scheduled task
     * Syntax: `main.py --use persist --id 2 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 2 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using image file execution option and magnifier.exe
     * Id: 3
     * Method: Image File Execution Options debugger and accessibility application
     * Syntax: `main.py --use persist --id 3 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a	
+    * Syntax for removing: `main.py --use persist --id 3 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a	
 * Persistence using userinit key
     * Id: 4
     * Method: Registry key (UserInit) manipulation
     * Syntax: `main.py --use persist --id 4 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 4 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using HKCU run key
     * Id: 5
     * Method: Registry key (HKCU Run) manipulation
     * Syntax: `main.py --use persist --id 5 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 5 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: n/a
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using HKLM run key
     * Id: 6
     * Method: Registry key (HKLM Run) manipulation
     * Syntax: `main.py --use persist --id 6 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 6 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using wmic.exe (SYSTEM privileges)
     * Id: 7
     * Method: Malicious mof file using EventFilter EventConsumer and binding
     * Syntax: `main.py --use persist --id 7 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 7 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using startup files
     * Id: 8
     * Method: Malicious lnk file in startup directory
     * Syntax: `main.py --use persist --id 8 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 8 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: n/a
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using cortana windows app
     * Id: 9
     * Method: Registry key (Class) manipulation
     * Syntax: `main.py --use persist --id 9 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 14393
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 9 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: n/a
+    * Works from: 14393
+    * Fixed in: n/a
 * Persistence using people windows app
     * Id: 10
     * Method: Registry key (Class) manipulation
     * Syntax: `main.py --use persist --id 10 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: n/a
-	* Works from: 14393
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 10 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: n/a
+    * Works from: 14393
+    * Fixed in: n/a
 * Persistence using bitsadmin.exe
     * Id: 11
     * Method: Malicious bitsadmin job
     * Syntax: `main.py --use persist --id 11 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 11 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 * Persistence using Windows Service (SYSTEM privileges)
     * Id: 12
     * Method: Malicious Windows Service
     * Syntax: `main.py --use persist --id 12 --payload c:\\windows\\system32\\cmd.exe`
-	* Requires: Administrator rights
-	* Works from: 7600
-	* Fixed in: n/a
+    * Syntax for removing: `main.py --use persist --id 12 --payload c:\\windows\\system32\\cmd.exe --remove`
+    * Requires: Administrator rights
+    * Works from: 7600
+    * Fixed in: n/a
 </details>
 
 ## Elevation techniques
