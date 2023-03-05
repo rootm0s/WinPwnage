@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "winpwnage"
+version = "0.0.0"
+description = "UAC bypass, Elevate, Persistence methods"
+authors = ["rootm0s"]
+license = "Proprietary"
+readme = "README.md"
+repository = "https://github.com/rootm0s/WinPwnage"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+winpwnage = 'winpwnage.__main__:main'
